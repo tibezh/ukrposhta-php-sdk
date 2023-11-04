@@ -1,24 +1,28 @@
 {
     "name": "tibezh/ukrposhta-php-api",
-    "description": "Contains integration with Ukrposhta service.",
     "type": "library",
-    "require": {
-        "php": ">=8.1.0"
-        "guzzlehttp/guzzle": "^7.8"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^9.6"
-    },
+    "description": "Contains integration with Ukrposhta service.",
+    "keywords": ["Ukrpostha", "Ukrpostha PHP", "Ukrpostha PHP API", "Ukrpostha API"],
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Tibezh\\UkrposhtaPhpApi\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "Ivan Tibezh",
             "email": "ivan.tbzh@gmail.com"
         }
-    ]
+    ],
+    "require": {
+        "php": ">=8.1.0",
+        "guzzlehttp/guzzle": "^7.8",
+        "psr/log": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ukrposhta\\": "src"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
