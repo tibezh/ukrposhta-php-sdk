@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Ukrposhta;
 
@@ -12,26 +10,24 @@ use Psr\Log\LoggerInterface;
  */
 abstract class Ukrposhta implements LoggerAwareInterface {
 
-  const VERSION = '0.0.1';
-  const BASE_URL = 'https://ukrposhta.ua/ecom';
-
-  protected string $accessBearer;
-
-  protected string $accessToken;
-
-  protected LoggerInterface $logger;
+  public const VERSION = '0.0.1';
+  public const BASE_URL = 'https://www.ukrposhta.ua/';
 
   /**
-   * Constructor.
-   *
-   * @param string|null $bearer
-   * @param string|null $token
+   * @param string|null $bearerEcom
+   * @param string|null $bearerStatusTracking
+   * @param string|null $bearerCounterparty
+   * @param bool $sandbox
    * @param LoggerInterface|null $logger
    */
-  public function __construct(string $bearer = null, string $token = null, LoggerInterface $logger = null) {
-    $this->accessBearer = $bearer;
-    $this->accessToken = $token;
-    $this->logger = $logger;
+  public function __construct(
+    protected readonly ?string $bearerEcom = null,
+    protected readonly ?string $bearerStatusTracking = null,
+    protected readonly ?string $bearerCounterparty = null,
+    protected bool $sandbox = false,
+    protected ?LoggerInterface $logger = null,
+  ) {
+
   }
 
   /**
@@ -42,20 +38,26 @@ abstract class Ukrposhta implements LoggerAwareInterface {
   }
 
   /**
-   * @return LoggerInterface
+   * @return LoggerInterface|null
    */
-  public function getLogger(): LoggerInterface {
+  public function getLogger(): ?LoggerInterface {
     return $this->logger;
   }
 
   /**
    * Gets endpoints URL.
    *
-   * @return string
+   * @return string|null
    */
-  protected function getEndpointUrl(): string {
-    return self::BASE_URL . '/' . self::VERSION;
+  protected function getEndpointUrl(): ?string {
+    return self::BASE_URL;
   }
 
+  /**
+   * @return bool
+   */
+  protected function isSandbox(): bool {
+    return $this->sandbox;
+  }
 
 }
