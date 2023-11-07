@@ -1,8 +1,8 @@
 {
-    "name": "tibezh/ukrposhta-php-api",
+    "name": "tibezh/ukrposhta-php-sdk",
     "type": "library",
     "description": "Contains integration with Ukrposhta service.",
-    "keywords": ["Ukrpostha", "Ukrpostha PHP", "Ukrpostha PHP API", "Ukrpostha API"],
+    "keywords": ["Ukrpostha", "Ukrpostha PHP", "Ukrpostha PHP SDK", "Ukrpostha SDK", "Ukrpostha PHP API", "Ukrpostha API"],
     "license": "MIT",
     "authors": [
         {

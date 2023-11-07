@@ -6,3 +6,6 @@
 - Added TrackingStatus, TrackingStatusCollection and TrackingRoute classes.
 - Other changes.
 - Added the changelog file.
+
+## 0.0.0-dev2 (released 07-11-2023)
+- Changed name from `ukrpostha-php-api` to `ukrpostha-php-sdk` 
