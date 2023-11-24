@@ -4,5 +4,8 @@ namespace Ukrposhta\Exceptions;
 
 use Exception;
 
+/**
+ *
+ */
 class InvalidResponseException extends Exception {
 }

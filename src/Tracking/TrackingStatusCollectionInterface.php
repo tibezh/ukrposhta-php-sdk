@@ -2,7 +2,9 @@
 
 namespace Ukrposhta\Tracking;
 
-
+/**
+ *
+ */
 interface TrackingStatusCollectionInterface {
 
   /**

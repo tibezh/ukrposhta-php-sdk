@@ -2,8 +2,6 @@
 
 namespace Ukrposhta\Tracking;
 
-use ArrayIterator;
-
 /**
  *
  */

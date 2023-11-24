@@ -2,6 +2,9 @@
 
 namespace Ukrposhta\Tracking;
 
+/**
+ *
+ */
 class TrackingRoute implements TrackingRouteInterface {
 
   /**

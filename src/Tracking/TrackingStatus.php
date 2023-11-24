@@ -13,27 +13,29 @@ class TrackingStatus implements TrackingStatusInterface {
    * @param string $barcode
    * @param int $step
    * @param \DateTime $date
-   * @param string|null $index
+   * @param string $name
    * @param int $eventId
    * @param string $eventName
    * @param string $country
-   * @param string|null $eventReason
-   * @param int|null $eventReasonId
    * @param int $mailType
    * @param int $indexOrder
+   * @param string|null $index
+   * @param string|null $eventReason
+   * @param int|null $eventReasonId
    */
   public function __construct(
     protected readonly string $barcode,
     protected readonly int $step,
     protected readonly \DateTime $date,
-    protected readonly ?string $index,
+    protected readonly string $name,
     protected readonly int $eventId,
     protected readonly string $eventName,
     protected readonly string $country,
-    protected readonly ?string $eventReason,
-    protected readonly ?int $eventReasonId,
     protected readonly int $mailType,
-    protected readonly int $indexOrder
+    protected readonly int $indexOrder,
+    protected readonly ?string $index = null,
+    protected readonly ?string $eventReason = null,
+    protected readonly ?int $eventReasonId = null
   ) {
   }
 
@@ -64,7 +66,7 @@ class TrackingStatus implements TrackingStatusInterface {
   /**
    * {@inheritDoc}
    */
-  public function getIndex(): string
+  public function getIndex(): ?string
   {
     return $this->index;
   }
@@ -74,7 +76,7 @@ class TrackingStatus implements TrackingStatusInterface {
    */
   public function getName(): string
   {
-    return $this->index;
+    return $this->name;
   }
 
   /**

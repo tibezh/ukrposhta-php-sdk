@@ -45,18 +45,25 @@ abstract class Ukrposhta implements LoggerAwareInterface {
   }
 
   /**
+   * @return string
+   */
+  public function getVersion(): string {
+    return self::VERSION;
+  }
+
+  /**
    * Gets endpoints URL.
    *
-   * @return string|null
+   * @return string
    */
-  protected function getEndpointUrl(): ?string {
+  public function getEndpointUrl(): string {
     return self::BASE_URL;
   }
 
   /**
    * @return bool
    */
-  protected function isSandbox(): bool {
+  public function isSandbox(): bool {
     return $this->sandbox;
   }
 

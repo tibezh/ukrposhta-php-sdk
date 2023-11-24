@@ -8,6 +8,9 @@ use Ukrposhta\Request\Request;
 use Ukrposhta\Request\RequestInterface;
 use Ukrposhta\Ukrposhta;
 
+/**
+ *
+ */
 class Tracking extends Ukrposhta implements TrackingInterface {
 
   public const BASE_ENDPOINT = 'status-tracking';
@@ -46,12 +49,12 @@ class Tracking extends Ukrposhta implements TrackingInterface {
       $bearerEcom,
       $bearerStatusTracking,
       $bearerCounterparty,
-    $sandbox,
+      $sandbox,
       $logger
     );
 
     // Prepare request object.
-    if (null !== $this->request) {
+    if (null !== $request) {
       $this->setRequest($request);
     }
   }
@@ -117,21 +120,22 @@ class Tracking extends Ukrposhta implements TrackingInterface {
       barcode: $trackingStatusResponseData['barcode'],
       step: (int) $trackingStatusResponseData['step'],
       date: new \DateTime($trackingStatusResponseData['date']),
-      index: $trackingStatusResponseData['index'],
+      name: $trackingStatusResponseData['name'],
       eventId: (int) $trackingStatusResponseData['event'],
       eventName: $trackingStatusResponseData['eventName'],
       country: $trackingStatusResponseData['country'],
-      eventReason: $trackingStatusResponseData['eventReason'] ?? null,
-      eventReasonId: $trackingStatusResponseData['eventReason_id'] ? (int) $trackingStatusResponseData['eventReason_id'] : null,
       mailType: (int) $trackingStatusResponseData['mailType'],
-      indexOrder: (int) $trackingStatusResponseData['indexOrder']
+      indexOrder: (int) $trackingStatusResponseData['indexOrder'],
+      index: $trackingStatusResponseData['index'],
+      eventReason: $trackingStatusResponseData['eventReason'] ?? null,
+      eventReasonId: $trackingStatusResponseData['eventReason_id'] ?? null
     );
   }
 
   /**
    * {@inheritDoc}
    */
-  protected function getEndpointUrl(): string {
+  public function getEndpointUrl(): string {
     return self::BASE_URL . self::BASE_ENDPOINT . '/' . self::VERSION;
   }
 

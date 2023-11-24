@@ -16,11 +16,17 @@
         "psr/log": "^3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.6"
+        "phpunit/phpunit": "^10",
+        "fakerphp/faker": "^1.23"
     },
     "autoload": {
         "psr-4": {
-            "Ukrposhta\\": "src"
+            "Ukrposhta\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ukrposhta\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "dev",

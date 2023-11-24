@@ -4,6 +4,9 @@ namespace Ukrposhta\Exceptions;
 
 use LogicException;
 
+/**
+ *
+ */
 class NoCredentialException extends LogicException {
 
 }

@@ -23,9 +23,9 @@ interface TrackingStatusInterface {
   public function getDate(): \DateTime;
 
   /**
-   * @return string
+   * @return string|null
    */
-  public function getIndex(): string;
+  public function getIndex(): ?string;
 
   /**
    * @return string

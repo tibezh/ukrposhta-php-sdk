@@ -25,9 +25,9 @@ interface RequestInterface {
   public function request(string $access, string $method, string $endpointUrl, array $request = []): ResponseInterface;
 
   /**
-   * @param $access
+   * @param string $access
    */
-  public function setAccess($access): static;
+  public function setAccess(string $access): static;
 
   /**
    * @return string
@@ -45,9 +45,9 @@ interface RequestInterface {
   public function getRequest(): array;
 
   /**
-   * @param $endpointUrl
+   * @param string $endpointUrl
    */
-  public function setEndpointUrl($endpointUrl): static;
+  public function setEndpointUrl(string $endpointUrl): static;
 
   /**
    * @return string

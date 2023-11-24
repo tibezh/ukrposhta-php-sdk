@@ -4,6 +4,7 @@ namespace Ukrposhta\Request;
 
 use DateTime;
 use GuzzleHttp\Client as Guzzle;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\TransferException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -19,24 +20,24 @@ use Ukrposhta\Response\ResponseInterface;
 class Request implements RequestInterface, LoggerAwareInterface {
 
   /**
-   * @var Guzzle
+   * @var ClientInterface
    */
-  protected Guzzle $client;
+  protected ClientInterface $client;
 
   /**
    * @var array
    */
-  protected array $request;
+  protected array $request = [];
 
   /**
    * @var string
    */
-  protected string $access;
+  protected string $access = '';
 
   /**
    * @var string
    */
-  protected string $endpointUrl;
+  protected string $endpointUrl = '';
 
   /**
    * @var LoggerInterface
@@ -93,7 +94,6 @@ class Request implements RequestInterface, LoggerAwareInterface {
         $options = array_merge($options, ['query' => $request]);
       }
 
-
       $response = $this->client->request(
         $method,
         $this->getEndpointUrl(),
@@ -118,7 +118,6 @@ class Request implements RequestInterface, LoggerAwareInterface {
       else {
         throw new InvalidResponseException(sprintf('Failure: %s response code.', $response->getStatusCode()));
       }
-
     }
     catch (TransferException $e) {
       $this->logger->alert($e->getMessage(), [
@@ -142,14 +141,14 @@ class Request implements RequestInterface, LoggerAwareInterface {
   /**
    * Creates a single instance of the Guzzle client.
    */
-  public function setClient(): void {
-    $this->client = new Guzzle();
+  public function setClient(?ClientInterface $client = null): void {
+    $this->client = $client ?? new Guzzle();
   }
 
   /**
    * {@inheritDoc}
    */
-  public function setAccess($access): static {
+  public function setAccess(string $access): static {
     $this->access = $access;
     return $this;
   }
@@ -157,7 +156,7 @@ class Request implements RequestInterface, LoggerAwareInterface {
   /**
    * {@inheritDoc}
    */
-  public function getAccess(): string{
+  public function getAccess(): string {
     return $this->access;
   }
 
@@ -179,7 +178,7 @@ class Request implements RequestInterface, LoggerAwareInterface {
   /**
    * {@inheritDoc}
    */
-  public function setEndpointUrl($endpointUrl): static {
+  public function setEndpointUrl(string $endpointUrl): static {
     $this->endpointUrl = $endpointUrl;
     return $this;
   }
