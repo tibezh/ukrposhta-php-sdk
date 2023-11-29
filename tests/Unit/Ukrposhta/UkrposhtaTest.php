@@ -22,26 +22,31 @@ final class UkrposhtaTest extends TestCase {
 
   public function testCannotBeCreatedWithNotValidTypeData1(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new UkrposhtaClass(bearerEcom: $this->fakerGenerator()->randomDigit());
   }
 
   public function testCannotBeCreatedWithNotValidTypeData2(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new UkrposhtaClass(bearerStatusTracking: $this->fakerGenerator()->randomDigit());
   }
 
   public function testCannotBeCreatedWithNotValidTypeData3(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new UkrposhtaClass(bearerCounterparty: $this->fakerGenerator()->randomDigit());
   }
 
   public function testCannotBeCreatedWithNotValidTypeData4(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new UkrposhtaClass(sandbox: $this->fakerGenerator()->randomDigit());
   }
 
   public function testCannotBeCreatedWithNotValidTypeData5(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new UkrposhtaClass(logger: $this->fakerGenerator()->randomDigit());
   }
 

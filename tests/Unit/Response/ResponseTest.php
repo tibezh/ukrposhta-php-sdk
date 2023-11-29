@@ -17,7 +17,7 @@ class ResponseTest extends TestCase {
   use FakerGeneratorTrait;
 
   public function testConstructBase(): void {
-    $response = new Response(['data']);
+    $response = new Response(['foo' => 'bar']);
     $this->assertInstanceOf(ResponseInterface::class, $response);
   }
 
@@ -28,6 +28,7 @@ class ResponseTest extends TestCase {
 
   public function testConstructFailedArgs(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new Response(null);
   }
 

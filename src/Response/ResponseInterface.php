@@ -2,12 +2,15 @@
 
 namespace Ukrposhta\Response;
 
+/**
+ *
+ */
 interface ResponseInterface {
 
   /**
    * Response object.
    *
-   * @return array
+   * @return array<string|int, string|mixed|array<string, mixed>>
    */
   public function getResponseData(): array;
 

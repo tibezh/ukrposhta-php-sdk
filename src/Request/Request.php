@@ -25,7 +25,7 @@ class Request implements RequestInterface, LoggerAwareInterface {
   protected ClientInterface $client;
 
   /**
-   * @var array
+   * @var array<string, mixed>
    */
   protected array $request = [];
 
@@ -76,20 +76,19 @@ class Request implements RequestInterface, LoggerAwareInterface {
     // Log request
     $date = new DateTime();
     $id = $date->format('YmdHisu');
-    $this->logger->info('Request to Ukrposhta API', [
+    $logger_context = [
       'id' => $id,
       'endpointurl' => $this->getEndpointUrl(),
-    ]);
+    ];
+    $this->logger->info('Request to Ukrposhta API', $logger_context);
 
 
     $request_json = json_encode($this->getRequest());
-    $this->logger->debug("Request: {$request_json}", [
-      'id' => $id,
-      'endpointurl' => $this->getEndpointUrl(),
-    ]);
+    $this->logger->debug("Request: {$request_json}", $logger_context);
 
     try {
       $options = $this->getRequestOptions();
+
       if ('GET' === $method) {
         $options = array_merge($options, ['query' => $request]);
       }
@@ -102,32 +101,26 @@ class Request implements RequestInterface, LoggerAwareInterface {
 
       $body = (string) $response->getBody();
 
-      $this->logger->info('Response from Ukrposhta API', [
-        'id' => $id,
-        'endpointurl' => $this->getEndpointUrl(),
-      ]);
+      $this->logger->info('Response from Ukrposhta API', $logger_context);
 
-      $this->logger->debug("Response: {$body}" , [
-        'id' => $id,
-        'endpointurl' => $this->getEndpointUrl(),
-      ]);
+      $this->logger->debug("Response: {$body}" , $logger_context);
 
       if (200 === $response->getStatusCode()) {
-        return new Response(response: json_decode($body, true));
+        return new Response(response: (array) json_decode($body, true));
       }
       else {
         throw new InvalidResponseException(sprintf('Failure: %s response code.', $response->getStatusCode()));
       }
     }
     catch (TransferException $e) {
-      $this->logger->alert($e->getMessage(), [
-        'id' => $id,
-        'endpointurl' => $this->getEndpointUrl(),
-      ]);
+      $this->logger->alert($e->getMessage(), $logger_context);
       throw new RequestException($e->getMessage());
     }
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   protected function getRequestOptions(): array {
     return [
       'http_errors' => TRUE,

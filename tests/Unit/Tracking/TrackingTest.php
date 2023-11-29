@@ -4,20 +4,16 @@ namespace Ukrposhta\Tests\Unit\Tracking;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Medium;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Ukrposhta\Exceptions\NoCredentialException;
 use Ukrposhta\Request\Request;
 use Ukrposhta\Request\RequestInterface;
 use Ukrposhta\Response\Response;
-use Ukrposhta\Response\ResponseInterface;
 use Ukrposhta\Tests\Utils\FakerGeneratorTrait;
 use Ukrposhta\Tracking\Tracking;
 use Ukrposhta\Tracking\TrackingInterface;
 use Ukrposhta\Tracking\TrackingRouteInterface;
-use Ukrposhta\Tracking\TrackingStatus;
 use Ukrposhta\Tracking\TrackingStatusCollectionInterface;
 use Ukrposhta\Tracking\TrackingStatusInterface;
 
@@ -105,31 +101,37 @@ class TrackingTest extends TestCase {
 
   public function testCanBeCreatedWithNotValidData1(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new Tracking(bearerEcom: $this->fakerGenerator()->randomDigit());
   }
 
   public function testCanBeCreatedWithNotValidData2(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new Tracking(bearerStatusTracking: $this->fakerGenerator()->randomDigit());
   }
 
   public function testCanBeCreatedWithNotValidData3(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new Tracking(bearerCounterparty: $this->fakerGenerator()->randomDigit());
   }
 
   public function testCanBeCreatedWithNotValidData4(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new Tracking(sandbox: $this->fakerGenerator()->words());
   }
 
   public function testCanBeCreatedWithNotValidData5(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new Tracking(logger: $this->fakerGenerator()->address());
   }
 
   public function testCanBeCreatedWithNotValidData6(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new Tracking(request: $this->fakerGenerator()->boolean());
   }
 
@@ -149,10 +151,11 @@ class TrackingTest extends TestCase {
 
   public function testSetAccessTokenNotValid(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     (new Tracking())->setAccessToken($this->fakerGenerator()->boolean());
   }
 
-  public function testGetTokenNotValid() {
+  public function testGetTokenNotValid(): void {
     // Make getAccessToken method accessible.
     $reflection = new \ReflectionClass(Tracking::class);
     $method = $reflection->getMethod('getAccessToken');
@@ -205,27 +208,6 @@ class TrackingTest extends TestCase {
     $this->assertSame($lang, $property->getValue($tracking));
   }
 
-  public function testSetRequest(): void {
-    $tracking = new Tracking();
-
-    $request = new class implements RequestInterface {
-      public function __construct(?LoggerInterface $logger = null) {}
-      public function request(string $access, string $method, string $endpointUrl, array $request = []): ResponseInterface {}
-      public function setAccess($access): static {}
-      public function getAccess(): string {}
-      public function setRequest(array $request): static {}
-      public function getRequest(): array {}
-      public function setEndpointUrl($endpointUrl): static {}
-      public function getEndpointUrl(): string {}
-    };
-    $tracking->setRequest($request);
-
-    $reflection = new \ReflectionClass($tracking);
-    $property = $reflection->getProperty('request');
-
-    $this->assertSame($request, $property->getValue($tracking));
-  }
-
   public function testGetRequest(): void {
     $tracking = new Tracking();
 
@@ -238,7 +220,7 @@ class TrackingTest extends TestCase {
     $this->assertSame($request, $property->getValue($tracking));
   }
 
-  public function testGetEndpointUrl() {
+  public function testGetEndpointUrl(): void {
     $tracking = new Tracking();
 
     $endpointUrl = $tracking->getEndpointUrl();

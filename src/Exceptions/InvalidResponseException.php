@@ -7,5 +7,4 @@ use Exception;
 /**
  *
  */
-class InvalidResponseException extends Exception {
-}
+class InvalidResponseException extends Exception {}

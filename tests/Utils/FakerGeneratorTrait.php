@@ -13,11 +13,11 @@ trait FakerGeneratorTrait {
   protected ?FakerGeneratorInterface $fakerGenerator = null;
 
   /**
-   * @return FakerGeneratorInterface|FakerGenerator
+   * @return FakerGeneratorInterface
    */
   protected function fakerGenerator(): FakerGeneratorInterface {
     if (!$this->fakerGenerator) {
-      $this->fakerGenerator = FakerFactory::create();
+      $this->fakerGenerator = FakerFactory::createCustom();
     }
     return $this->fakerGenerator;
   }

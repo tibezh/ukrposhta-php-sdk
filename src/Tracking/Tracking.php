@@ -37,6 +37,9 @@ class Tracking extends Ukrposhta implements TrackingInterface {
    */
   private ?string $accessToken = null;
 
+  /**
+   * {@inheritDoc}
+   */
   public function __construct(
     ?string $bearerEcom = null,
     ?string $bearerStatusTracking = null,
@@ -69,6 +72,7 @@ class Tracking extends Ukrposhta implements TrackingInterface {
       $this->getEndpointUrl() . self::BARCODE_LAST_STATUS_ENDPOINT,
       ['barcode' => $barcode, 'lang' => $this->getRequestLang()]
     );
+    /** @var array<string, mixed> $response */
     $response = $response->getResponseData();
     return $this->convertTrackingStatusResponse($response);
   }
@@ -85,8 +89,9 @@ class Tracking extends Ukrposhta implements TrackingInterface {
     );
     $response = $response->getResponseData();
     $collection = new TrackingStatusCollection();
+    /** @var array<string, mixed> $trackingStatus */
     foreach ($response as $trackingStatus) {
-      $collection->add($this->convertTrackingStatusResponse($trackingStatus));
+      $collection->add($this->convertTrackingStatusResponse((array) $trackingStatus));
     }
     return $collection;
   }
@@ -106,12 +111,13 @@ class Tracking extends Ukrposhta implements TrackingInterface {
       'GET',
       $this->getEndpointUrl() . $endpoint,
     );
+    /** @var array<string, string> $response */
     $response = $response->getResponseData();
     return new TrackingRoute($response['from'], $response['to']);
   }
 
   /**
-   * @param array $trackingStatusResponseData
+   * @param array<string|int, string|mixed> $trackingStatusResponseData
    * @return TrackingStatusInterface
    * @throws \Exception
    */
@@ -194,6 +200,9 @@ class Tracking extends Ukrposhta implements TrackingInterface {
       else {
         $this->setAccessToken($this->{static::CREDENTIALS_TYPE});
       }
+    }
+    if (!$this->accessToken) {
+      throw new NoCredentialException();
     }
     return $this->accessToken;
   }

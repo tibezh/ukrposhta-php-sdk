@@ -9,6 +9,9 @@ use Ukrposhta\Tests\Utils\FakerFactory;
  */
 class TrackingStatusHelper {
 
+  /**
+   * @return array<string, mixed>
+   */
   public static function getRandomTrackingStatusFixture(): array {
     $fixture = [];
     $faker_generator = FakerFactory::create();
@@ -37,6 +40,9 @@ class TrackingStatusHelper {
     return $fixture;
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   public static function getRandomTrackingStatusResponseDataFixture(): array {
     $fixture = [];
     $faker_generator = FakerFactory::create();

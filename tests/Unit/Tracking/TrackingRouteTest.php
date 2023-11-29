@@ -46,27 +46,32 @@ final class TrackingRouteTest extends TestCase {
 
   public function testCannotBeCreatedWithNotValidArgumentData1(): void {
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     new TrackingRoute();
   }
 
   public function testCannotBeCreatedWithNotValidArgumentData2(): void {
     $this->expectException(\ArgumentCountError::class);
     $from = $this->fakerGenerator()->address();
+    /** @phpstan-ignore-next-line */
     new TrackingRoute(from: $from);
   }
 
   public function testCannotBeCreatedWithNotValidArgumentData3(): void {
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     new TrackingRoute(from: $this->fakerGenerator()->address());
   }
 
   public function testCannotBeCreatedWithNotValidTypeData1(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new TrackingRoute(from: $this->fakerGenerator()->randomDigit(), to: $this->fakerGenerator()->address());
   }
 
   public function testCannotBeCreatedWithNotValidTypeData2(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new TrackingRoute(from: $this->fakerGenerator()->address(), to: $this->fakerGenerator()->randomDigit());
   }
 

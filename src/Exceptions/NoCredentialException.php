@@ -7,6 +7,4 @@ use LogicException;
 /**
  *
  */
-class NoCredentialException extends LogicException {
-
-}
+class NoCredentialException extends LogicException {}

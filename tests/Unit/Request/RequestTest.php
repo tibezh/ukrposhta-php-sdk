@@ -34,6 +34,7 @@ class RequestTest extends TestCase {
 
   public function testConstructFailedArgs(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     new Request(true);
   }
 
@@ -50,6 +51,7 @@ class RequestTest extends TestCase {
 
   public function testSetLogger(): void {
     $logger = new class extends AbstractLogger {
+      /** @phpstan-ignore-next-line */
       public function log($level, \Stringable|string $message, array $context = []): void {}
     };
 
@@ -78,6 +80,7 @@ class RequestTest extends TestCase {
 
   public function testSetEndpointUrlFailed(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     (new Request())->setEndpointUrl(null);
   }
 
@@ -115,6 +118,7 @@ class RequestTest extends TestCase {
 
   public function testSetRequestFailedArgs(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     (new Request())->setRequest(null);
   }
 
@@ -136,6 +140,7 @@ class RequestTest extends TestCase {
 
   public function testSetAccessFailed(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     (new Request())->setAccess(null);
   }
 
@@ -179,38 +184,48 @@ class RequestTest extends TestCase {
 
   public function testRequestNoArgsFail1(): void {
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     (new Request())->request();
   }
 
   public function testRequestNoArgsFail2(): void {
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     (new Request())->request(access: $this->fakerGenerator()->uuid());
   }
 
   public function testRequestNoArgsFail3(): void {
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     (new Request())->request(access: $this->fakerGenerator()->uuid(), method: 'GET');
   }
 
   public function testRequestTypeArgsFail1(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     (new Request())->request(access: null, method: 'GET', endpointUrl: $this->fakerGenerator()->url());
   }
 
   public function testRequestTypeArgsFail2(): void {
     $this->expectException(\TypeError::class);
-    (new Request())->request(access: $this->fakerGenerator()->uuid(), method: null, endpointUrl: $this->fakerGenerator()->url());
+    (new Request())->request(
+      access: $this->fakerGenerator()->uuid(),
+      /** @phpstan-ignore-next-line */
+      method: null,
+      endpointUrl: $this->fakerGenerator()->url()
+    );
   }
 
   public function testRequestTypeArgsFail3(): void {
     $this->expectException(\TypeError::class);
+    /** @phpstan-ignore-next-line */
     (new Request())->request(access: $this->fakerGenerator()->uuid(), method: 'GET', endpointUrl: null);
   }
 
   public function testRequestBase(): void {
     $fakeResponseData = $this->fakerGenerator()->randomElements(count: 3);
     $mock = new MockHandler([
-      new GuzzleResponse(200, [], json_encode($fakeResponseData)),
+      new GuzzleResponse(200, [], (string) json_encode($fakeResponseData)),
     ]);
 
     $handler = HandlerStack::create($mock);
@@ -223,8 +238,8 @@ class RequestTest extends TestCase {
     $method = 'GET';
     $endpointUrl = $this->fakerGenerator()->url();
 
-    $response1 = $request->request(access: $access, method: $method, endpointUrl: $endpointUrl);
-    $this->assertSame($fakeResponseData, $response1->getResponseData());
+    $response = $request->request(access: $access, method: $method, endpointUrl: $endpointUrl);
+    $this->assertSame($fakeResponseData, $response->getResponseData());
   }
 
   public function testRequestInvalidResponseException(): void {

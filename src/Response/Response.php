@@ -7,9 +7,10 @@ namespace Ukrposhta\Response;
  */
 class Response implements ResponseInterface {
 
-  public function __construct(protected readonly array $response = []) {
-
-  }
+  /**
+   * @param array<string|int, mixed|array<string, mixed>> $response
+   */
+  public function __construct(protected readonly array $response = []) {}
 
   /**
    * {@inheritDoc}

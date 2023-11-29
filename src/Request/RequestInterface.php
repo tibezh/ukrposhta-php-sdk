@@ -19,7 +19,7 @@ interface RequestInterface {
    * @param string $access
    * @param string $method
    * @param string $endpointUrl
-   * @param array $request
+   * @param array<string, mixed> $request
    * @return ResponseInterface
    */
   public function request(string $access, string $method, string $endpointUrl, array $request = []): ResponseInterface;
@@ -35,12 +35,12 @@ interface RequestInterface {
   public function getAccess(): string;
 
   /**
-   * @param array $request
+   * @param array<string, mixed> $request
    */
   public function setRequest(array $request): static;
 
   /**
-   * @return string
+   * @return array<string, mixed>
    */
   public function getRequest(): array;
 
@@ -53,4 +53,5 @@ interface RequestInterface {
    * @return string
    */
   public function getEndpointUrl(): string;
+
 }

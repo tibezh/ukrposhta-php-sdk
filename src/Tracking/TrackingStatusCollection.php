@@ -8,7 +8,7 @@ namespace Ukrposhta\Tracking;
 class TrackingStatusCollection implements TrackingStatusCollectionInterface {
 
   /**
-   * @var array
+   * @var array<int, TrackingStatusInterface>
    */
   private array $items = [];
 
@@ -27,7 +27,7 @@ class TrackingStatusCollection implements TrackingStatusCollectionInterface {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function add(TrackingStatusInterface $trackingStatus): void
   {
@@ -35,7 +35,7 @@ class TrackingStatusCollection implements TrackingStatusCollectionInterface {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function all(): array
   {
@@ -43,7 +43,7 @@ class TrackingStatusCollection implements TrackingStatusCollectionInterface {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function key(): int
   {
@@ -51,7 +51,7 @@ class TrackingStatusCollection implements TrackingStatusCollectionInterface {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function rewind(): void
   {
@@ -67,7 +67,7 @@ class TrackingStatusCollection implements TrackingStatusCollectionInterface {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function next(): void
   {
@@ -75,7 +75,7 @@ class TrackingStatusCollection implements TrackingStatusCollectionInterface {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function valid(): bool
   {
@@ -83,7 +83,7 @@ class TrackingStatusCollection implements TrackingStatusCollectionInterface {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritDoc}
    */
   public function count(): int
   {

@@ -14,7 +14,7 @@ interface TrackingStatusCollectionInterface {
   public function add(TrackingStatusInterface $trackingStatus): void;
 
   /**
-   * @return array
+   * @return array<int, TrackingStatusInterface>
    */
   public function all(): array;
 

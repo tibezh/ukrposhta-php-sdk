@@ -15,6 +15,9 @@ final class TrackingStatusTest extends TestCase {
 
   use FakerGeneratorTrait;
 
+  /**
+   * @var array<string, mixed>
+   */
   protected array $fixturesData = [];
 
   protected function updateFixturesData(): void {
@@ -46,18 +49,21 @@ final class TrackingStatusTest extends TestCase {
 
   public function testCannotBeCreatedWithNotValidArgumentData1(): void {
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     new TrackingStatus();
   }
 
   public function testCannotBeCreatedWithNotValidArgumentData2(): void {
     $this->updateFixturesData();
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     new TrackingStatus(barcode: $this->fixturesData['barcode']);
   }
 
   public function testCannotBeCreatedWithNotValidArgumentData3(): void {
     $this->updateFixturesData();
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     new TrackingStatus(
       barcode: $this->fixturesData['barcode'],
       step: $this->fixturesData['step']
@@ -67,6 +73,7 @@ final class TrackingStatusTest extends TestCase {
   public function testCannotBeCreatedWithNotValidArgumentData4(): void {
     $this->updateFixturesData();
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     new TrackingStatus(
       barcode: $this->fixturesData['barcode'],
       step: $this->fixturesData['step'],
@@ -77,6 +84,7 @@ final class TrackingStatusTest extends TestCase {
   public function testCannotBeCreatedWithNotValidArgumentData5(): void {
     $this->updateFixturesData();
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     new TrackingStatus(
       barcode: $this->fixturesData['barcode'],
       step: $this->fixturesData['step'],
@@ -88,6 +96,7 @@ final class TrackingStatusTest extends TestCase {
   public function testCannotBeCreatedWithNotValidArgumentData6(): void {
     $this->updateFixturesData();
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     new TrackingStatus(
       barcode: $this->fixturesData['barcode'],
       step: $this->fixturesData['step'],
@@ -100,6 +109,7 @@ final class TrackingStatusTest extends TestCase {
   public function testCannotBeCreatedWithNotValidArgumentData7(): void {
     $this->updateFixturesData();
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     new TrackingStatus(
       barcode: $this->fixturesData['barcode'],
       step: $this->fixturesData['step'],
@@ -113,6 +123,7 @@ final class TrackingStatusTest extends TestCase {
   public function testCannotBeCreatedWithNotValidArgumentData8(): void {
     $this->updateFixturesData();
     $this->expectException(\ArgumentCountError::class);
+    /** @phpstan-ignore-next-line */
     new TrackingStatus(
       barcode: $this->fixturesData['barcode'],
       step: $this->fixturesData['step'],

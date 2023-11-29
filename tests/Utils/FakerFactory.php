@@ -7,9 +7,10 @@ use Faker\Factory;
 class FakerFactory extends Factory {
 
   /**
-   * {@inheritDoc}
+   * @param string $locale
+   * @return FakerGeneratorInterface
    */
-  public static function create($locale = self::DEFAULT_LOCALE)
+  public static function createCustom(string $locale = self::DEFAULT_LOCALE): FakerGeneratorInterface
   {
     $generator = new FakerGenerator();
 
