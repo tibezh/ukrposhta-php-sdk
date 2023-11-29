@@ -7,7 +7,6 @@ namespace Ukrposhta\Tests\Unit\Tracking;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
-use Ukrposhta\Tests\Utils\FakerGeneratorTrait;
 use Ukrposhta\Tracking\TrackingStatus;
 use Ukrposhta\Tracking\TrackingStatusInterface;
 
@@ -15,7 +14,6 @@ use Ukrposhta\Tracking\TrackingStatusInterface;
 #[Small]
 final class TrackingStatusTest extends TestCase
 {
-    use FakerGeneratorTrait;
 
     /**
      * @var array<string, mixed>
@@ -169,7 +167,7 @@ final class TrackingStatusTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
-        $this->fixturesData['barcode'] = $this->fakerGenerator()->randomDigit();
+        $this->fixturesData['barcode'] = 123;
         new TrackingStatus(...$this->fixturesData);
     }
 
@@ -177,7 +175,7 @@ final class TrackingStatusTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
-        $this->fixturesData['step'] = $this->fakerGenerator()->word();
+        $this->fixturesData['step'] = 'step2';
         new TrackingStatus(...$this->fixturesData);
     }
 
@@ -185,7 +183,7 @@ final class TrackingStatusTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
-        $this->fixturesData['date'] = $this->fakerGenerator()->word();
+        $this->fixturesData['date'] = 'date3';
         new TrackingStatus(...$this->fixturesData);
     }
 
@@ -193,7 +191,7 @@ final class TrackingStatusTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
-        $this->fixturesData['eventId'] = $this->fakerGenerator()->word();
+        $this->fixturesData['eventId'] = 'eventId4';
         new TrackingStatus(...$this->fixturesData);
     }
 
@@ -201,7 +199,7 @@ final class TrackingStatusTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
-        $this->fixturesData['eventName'] = $this->fakerGenerator()->randomDigit();
+        $this->fixturesData['eventName'] = 123450;
         new TrackingStatus(...$this->fixturesData);
     }
 
@@ -209,7 +207,7 @@ final class TrackingStatusTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
-        $this->fixturesData['country'] = $this->fakerGenerator()->randomDigit();
+        $this->fixturesData['country'] = 0123456;
         new TrackingStatus(...$this->fixturesData);
     }
 
@@ -217,7 +215,7 @@ final class TrackingStatusTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
-        $this->fixturesData['mailType'] = $this->fakerGenerator()->word();
+        $this->fixturesData['mailType'] = 'mailType7';
         new TrackingStatus(...$this->fixturesData);
     }
 
@@ -225,7 +223,7 @@ final class TrackingStatusTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
-        $this->fixturesData['indexOrder'] = $this->fakerGenerator()->word();
+        $this->fixturesData['indexOrder'] = 'indexOrder8';
         new TrackingStatus(...$this->fixturesData);
     }
 
@@ -233,7 +231,7 @@ final class TrackingStatusTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
-        $this->fixturesData['index'] = $this->fakerGenerator()->randomDigit();
+        $this->fixturesData['index'] = 123456789999;
         new TrackingStatus(...$this->fixturesData);
     }
 
@@ -241,7 +239,7 @@ final class TrackingStatusTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
-        $this->fixturesData['eventReason'] = $this->fakerGenerator()->randomDigit();
+        $this->fixturesData['eventReason'] = 101011123;
         new TrackingStatus(...$this->fixturesData);
     }
 
@@ -249,7 +247,7 @@ final class TrackingStatusTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
-        $this->fixturesData['eventReasonId'] = $this->fakerGenerator()->word();
+        $this->fixturesData['eventReasonId'] = 'eventReasonId11';
         new TrackingStatus(...$this->fixturesData);
     }
 }

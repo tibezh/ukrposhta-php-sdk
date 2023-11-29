@@ -17,7 +17,6 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^10",
-        "fakerphp/faker": "^1.23",
         "phpstan/phpstan": "^1.10",
         "friendsofphp/php-cs-fixer": "^3.40"
     },
@@ -34,6 +33,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "phpstan": "@php vendor/bin/phpstan analyse"
+        "phpstan": "@php vendor/bin/phpstan analyse",
+        "test": "@php vendor/bin/phpunit"
     }
 }

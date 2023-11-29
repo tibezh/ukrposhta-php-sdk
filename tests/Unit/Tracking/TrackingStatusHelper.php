@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Ukrposhta\Tests\Unit\Tracking;
 
-use Ukrposhta\Tests\Utils\FakerFactory;
+use DateTime;
 
 class TrackingStatusHelper
 {
@@ -13,31 +13,20 @@ class TrackingStatusHelper
      */
     public static function getRandomTrackingStatusFixture(): array
     {
-        $fixture = [];
-        $faker_generator = FakerFactory::create();
-        $keys_mapping = [
-          'barcode' => 'barcode',
-          'step' => 'randomDigit',
-          'date' => 'dateTime',
-          'name' => ['sentence', 3],
-          'eventId' => 'randomDigit',
-          'eventName' => ['sentence', 3],
-          'country' => 'country',
-          'eventReason' => 'sentenceOrNull',
-          'eventReasonId' => 'randomDigitOrNull',
-          'mailType' => 'randomDigit',
-          'indexOrder' => 'randomDigit',
-          'index' => 'randomStringOrNull',
+        return [
+          'barcode' => '123',
+          'step' => 0,
+          'date' => new DateTime('January 11 2023'),
+          'name' => 'random tracking status fixture',
+          'eventId' => 321,
+          'eventName' => 'random tracking status event name',
+          'country' => 'Ukraine status fixture',
+          'eventReason' => null,
+          'eventReasonId' => null,
+          'mailType' => 563,
+          'indexOrder' => 4789,
+          'index' => '32123',
         ];
-        foreach ($keys_mapping as $key => $func) {
-            if (is_array($func)) {
-                $fixture[$key] = $faker_generator->{$func[0]}($func[1]);
-            } else {
-                $fixture[$key] = $faker_generator->{$func}();
-            }
-        }
-
-        return $fixture;
     }
 
     /**
@@ -45,31 +34,19 @@ class TrackingStatusHelper
      */
     public static function getRandomTrackingStatusResponseDataFixture(): array
     {
-        $fixture = [];
-        $faker_generator = FakerFactory::create();
-        $keys_mapping = [
-          'barcode' => 'barcode',
-          'step' => 'randomDigit',
-          'date' => 'dateTime',
-          'name' => ['sentence', 3],
-          'event' => 'randomDigit',
-          'eventName' => ['sentence', 3],
-          'country' => 'country',
-          'mailType' => 'randomDigit',
-          'indexOrder' => 'randomDigit',
-          'index' => 'randomStringOrNull',
-          'eventReason' => 'sentenceOrNull',
-          'eventReason_id' => 'randomDigitOrNull',
+        return [
+          'barcode' => '456',
+          'step' => 1,
+          'date' => (new DateTime('August 23 2023'))->format('c'),
+          'name' => 'random tracking status response data fixture',
+          'event' => 654,
+          'eventName' => 'random tracking status response event name',
+          'country' => 'Ukraine response status fixture',
+          'mailType' => 890,
+          'indexOrder' => 1235,
+          'index' => null,
+          'eventReason' => null,
+          'eventReason_id' => 1579,
         ];
-        foreach ($keys_mapping as $key => $func) {
-            if (is_array($func)) {
-                $fixture[$key] = $faker_generator->{$func[0]}($func[1]);
-            } else {
-                $fixture[$key] = $faker_generator->{$func}();
-            }
-        }
-        $fixture['date'] = $fixture['date']->format('c');
-
-        return $fixture;
     }
 }

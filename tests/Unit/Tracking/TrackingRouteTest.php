@@ -16,21 +16,20 @@ use Ukrposhta\Tracking\TrackingRouteInterface;
 #[Small]
 final class TrackingRouteTest extends TestCase
 {
-    use FakerGeneratorTrait;
 
     public function testInterface(): void
     {
         $trackingRoute = new TrackingRoute(
-            from: $this->fakerGenerator()->address(),
-            to: $this->fakerGenerator()->address()
+            from: 'Ukraine interface from',
+            to: 'Ukraine interface to'
         );
         $this->assertInstanceOf(TrackingRouteInterface::class, $trackingRoute);
     }
 
     public function testGetFrom(): void
     {
-        $from = $this->fakerGenerator()->address();
-        $to = $this->fakerGenerator()->address();
+        $from = 'Ukraine get from';
+        $to = 'Ukraine get from to';
         $trackingRoute = new TrackingRoute(from: $from, to: $to);
         $this->assertSame($from, $trackingRoute->getFrom());
         $this->assertSame($to, $trackingRoute->getTo());
@@ -42,8 +41,8 @@ final class TrackingRouteTest extends TestCase
      */
     public function testCanBeCreatedWithValidData(): void
     {
-        $from = $this->fakerGenerator()->address();
-        $to = $this->fakerGenerator()->address();
+        $from = 'Ukraine valid data from';
+        $to = 'Ukraine valid data to';
         $trackingRoute = new TrackingRoute(from: $from, to: $to);
         $this->assertSame($from, $trackingRoute->getFrom());
         $this->assertSame($to, $trackingRoute->getTo());
@@ -59,7 +58,7 @@ final class TrackingRouteTest extends TestCase
     public function testCannotBeCreatedWithNotValidArgumentData2(): void
     {
         $this->expectException(\ArgumentCountError::class);
-        $from = $this->fakerGenerator()->address();
+        $from = 'Ukraine with not valid argument data 2';
         /** @phpstan-ignore-next-line */
         new TrackingRoute(from: $from);
     }
@@ -68,20 +67,20 @@ final class TrackingRouteTest extends TestCase
     {
         $this->expectException(\ArgumentCountError::class);
         /** @phpstan-ignore-next-line */
-        new TrackingRoute(from: $this->fakerGenerator()->address());
+        new TrackingRoute(from: 'Ukraine with not valid argument data 3');
     }
 
     public function testCannotBeCreatedWithNotValidTypeData1(): void
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        new TrackingRoute(from: $this->fakerGenerator()->randomDigit(), to: $this->fakerGenerator()->address());
+        new TrackingRoute(from: 0123, to: 'Ukraine');
     }
 
     public function testCannotBeCreatedWithNotValidTypeData2(): void
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        new TrackingRoute(from: $this->fakerGenerator()->address(), to: $this->fakerGenerator()->randomDigit());
+        new TrackingRoute(from: 'Ukraine', to: 2143);
     }
 }

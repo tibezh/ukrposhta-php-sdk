@@ -16,7 +16,6 @@ use Ukrposhta\Tests\Utils\FakerGeneratorTrait;
 #[Small]
 class ResponseTest extends TestCase
 {
-    use FakerGeneratorTrait;
 
     public function testConstructBase(): void
     {
@@ -40,10 +39,10 @@ class ResponseTest extends TestCase
     public function testGetResponseData(): void
     {
         $fakeResponse = [
-          'digit' => $this->fakerGenerator()->randomDigit(),
-          'string' => $this->fakerGenerator()->word(),
-          'bool' => $this->fakerGenerator()->boolean(),
-          'number' => $this->fakerGenerator()->randomNumber(),
+          'digit' => 0123,
+          'string' => 'Lorem ipsum',
+          'bool' => false,
+          'number' => 321,
         ];
 
         $response = new Response($fakeResponse);

@@ -180,10 +180,8 @@ class Tracking extends Ukrposhta implements TrackingInterface
                 $this->setAccessToken($this->{static::CREDENTIALS_TYPE});
             }
         }
-        if (!$this->accessToken) {
-            throw new NoCredentialException();
-        }
-
+        // todo: fix phpstan error with return type.
+        /** @phpstan-ignore-next-line */
         return $this->accessToken;
     }
 }

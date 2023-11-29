@@ -19,14 +19,12 @@ use Ukrposhta\Exceptions\InvalidResponseException;
 use Ukrposhta\Exceptions\RequestException;
 use Ukrposhta\Request\Request;
 use Ukrposhta\Request\RequestInterface;
-use Ukrposhta\Tests\Utils\FakerGeneratorTrait;
 
 #[CoversClass(Request::class)]
 #[CoversClass(RequestInterface::class)]
 #[Medium]
 class RequestTest extends TestCase
 {
-    use FakerGeneratorTrait;
 
     public function testConstructBase(): void
     {
@@ -81,7 +79,7 @@ class RequestTest extends TestCase
 
     public function testGetEndpointUrlAvailable(): void
     {
-        $endpointUrl = $this->fakerGenerator()->url();
+        $endpointUrl = 'https://example.com/get-endpoint';
         $endpoint = (new Request())
           ->setEndpointUrl($endpointUrl)
           ->getEndpointUrl();
@@ -97,7 +95,7 @@ class RequestTest extends TestCase
 
     public function testSetEndpointUrl(): void
     {
-        $endpointUrl = $this->fakerGenerator()->url();
+        $endpointUrl = 'https://example.com/set-endpoint';
         $request = (new Request())->setEndpointUrl($endpointUrl);
 
         $reflection = new \ReflectionClass($request);
@@ -116,10 +114,10 @@ class RequestTest extends TestCase
     public function testGetRequestAvailable(): void
     {
         $fakeRequestData = [
-          'digit' => $this->fakerGenerator()->randomDigit(),
-          'string' => $this->fakerGenerator()->word(),
-          'bool' => $this->fakerGenerator()->boolean(),
-          'number' => $this->fakerGenerator()->randomNumber(),
+          'digit' => 0321,
+          'string' => 'lorem Ipsum',
+          'bool' => true,
+          'number' => 321,
         ];
         $requestData = (new Request())->setRequest($fakeRequestData)->getRequest();
 
@@ -138,7 +136,7 @@ class RequestTest extends TestCase
 
     public function testSetRequest(): void
     {
-        $fakeRequestData = [$this->fakerGenerator()->word() => $this->fakerGenerator()->randomDigit()];
+        $fakeRequestData = ['foo' => 0412];
 
         $request = (new Request())->setRequest($fakeRequestData);
         $reflection = new \ReflectionClass($request);
@@ -163,7 +161,7 @@ class RequestTest extends TestCase
 
     public function testSetAccess(): void
     {
-        $fakeAccessData = $this->fakerGenerator()->uuid();
+        $fakeAccessData = '74cc7c64-8ec8-11ee-b9d1-0242ac120002';
 
         $request = (new Request())->setAccess($fakeAccessData);
         $reflection = new \ReflectionClass($request);
@@ -185,7 +183,7 @@ class RequestTest extends TestCase
 
     public function testGetRequestOptions(): void
     {
-        $bearer = $this->fakerGenerator()->uuid();
+        $bearer = 'fe691e2b-bceb-4d08-a308-8c1b9a9e3d61';
         $requestOptions = [
           'http_errors' => true,
           'headers' => [
@@ -213,31 +211,31 @@ class RequestTest extends TestCase
     {
         $this->expectException(\ArgumentCountError::class);
         /** @phpstan-ignore-next-line */
-        (new Request())->request(access: $this->fakerGenerator()->uuid());
+        (new Request())->request(access: 'a09a933b-5f04-4080-9037-964e809d4a61');
     }
 
     public function testRequestNoArgsFail3(): void
     {
         $this->expectException(\ArgumentCountError::class);
         /** @phpstan-ignore-next-line */
-        (new Request())->request(access: $this->fakerGenerator()->uuid(), method: 'GET');
+        (new Request())->request(access: '901f87dc-2c66-4dcf-a7dd-10b7480be020', method: 'GET');
     }
 
     public function testRequestTypeArgsFail1(): void
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        (new Request())->request(access: null, method: 'GET', endpointUrl: $this->fakerGenerator()->url());
+        (new Request())->request(access: null, method: 'GET', endpointUrl: 'https://example.com/type-args-fail1');
     }
 
     public function testRequestTypeArgsFail2(): void
     {
         $this->expectException(\TypeError::class);
         (new Request())->request(
-            access: $this->fakerGenerator()->uuid(),
+            access: '6d072b2e-3382-4b5c-8d97-45dadbc159a5',
             /** @phpstan-ignore-next-line */
             method: null,
-            endpointUrl: $this->fakerGenerator()->url()
+            endpointUrl: 'https://example.com/type-args-fail2'
         );
     }
 
@@ -245,12 +243,12 @@ class RequestTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        (new Request())->request(access: $this->fakerGenerator()->uuid(), method: 'GET', endpointUrl: null);
+        (new Request())->request(access: '3dd5951c-a99c-412a-8bfd-67249a46db61', method: 'GET', endpointUrl: null);
     }
 
     public function testRequestBase(): void
     {
-        $fakeResponseData = $this->fakerGenerator()->randomElements(count: 3);
+        $fakeResponseData = ['a' => 'b', 'c' => 'd', 'w' => 'x'];
         $mock = new MockHandler([
           new GuzzleResponse(200, [], (string) json_encode($fakeResponseData)),
         ]);
@@ -261,9 +259,9 @@ class RequestTest extends TestCase
         $request = new Request();
         $request->setClient($guzzleClient);
 
-        $access = $this->fakerGenerator()->uuid();
+        $access = 'cc992de8-b583-4395-b1fd-1497f8801c3c';
         $method = 'GET';
-        $endpointUrl = $this->fakerGenerator()->url();
+        $endpointUrl = 'https://example.com/base';
 
         $response = $request->request(access: $access, method: $method, endpointUrl: $endpointUrl);
         $this->assertSame($fakeResponseData, $response->getResponseData());
@@ -279,9 +277,9 @@ class RequestTest extends TestCase
         $request = new Request();
         $request->setClient($guzzleClient);
 
-        $access = $this->fakerGenerator()->uuid();
+        $access = '6d3a3f89-b094-4c9a-bd64-9185016afe85';
         $method = 'GET';
-        $endpointUrl = $this->fakerGenerator()->url();
+        $endpointUrl = 'https://example.com/invalid-response-exception';
 
         $this->expectException(InvalidResponseException::class);
         $request->request(access: $access, method: $method, endpointUrl: $endpointUrl);
@@ -297,9 +295,10 @@ class RequestTest extends TestCase
         $request = new Request();
         $request->setClient($guzzleClient);
 
-        $access = $this->fakerGenerator()->uuid();
+        $access = '1571af86-3908-40b9-9cd6-1eb8e4b67592';
         $method = 'GET';
-        $endpointUrl = $this->fakerGenerator()->url();
+        $endpointUrl = 'https://example.com/request-exception';
+
 
         $this->expectException(RequestException::class);
         $request->request(access: $access, method: $method, endpointUrl: $endpointUrl);

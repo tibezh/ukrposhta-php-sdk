@@ -12,7 +12,6 @@ use Ukrposhta\Exceptions\NoCredentialException;
 use Ukrposhta\Request\Request;
 use Ukrposhta\Request\RequestInterface;
 use Ukrposhta\Response\Response;
-use Ukrposhta\Tests\Utils\FakerGeneratorTrait;
 use Ukrposhta\Tracking\Tracking;
 use Ukrposhta\Tracking\TrackingInterface;
 use Ukrposhta\Tracking\TrackingRouteInterface;
@@ -23,7 +22,6 @@ use Ukrposhta\Tracking\TrackingStatusInterface;
 #[Medium]
 class TrackingTest extends TestCase
 {
-    use FakerGeneratorTrait;
 
     public function testInterface(): void
     {
@@ -76,21 +74,21 @@ class TrackingTest extends TestCase
 
     public function testCanBeCreatedWithValidData2(): void
     {
-        new Tracking(bearerEcom: $this->fakerGenerator()->uuid());
+        new Tracking(bearerEcom: 'bf4e21d8-5b06-48ac-93a1-6aedcc195665');
         new Tracking(bearerEcom: null);
         $this->expectNotToPerformAssertions();
     }
 
     public function testCanBeCreatedWithValidData3(): void
     {
-        new Tracking(bearerStatusTracking: $this->fakerGenerator()->uuid());
+        new Tracking(bearerStatusTracking: 'c22bfca9-83cf-45b6-a598-74c02d86a2ca');
         new Tracking(bearerStatusTracking: null);
         $this->expectNotToPerformAssertions();
     }
 
     public function testCanBeCreatedWithValidData4(): void
     {
-        new Tracking(bearerCounterparty: $this->fakerGenerator()->uuid());
+        new Tracking(bearerCounterparty: 'b0d14259-6c4a-4ac2-bce0-dc64fc70240d');
         new Tracking(bearerCounterparty: null);
         $this->expectNotToPerformAssertions();
     }
@@ -119,42 +117,42 @@ class TrackingTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        new Tracking(bearerEcom: $this->fakerGenerator()->randomDigit());
+        new Tracking(bearerEcom: 12321);
     }
 
     public function testCanBeCreatedWithNotValidData2(): void
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        new Tracking(bearerStatusTracking: $this->fakerGenerator()->randomDigit());
+        new Tracking(bearerStatusTracking: 22334);
     }
 
     public function testCanBeCreatedWithNotValidData3(): void
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        new Tracking(bearerCounterparty: $this->fakerGenerator()->randomDigit());
+        new Tracking(bearerCounterparty: 3335234);
     }
 
     public function testCanBeCreatedWithNotValidData4(): void
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        new Tracking(sandbox: $this->fakerGenerator()->words());
+        new Tracking(sandbox: 'sandbox 4 sandbox');
     }
 
     public function testCanBeCreatedWithNotValidData5(): void
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        new Tracking(logger: $this->fakerGenerator()->address());
+        new Tracking(logger: 'Ukraine logger');
     }
 
     public function testCanBeCreatedWithNotValidData6(): void
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        new Tracking(request: $this->fakerGenerator()->boolean());
+        new Tracking(request: true);
     }
 
     public function testSetAccessTokenValid(): void
@@ -164,7 +162,7 @@ class TrackingTest extends TestCase
         $method = $reflection->getMethod('getAccessToken');
 
         // Create Tracking object and apply access token.
-        $accessToken = $this->fakerGenerator()->uuid();
+        $accessToken = '991fa78f-f082-4cf0-9eec-91c2aee208ab';
         $tracking = (new Tracking())
           ->setAccessToken($accessToken);
 
@@ -176,10 +174,10 @@ class TrackingTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        (new Tracking())->setAccessToken($this->fakerGenerator()->boolean());
+        (new Tracking())->setAccessToken(false);
     }
 
-    public function testGetTokenNotValid(): void
+    public function testGetAccessTokenNotValid(): void
     {
         // Make getAccessToken method accessible.
         $reflection = new \ReflectionClass(Tracking::class);
@@ -200,7 +198,7 @@ class TrackingTest extends TestCase
         $method = $reflection->getMethod('getAccessToken');
 
         // Create Tracking object without any credentials.
-        $trackingToken = $this->fakerGenerator()->uuid();
+        $trackingToken = '82096906-db8a-4211-96dd-644af2d836f8';
         $tracking = (new Tracking(bearerStatusTracking: $trackingToken));
 
         // Catch NoCredentials exception.
@@ -215,7 +213,7 @@ class TrackingTest extends TestCase
         $this->assertSame('UA', $tracking->getRequestLang());
 
         // Check with updated property.
-        $lang = $this->fakerGenerator()->languageCode();
+        $lang = 'UA';
         $reflection = new \ReflectionClass($tracking);
         $property = $reflection->getProperty('requestLang');
         $property->setValue($tracking, $lang);
@@ -226,7 +224,7 @@ class TrackingTest extends TestCase
     {
         $tracking = new Tracking();
 
-        $lang = $this->fakerGenerator()->languageCode();
+        $lang = 'EN';
         $tracking->setRequestLang($lang);
 
         $reflection = new \ReflectionClass($tracking);
@@ -286,13 +284,13 @@ class TrackingTest extends TestCase
 
     public function testRequestBarcodeRouteBase(): void
     {
-        $bearerStatusTrackingAccessToken = $this->fakerGenerator()->uuid();
-        $barcode = $this->fakerGenerator()->barcode();
+        $bearerStatusTrackingAccessToken = '95f0412b-54b3-40c5-90e1-ef0000a4d6b8';
+        $barcode = '123213213';
         $endpoint = sprintf(Tracking::BARCODE_ROUTE_ENDPOINT, $barcode);
         $endpointUrl = (new Tracking())->getEndpointUrl() . $endpoint;
 
-        $from = $this->fakerGenerator()->address();
-        $to = $this->fakerGenerator()->address();
+        $from = 'address from';
+        $to = 'address to';
         $fakeResponse = new Response(['from' => $from, 'to' => $to]);
 
         $requestMock = $this->createMock(RequestInterface::class);
@@ -315,13 +313,13 @@ class TrackingTest extends TestCase
 
     public function testRequestBarcodeRouteBaseWithEnVersion(): void
     {
-        $bearerStatusTrackingAccessToken = $this->fakerGenerator()->uuid();
-        $barcode = $this->fakerGenerator()->barcode();
+        $bearerStatusTrackingAccessToken = 'f34b1db0-a358-4236-abb1-db891f10c0dc';
+        $barcode = '3123214123';
         $endpoint = sprintf(Tracking::BARCODE_ROUTE_WITH_LANG_ENDPOINT, $barcode, (new Tracking())->getRequestLang());
         $endpointUrl = (new Tracking())->getEndpointUrl() . $endpoint;
 
-        $from = $this->fakerGenerator()->address();
-        $to = $this->fakerGenerator()->address();
+        $from = 'address from en';
+        $to = 'address to en';
         $fakeResponse = new Response(['from' => $from, 'to' => $to]);
 
         $requestMock = $this->createMock(RequestInterface::class);
@@ -344,8 +342,8 @@ class TrackingTest extends TestCase
 
     public function testRequestBarcodeStatuses(): void
     {
-        $bearerStatusTrackingAccessToken = $this->fakerGenerator()->uuid();
-        $barcode = $this->fakerGenerator()->barcode();
+        $bearerStatusTrackingAccessToken = '2ddf76b8-0719-4dce-ae3b-f4207c4135d0';
+        $barcode = '12214132132';
         $lang = (new Tracking())->getRequestLang();
         $endpoint = sprintf(Tracking::BARCODE_STATUSES_ENDPOINT);
         $endpointUrl = (new Tracking())->getEndpointUrl() . $endpoint;
@@ -406,8 +404,8 @@ class TrackingTest extends TestCase
 
     public function testRequestBarcodeLastStatus(): void
     {
-        $bearerStatusTrackingAccessToken = $this->fakerGenerator()->uuid();
-        $barcode = $this->fakerGenerator()->barcode();
+        $bearerStatusTrackingAccessToken = '3a447154-7496-4a39-b8b5-f84c49974d98';
+        $barcode = '32131212213453';
         $lang = (new Tracking())->getRequestLang();
         $endpoint = sprintf(Tracking::BARCODE_LAST_STATUS_ENDPOINT);
         $endpointUrl = (new Tracking())->getEndpointUrl() . $endpoint;
