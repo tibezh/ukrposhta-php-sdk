@@ -9,3 +9,9 @@
 
 ## 0.0.0-dev2 (released 07-11-2023)
 - Changed name from `ukrpostha-php-api` to `ukrpostha-php-sdk` 
+
+## 0.0.0-dev3 (released 29-11-2023)
+- Added unit tests
+- Added and configured PHP-CS-Fixer
+- Added and configured PHPStan
+- Added GitHub workflow
