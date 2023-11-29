@@ -299,7 +299,6 @@ class RequestTest extends TestCase
         $method = 'GET';
         $endpointUrl = 'https://example.com/request-exception';
 
-
         $this->expectException(RequestException::class);
         $request->request(access: $access, method: $method, endpointUrl: $endpointUrl);
     }

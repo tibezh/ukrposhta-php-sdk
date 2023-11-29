@@ -7,7 +7,6 @@ namespace Ukrposhta\Tests\Unit\Tracking;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
-use Ukrposhta\Tests\Utils\FakerGeneratorTrait;
 use Ukrposhta\Tracking\TrackingRoute;
 use Ukrposhta\Tracking\TrackingRouteInterface;
 

@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Ukrposhta\Response\Response;
 use Ukrposhta\Response\ResponseInterface;
-use Ukrposhta\Tests\Utils\FakerGeneratorTrait;
 
 #[CoversClass(Response::class)]
 #[CoversClass(ResponseInterface::class)]
