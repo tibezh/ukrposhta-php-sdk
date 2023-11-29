@@ -43,7 +43,7 @@ class FakerGenerator extends Generator implements FakerGeneratorInterface
         return parent::word();
     }
 
-    public function words($nb = 3, $asText = false): array|string
+    public function words(int $nb = 3, bool $asText = false): array|string
     {
         return parent::words($nb, $asText);
     }
