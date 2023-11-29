@@ -1,23 +1,20 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Ukrposhta\Response;
 
-/**
- *
- */
-class Response implements ResponseInterface {
+class Response implements ResponseInterface
+{
+    /**
+     * @param array<string|int, mixed|array<string, mixed>> $response
+     */
+    public function __construct(protected readonly array $response = [])
+    {
+    }
 
-  /**
-   * @param array<string|int, mixed|array<string, mixed>> $response
-   */
-  public function __construct(protected readonly array $response = []) {}
-
-  /**
-   * {@inheritDoc}
-   */
-  public function getResponseData(): array {
-    return $this->response;
-  }
-
+    public function getResponseData(): array
+    {
+        return $this->response;
+    }
 }
-

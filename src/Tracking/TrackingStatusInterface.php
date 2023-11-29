@@ -1,70 +1,32 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Ukrposhta\Tracking;
 
-/**
- *
- */
-interface TrackingStatusInterface {
+interface TrackingStatusInterface
+{
+    public function getBarcode(): string;
 
-  /**
-   * @return string
-   */
-  public function getBarcode(): string;
+    public function getStep(): int;
 
-  /**
-   * @return int
-   */
-  public function getStep(): int;
+    public function getDate(): \DateTime;
 
-  /**
-   * @return \DateTime
-   */
-  public function getDate(): \DateTime;
+    public function getIndex(): ?string;
 
-  /**
-   * @return string|null
-   */
-  public function getIndex(): ?string;
+    public function getName(): string;
 
-  /**
-   * @return string
-   */
-  public function getName(): string;
+    public function getEventId(): int;
 
-  /**
-   * @return int
-   */
-  public function getEventId(): int;
+    public function getEventName(): string;
 
-  /**
-   * @return string
-   */
-  public function getEventName(): string;
+    public function getCountry(): string;
 
-  /**
-   * @return string
-   */
-  public function getCountry(): string;
+    public function getEventReason(): ?string;
 
-  /**
-   * @return string|null
-   */
-  public function getEventReason(): ?string;
+    public function getEventReasonId(): ?int;
 
-  /**
-   * @return int|null
-   */
-  public function getEventReasonId(): ?int;
+    public function getMailType(): int;
 
-  /**
-   * @return int
-   */
-  public function getMailType(): int;
-
-  /**
-   * @return int
-   */
-  public function getIndexOrder(): int;
-
+    public function getIndexOrder(): int;
 }

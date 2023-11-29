@@ -1,51 +1,27 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Ukrposhta\Tracking;
 
-/**
- *
- */
-interface TrackingStatusCollectionInterface {
+interface TrackingStatusCollectionInterface
+{
+    public function add(TrackingStatusInterface $trackingStatus): void;
 
-  /**
-   * @param TrackingStatusInterface $trackingStatus
-   * @return void
-   */
-  public function add(TrackingStatusInterface $trackingStatus): void;
+    /**
+     * @return array<int, TrackingStatusInterface>
+     */
+    public function all(): array;
 
-  /**
-   * @return array<int, TrackingStatusInterface>
-   */
-  public function all(): array;
+    public function key(): int;
 
-  /**
-   * @return int
-   */
-  public function key(): int;
+    public function rewind(): void;
 
-  /**
-   * @return void
-   */
-  public function rewind(): void;
+    public function current(): TrackingStatusInterface;
 
-  /**
-   * @return TrackingStatusInterface
-   */
-  public function current(): TrackingStatusInterface;
+    public function next(): void;
 
-  /**
-   * @return void
-   */
-  public function next(): void;
+    public function valid(): bool;
 
-  /**
-   * @return bool
-   */
-  public function valid(): bool;
-
-  /**
-   * @return int
-   */
-  public function count(): int;
-
+    public function count(): int;
 }

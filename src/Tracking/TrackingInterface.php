@@ -1,28 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Ukrposhta\Tracking;
 
-/**
- *
- */
-interface TrackingInterface {
+interface TrackingInterface
+{
+    public function requestBarcodeLastStatus(string $barcode): TrackingStatusInterface;
 
-  /**
-   * @param string $barcode
-   * @return TrackingStatusInterface
-   */
-  public function requestBarcodeLastStatus(string $barcode): TrackingStatusInterface;
+    public function requestBarcodeStatuses(string $barcode): TrackingStatusCollectionInterface;
 
-  /**
-   * @param string $barcode
-   * @return TrackingStatusCollectionInterface
-   */
-  public function requestBarcodeStatuses(string $barcode): TrackingStatusCollectionInterface;
-
-  /**
-   * @param string $barcode
-   * @return TrackingRouteInterface
-   */
-  public function requestBarcodeRoute(string $barcode): TrackingRouteInterface;
-
+    public function requestBarcodeRoute(string $barcode): TrackingRouteInterface;
 }

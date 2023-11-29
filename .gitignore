@@ -7,3 +7,4 @@ php-ups-api.iml
 .phpunit.result.cache
 .phpunit.cache
 /phpunit.xml
+.php-cs-fixer.cache

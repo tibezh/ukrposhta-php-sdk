@@ -1,57 +1,36 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Ukrposhta\Request;
 
 use Psr\Log\LoggerInterface;
 use Ukrposhta\Response\ResponseInterface;
 
-/**
- *
- */
-interface RequestInterface {
+interface RequestInterface
+{
+    public function __construct(LoggerInterface $logger = null);
 
-  /**
-   * @param LoggerInterface|null $logger
-   */
-  public function __construct(?LoggerInterface $logger = null);
+    /**
+     * @param array<string, mixed> $request
+     */
+    public function request(string $access, string $method, string $endpointUrl, array $request = []): ResponseInterface;
 
-  /**
-   * @param string $access
-   * @param string $method
-   * @param string $endpointUrl
-   * @param array<string, mixed> $request
-   * @return ResponseInterface
-   */
-  public function request(string $access, string $method, string $endpointUrl, array $request = []): ResponseInterface;
+    public function setAccess(string $access): static;
 
-  /**
-   * @param string $access
-   */
-  public function setAccess(string $access): static;
+    public function getAccess(): string;
 
-  /**
-   * @return string
-   */
-  public function getAccess(): string;
+    /**
+     * @param array<string, mixed> $request
+     */
+    public function setRequest(array $request): static;
 
-  /**
-   * @param array<string, mixed> $request
-   */
-  public function setRequest(array $request): static;
+    /**
+     * @return array<string, mixed>
+     */
+    public function getRequest(): array;
 
-  /**
-   * @return array<string, mixed>
-   */
-  public function getRequest(): array;
+    public function setEndpointUrl(string $endpointUrl): static;
 
-  /**
-   * @param string $endpointUrl
-   */
-  public function setEndpointUrl(string $endpointUrl): static;
-
-  /**
-   * @return string
-   */
-  public function getEndpointUrl(): string;
-
+    public function getEndpointUrl(): string;
 }
