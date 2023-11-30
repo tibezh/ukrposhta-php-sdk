@@ -16,12 +16,27 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['8.1', '8.2', '8.3']
+        php-versions:
+         - "8.1"
+         - "8.2"
+         - "8.3"
+         - "8.4"
+      
+        coverage-driver:
+          - "xdebug3"
 
     name: PHP ${{ matrix.php-versions }}
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Install PHP with extensions
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        coverage: ${{ matrix.coverage-driver }}
+        tools: none
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
@@ -35,8 +50,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-php-
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+    - name: Install dependencies with Composer
+      run: php ./tools/composer update --no-ansi --no-interaction --no-progress
     
     - name: Check PHP CS
       run: composer run-script lint
