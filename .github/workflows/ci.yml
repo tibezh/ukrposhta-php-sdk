@@ -1,4 +1,4 @@
-name: Main Workflow
+name: CI
 
 on:
   push:
@@ -70,6 +70,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Setup PHP ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          coverage: xdebug
       
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
