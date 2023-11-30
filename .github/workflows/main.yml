@@ -44,8 +44,8 @@ jobs:
     - name: PHPStan
       run: composer run-script phpstan
 
-    - name: Test
-      run: composer run-script test
+    - name: Run tests with PHPUnit
+      run: vendor/bin/phpunit --coverage-clover=coverage.xml
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
