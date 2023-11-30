@@ -1,6 +1,6 @@
 <h1 align="center">Ukrpostha PHP SDK</h1>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/tibezh/ukrposhta-php-sdk/master/doc/assets/ukrposhta_logo.svg" title="Ukrposhta PHP SDK" alt="Ukrposhta PHP SDK logo">
+    <img src="https://raw.githubusercontent.com/tibezh/ukrposhta-php-sdk/master/doc/assets/ukrpostha_logo.svg" title="Ukrposhta PHP SDK" alt="Ukrposhta PHP SDK logo">
 </p>
 
 An Ukrposhta PHP SDK based on the official [Ukrposhta API].
