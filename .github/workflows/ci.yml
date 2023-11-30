@@ -59,25 +59,17 @@ jobs:
         run: composer run-script phpstan
 
   tests:
-    name: Tests with PHP ${{ matrix.php-versions }}
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
-        php-version:
-          - "8.1"
-          - "8.2"
-          - "8.3"
-          - "8.4"
+        php-versions: ["8.1", "8.2", "8.3", "8.4"]
 
+    name: Tests PHP with ${{ matrix.php-versions }}
+    
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-      
-      - name: Set up php ${{ matrix.php-version }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
+        uses: actions/checkout@v3
       
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
@@ -89,5 +81,3 @@ jobs:
         uses: codecov/codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-
