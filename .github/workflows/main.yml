@@ -10,59 +10,53 @@ permissions:
   contents: read
 
 jobs:
-  build:
-
+  validate-composer:
+    name: Validate Composer
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        php-versions:
-         - "8.1"
-         - "8.2"
-         - "8.3"
-         - "8.4"
-      
-        coverage-driver:
-          - "xdebug3"
-
-    name: PHP ${{ matrix.php-versions }}
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+        
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+  
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
 
-    - name: Install PHP with extensions
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php-version }}
-        coverage: ${{ matrix.coverage-driver }}
-        tools: none
+  coding-guidelines:
+    name: Coding Guidelines
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      
+      - name: Check PHP CS
+        run: composer run-script lint          
+  
+  type-checker:
+    name: Type Checker
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+   
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress 
+      
+      - name: PHPStan
+        run: composer run-script phpstan
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
 
-    - name: Install dependencies with Composer
-      run: php ./tools/composer update --no-ansi --no-interaction --no-progress
-    
-    - name: Check PHP CS
-      run: composer run-script lint
 
-    - name: PHPStan
-      run: composer run-script phpstan
-
-    - name: Run tests with PHPUnit
-      run: vendor/bin/phpunit --coverage-clover=coverage.xml
-
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v3
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
