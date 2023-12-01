@@ -84,4 +84,23 @@ class TrackingStatus implements TrackingStatusInterface
     {
         return $this->indexOrder;
     }
+
+    public function toArray(): array
+    {
+        return [
+          'barcode' => $this->getBarcode(),
+          'step' => $this->getStep(),
+          'date' => $this->getDate(),
+          'name' => $this->getName(),
+          'event_id' => $this->getEventId(),
+          'event_name' => $this->getEventName(),
+          'country' => $this->getCountry(),
+          'mail_type' => $this->getMailType(),
+          'index_order' => $this->getIndexOrder(),
+          'index' => $this->getIndex(),
+          'event_reason' => $this->getEventReason(),
+          'event_reason_id' => $this->getEventReasonId(),
+        ];
+    }
+
 }

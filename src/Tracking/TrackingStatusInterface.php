@@ -29,4 +29,9 @@ interface TrackingStatusInterface
     public function getMailType(): int;
 
     public function getIndexOrder(): int;
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array;
 }

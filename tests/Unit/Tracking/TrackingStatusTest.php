@@ -250,4 +250,24 @@ final class TrackingStatusTest extends TestCase
         $this->fixturesData['eventReasonId'] = 'eventReasonId11';
         new TrackingStatus(...$this->fixturesData);
     }
+
+    public function testToArray(): void
+    {
+        $this->updateFixturesData();
+        $trackingStatus = new TrackingStatus(...$this->fixturesData);
+        $trackingStatusArray = $trackingStatus->toArray();
+        $this->assertSame($this->fixturesData['barcode'], $trackingStatusArray['barcode']);
+        $this->assertSame($this->fixturesData['step'], $trackingStatusArray['step']);
+        $this->assertSame($this->fixturesData['date'], $trackingStatusArray['date']);
+        $this->assertSame($this->fixturesData['index'], $trackingStatusArray['index']);
+        $this->assertSame($this->fixturesData['name'], $trackingStatusArray['name']);
+        $this->assertSame($this->fixturesData['eventId'], $trackingStatusArray['event_id']);
+        $this->assertSame($this->fixturesData['eventName'], $trackingStatusArray['event_name']);
+        $this->assertSame($this->fixturesData['country'], $trackingStatusArray['country']);
+        $this->assertSame($this->fixturesData['eventReason'], $trackingStatusArray['event_reason']);
+        $this->assertSame($this->fixturesData['eventReasonId'], $trackingStatusArray['event_reason_id']);
+        $this->assertSame($this->fixturesData['mailType'], $trackingStatusArray['mail_type']);
+        $this->assertSame($this->fixturesData['indexOrder'], $trackingStatusArray['index_order']);
+    }
+
 }
