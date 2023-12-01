@@ -16,11 +16,11 @@ An Ukrposhta PHP SDK based on the official [Ukrposhta API].
 </p>
 
 ## Table of Contents
-* [Requirements](#-requirements)
-* [Available Features](#-available-features)
-* [Installation](#-installation)
-* [Examples](#-examples)
-  * [Status Tracking](#-status-tracking)
+* [Requirements](#requirements)
+* [Available Features](#available-features)
+* [Installation](#installation)
+* [Examples](#examples)
+  * [Status Tracking](#status-tracking)
 
 
 <a name="requirements"></a>
