@@ -21,6 +21,11 @@ $config
     'binary_operator_spaces' => ['default' => 'single_space'],
     'no_extra_blank_lines' => ['tokens' => ['extra']],
     'phpdoc_trim_consecutive_blank_line_separation' => true,
+    'comment_to_phpdoc' => true,
+    'no_empty_comment' => true,
+    'no_trailing_whitespace_in_comment' => true,
+    'single_line_comment_spacing' => true,
+    'single_line_comment_style' => true,
   ])
   ->setFinder(
     PhpCsFixer\Finder::create()

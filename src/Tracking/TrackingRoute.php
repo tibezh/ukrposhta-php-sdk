@@ -4,10 +4,19 @@ declare(strict_types=1);
 
 namespace Ukrposhta\Tracking;
 
+/**
+ * Tracking Route main class.
+ */
 class TrackingRoute implements TrackingRouteInterface
 {
+
     /**
      * TrackingRoute constructor.
+     *
+     * @param string $from
+     *   Tracking Route 'from' information.
+     * @param string $to
+     *   Tracking Route 'from' information.
      */
     public function __construct(
         protected readonly string $from,
@@ -15,13 +24,20 @@ class TrackingRoute implements TrackingRouteInterface
     ) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getFrom(): string
     {
         return $this->from;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getTo(): string
     {
         return $this->to;
     }
+
 }

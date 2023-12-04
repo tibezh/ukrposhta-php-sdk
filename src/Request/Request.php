@@ -16,23 +16,64 @@ use Ukrposhta\Exceptions\RequestException;
 use Ukrposhta\Response\Response;
 use Ukrposhta\Response\ResponseInterface;
 
+/**
+ * The main class to send requests.
+ */
 class Request implements RequestInterface, LoggerAwareInterface
 {
+
+    /**
+     * Related client object for requests.
+     *
+     * @see Request::setRequest()
+     * @see Request::getRequest()
+     *
+     * @var ClientInterface
+     */
     protected ClientInterface $client;
 
     /**
+     * An associative array that contains data for a request.
+     *
+     * @see Request::setRequest()
+     * @see Request::getRequest()
+     *
      * @var array<string, mixed>
      */
     protected array $request = [];
 
+    /**
+     * Access key for a request.
+     *
+     * @see Request::setAccess()
+     * @see Request::getAccess()
+     *
+     * @var string
+     */
     protected string $access = '';
 
+    /**
+     * Endpoint for request.
+     *
+     * @see Request::getEndpointUrl()
+     * @see Request::setEndpointUrl()
+     *
+     * @var string
+     */
     protected string $endpointUrl = '';
 
+    /**
+     * Related logger object.
+     *
+     * @see Request::setLogger()
+     * @see Request::getLogger()
+     *
+     * @var LoggerInterface
+     */
     protected LoggerInterface $logger;
 
     /**
-     * Request constructor.
+     * {@inheritDoc}
      */
     public function __construct(LoggerInterface $logger = null)
     {
@@ -44,18 +85,24 @@ class Request implements RequestInterface, LoggerAwareInterface
         $this->setClient();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function request(string $access, string $method, string $endpointUrl, array $request = []): ResponseInterface
     {
         $this->setAccess($access);
         $this->setRequest($request);
         $this->setEndpointUrl($endpointUrl);
 
-        // Log request
+        // Log request.
         $date = new DateTime();
         $id = $date->format('YmdHisu');
         $logger_context = [
@@ -98,7 +145,10 @@ class Request implements RequestInterface, LoggerAwareInterface
     }
 
     /**
+     * Returns default request options.
+     *
      * @return array<string, mixed>
+     *   Associative array with default request options.
      */
     protected function getRequestOptions(): array
     {
@@ -113,12 +163,20 @@ class Request implements RequestInterface, LoggerAwareInterface
 
     /**
      * Creates a single instance of the Guzzle client.
+     *
+     * @param ClientInterface|null $client
+     *   The client object for requests, leave null to use Guzzle by default.
+     *
+     * @return void
      */
     public function setClient(ClientInterface $client = null): void
     {
         $this->client = $client ?? new Guzzle();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setAccess(string $access): static
     {
         $this->access = $access;
@@ -126,23 +184,35 @@ class Request implements RequestInterface, LoggerAwareInterface
         return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getAccess(): string
     {
         return $this->access;
     }
 
-    public function setRequest($request): static
+    /**
+     * {@inheritDoc}
+     */
+    public function setRequest(array $request): static
     {
         $this->request = $request;
 
         return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getRequest(): array
     {
         return $this->request;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setEndpointUrl(string $endpointUrl): static
     {
         $this->endpointUrl = $endpointUrl;
@@ -150,8 +220,12 @@ class Request implements RequestInterface, LoggerAwareInterface
         return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getEndpointUrl(): string
     {
         return $this->endpointUrl;
     }
+
 }

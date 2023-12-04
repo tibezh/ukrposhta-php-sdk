@@ -12,9 +12,26 @@ use Psr\Log\LoggerInterface;
  */
 abstract class Ukrposhta implements LoggerAwareInterface
 {
+
+    /** @var string Supported version. */
     public const VERSION = '0.0.1';
+    /** @var string Base URL for requests. */
     public const BASE_URL = 'https://www.ukrposhta.ua/';
 
+    /**
+     * Ukrposhta abstract class constructor.
+     *
+     * @param string|null $bearerEcom
+     *   Ecom access token, uses to create deliveries, clients etc.
+     * @param string|null $bearerStatusTracking
+     *   Status Tracking access token, uses to check status tracking by barcode.
+     * @param string|null $bearerCounterparty
+     *   Counterparty token, uses for address classifier.
+     * @param bool $sandbox
+     *   Flag to use sandbox, false by default.
+     * @param LoggerInterface|null $logger
+     *   Logger for the requests.
+     */
     public function __construct(
         protected readonly ?string $bearerEcom = null,
         protected readonly ?string $bearerStatusTracking = null,
@@ -24,31 +41,58 @@ abstract class Ukrposhta implements LoggerAwareInterface
     ) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
 
+    /**
+     * Gets logger object.
+     *
+     * @return LoggerInterface|null
+     *   The logger object if exists, otherwise null.
+     */
     public function getLogger(): ?LoggerInterface
     {
         return $this->logger;
     }
 
+    /**
+     * Gets supported Ukrposhta API version.
+     *
+     * The version needs to build an endpoints URL.
+     *
+     * @return string
+     *   The version for endpoint URL.
+     */
     public function getVersion(): string
     {
         return self::VERSION;
     }
 
     /**
-     * Gets endpoints URL.
+     * Gets endpoint URL.
+     *
+     * @return string
+     *   The endpoint URL.
      */
     public function getEndpointUrl(): string
     {
         return self::BASE_URL;
     }
 
+    /**
+     * Flag which indicates sandbox uses.
+     *
+     * @return bool
+     *   The true if sandbox uses, otherwise false.
+     */
     public function isSandbox(): bool
     {
         return $this->sandbox;
     }
+
 }

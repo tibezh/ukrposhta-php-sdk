@@ -10,23 +10,51 @@ use Ukrposhta\Request\Request;
 use Ukrposhta\Request\RequestInterface;
 use Ukrposhta\Ukrposhta;
 
+/**
+ * Provides functionality to get Tracking Status information by barcode.
+ */
 class Tracking extends Ukrposhta implements TrackingInterface
 {
+
+    /** @var string Base endpoint to get status tracking information. */
     public const BASE_ENDPOINT = 'status-tracking';
 
+    /** @var string Access type that needs to get status tracking information. */
     public const CREDENTIALS_TYPE = 'bearerStatusTracking';
 
+    /** @var string Endpoint to get last tracking status information. */
     public const BARCODE_LAST_STATUS_ENDPOINT = '/statuses/last';
+    /** @var string Endpoint to get all tracking statuses. */
     public const BARCODE_STATUSES_ENDPOINT = '/statuses';
+    /** @var string Endpoint to get route information. */
     public const BARCODE_ROUTE_ENDPOINT = '/barcodes/%s/route';
+    /** @var string Endpoint to get route information for specific language. */
     public const BARCODE_ROUTE_WITH_LANG_ENDPOINT = '/barcodes/%s/route/in-lang/%s';
 
+    /**
+     * Default language for requests.
+     *
+     * @var string
+     */
     protected string $requestLang = 'UA';
 
+    /**
+     * Request object that uses in the class.
+     *
+     * @var RequestInterface|null
+     */
     private ?RequestInterface $request = null;
 
+    /**
+     * Status Tracking access token that uses for requests.
+     *
+     * @var string|null
+     */
     private ?string $accessToken = null;
 
+    /**
+     * {@inheritDoc}
+     */
     public function __construct(
         string $bearerEcom = null,
         string $bearerStatusTracking = null,
@@ -49,6 +77,9 @@ class Tracking extends Ukrposhta implements TrackingInterface
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function requestBarcodeLastStatus(string $barcode): TrackingStatusInterface
     {
         $response = $this->getRequest()->request(
@@ -63,6 +94,9 @@ class Tracking extends Ukrposhta implements TrackingInterface
         return $this->convertTrackingStatusResponse($response);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function requestBarcodeStatuses(string $barcode): TrackingStatusCollectionInterface
     {
         $response = $this->getRequest()->request(
@@ -81,6 +115,9 @@ class Tracking extends Ukrposhta implements TrackingInterface
         return $collection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function requestBarcodeRoute(string $barcode, bool $en_version = false): TrackingRouteInterface
     {
         if (!$en_version) {
@@ -100,7 +137,13 @@ class Tracking extends Ukrposhta implements TrackingInterface
     }
 
     /**
+     * Helper function to converts Tracking Status response to the Tracking Status object.
+     *
      * @param array<string|int, string|mixed> $trackingStatusResponseData
+     *   Tracking Status response to process.
+     *
+     * @return TrackingStatusInterface
+     *   Tracking Status object from the response data.
      *
      * @throws \Exception
      */
@@ -120,8 +163,12 @@ class Tracking extends Ukrposhta implements TrackingInterface
             eventReason: $trackingStatusResponseData['eventReason'] ?? null,
             eventReasonId: $trackingStatusResponseData['eventReason_id'] ?? null
         );
+
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getEndpointUrl(): string
     {
         return self::BASE_URL . self::BASE_ENDPOINT . '/' . self::VERSION;
@@ -137,6 +184,8 @@ class Tracking extends Ukrposhta implements TrackingInterface
     }
 
     /**
+     * Applies request object.
+     *
      * @return $this
      */
     public function setRequest(RequestInterface $request): static
@@ -147,6 +196,8 @@ class Tracking extends Ukrposhta implements TrackingInterface
     }
 
     /**
+     * Applies request language.
+     *
      * @return $this
      */
     public function setRequestLang(string $lang): static
@@ -156,12 +207,19 @@ class Tracking extends Ukrposhta implements TrackingInterface
         return $this;
     }
 
+    /**
+     * Gets request language.
+     *
+     * @return string
+     */
     public function getRequestLang(): string
     {
         return $this->requestLang;
     }
 
     /**
+     * Applies Tracking Status access token.
+     *
      * @return $this
      */
     public function setAccessToken(string $bearerStatusTrackingAccessToken): static
@@ -171,6 +229,11 @@ class Tracking extends Ukrposhta implements TrackingInterface
         return $this;
     }
 
+    /**
+     * Gets Tracking Status access token.
+     *
+     * @return string
+     */
     protected function getAccessToken(): string
     {
         if (!$this->accessToken) {
@@ -184,4 +247,5 @@ class Tracking extends Ukrposhta implements TrackingInterface
         /** @phpstan-ignore-next-line */
         return $this->accessToken;
     }
+
 }
