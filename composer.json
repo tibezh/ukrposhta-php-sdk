@@ -36,7 +36,7 @@
         "phpstan": "@php vendor/bin/phpstan analyse",
         "test": "@php vendor/bin/phpunit",
         "test-coverage-html": "@php vendor/bin/phpunit --coverage-html .phpunit.cache",
-        "lint": "@php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --diff --dry-run --using-cache=no",
-        "lint-fix": "@php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php"
+        "lint": "@php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --diff --dry-run --using-cache=no --allow-risky=yes",
+        "lint-fix": "@php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --allow-risky=yes"
     }
 }
