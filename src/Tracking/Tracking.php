@@ -8,6 +8,12 @@ use Psr\Log\LoggerInterface;
 use Ukrposhta\Exceptions\NoCredentialException;
 use Ukrposhta\Request\Request;
 use Ukrposhta\Request\RequestInterface;
+use Ukrposhta\Tracking\Entities\TrackingRoute;
+use Ukrposhta\Tracking\Entities\TrackingRouteInterface;
+use Ukrposhta\Tracking\Entities\TrackingStatus;
+use Ukrposhta\Tracking\Entities\TrackingStatusCollection;
+use Ukrposhta\Tracking\Entities\TrackingStatusCollectionInterface;
+use Ukrposhta\Tracking\Entities\TrackingStatusInterface;
 use Ukrposhta\Ukrposhta;
 
 /**

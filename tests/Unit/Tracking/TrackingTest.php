@@ -12,11 +12,11 @@ use Ukrposhta\Exceptions\NoCredentialException;
 use Ukrposhta\Request\Request;
 use Ukrposhta\Request\RequestInterface;
 use Ukrposhta\Response\Response;
+use Ukrposhta\Tracking\Entities\TrackingRouteInterface;
+use Ukrposhta\Tracking\Entities\TrackingStatusCollectionInterface;
+use Ukrposhta\Tracking\Entities\TrackingStatusInterface;
 use Ukrposhta\Tracking\Tracking;
 use Ukrposhta\Tracking\TrackingInterface;
-use Ukrposhta\Tracking\TrackingRouteInterface;
-use Ukrposhta\Tracking\TrackingStatusCollectionInterface;
-use Ukrposhta\Tracking\TrackingStatusInterface;
 
 #[CoversClass(Tracking::class)]
 #[Medium]

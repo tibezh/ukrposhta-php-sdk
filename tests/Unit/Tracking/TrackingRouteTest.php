@@ -7,8 +7,8 @@ namespace Ukrposhta\Tests\Unit\Tracking;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
-use Ukrposhta\Tracking\TrackingRoute;
-use Ukrposhta\Tracking\TrackingRouteInterface;
+use Ukrposhta\Tracking\Entities\TrackingRoute;
+use Ukrposhta\Tracking\Entities\TrackingRouteInterface;
 
 #[CoversClass(TrackingRoute::class)]
 #[CoversClass(TrackingRouteInterface::class)]
@@ -35,8 +35,8 @@ final class TrackingRouteTest extends TestCase
     }
 
     /**
-     * @covers \Ukrposhta\Tracking\TrackingRoute::getFrom
-     * @covers \Ukrposhta\Tracking\TrackingRoute::getTo
+     * @covers \Ukrposhta\Tracking\Entities\TrackingRoute::getFrom
+     * @covers \Ukrposhta\Tracking\Entities\TrackingRoute::getTo
      */
     public function testCanBeCreatedWithValidData(): void
     {

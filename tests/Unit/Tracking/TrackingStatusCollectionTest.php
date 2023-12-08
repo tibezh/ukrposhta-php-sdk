@@ -8,9 +8,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use Ukrposhta\Tracking\TrackingStatus;
-use Ukrposhta\Tracking\TrackingStatusCollection;
-use Ukrposhta\Tracking\TrackingStatusCollectionInterface;
+use Ukrposhta\Tracking\Entities\TrackingStatus;
+use Ukrposhta\Tracking\Entities\TrackingStatusCollection;
+use Ukrposhta\Tracking\Entities\TrackingStatusCollectionInterface;
 
 #[CoversClass(TrackingStatusCollection::class)]
 #[UsesClass(TrackingStatus::class)]
@@ -109,7 +109,7 @@ final class TrackingStatusCollectionTest extends TestCase
     }
 
     /**
-     * @covers \Ukrposhta\Tracking\TrackingStatusCollection::count
+     * @covers \Ukrposhta\Tracking\Entities\TrackingStatusCollection::count
      */
     public function testCount(): void
     {

@@ -55,8 +55,9 @@ composer require tibezh/ukrposhta-php-sdk
 #### Status Tracking
 
 Request last status by barcode:
+
 ```php
-/** @var \Ukrposhta\Tracking\TrackingStatusInterface $barcodeLastStatus */
+/** @var \Ukrposhta\Tracking\Entities\TrackingStatusInterface $barcodeLastStatus */
 $barcodeLastStatus = (new \Ukrposhta\Tracking\Tracking())
   ->setAccessToken('[BEARER-STATUS-TRACKING-ACCESS-TOKEN]')
   // To get results in English.
@@ -68,8 +69,9 @@ print $barcodeLastStatus->getEventName();
 ```
 
 Request all statuses by barcode:
+
 ```php
-/** @var \Ukrposhta\Tracking\TrackingStatusCollectionInterface $barcodeLastStatuses */
+/** @var \Ukrposhta\Tracking\Entities\TrackingStatusCollectionInterface $barcodeLastStatuses */
 $barcodeLastStatuses = (new \Ukrposhta\Tracking\Tracking())
   ->setAccessToken('[BEARER-STATUS-TRACKING-ACCESS-TOKEN]')
   // To get results in English.
@@ -84,8 +86,9 @@ foreach ($data->all() as $item) {
 ```
 
 Request route by barcode:
+
 ```php
-/** @var \Ukrposhta\Tracking\TrackingRouteInterface $barcodeRoute */
+/** @var \Ukrposhta\Tracking\Entities\TrackingRouteInterface $barcodeRoute */
 $barcodeRoute = (new \Ukrposhta\Tracking\Tracking())
   ->setAccessToken('[BEARER-STATUS-TRACKING-ACCESS-TOKEN]')
   // To get results in English.

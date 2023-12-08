@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ukrposhta\Tracking;
+namespace Ukrposhta\Tracking\Entities;
 
 /**
  * Provided collection of Tracking Status object.

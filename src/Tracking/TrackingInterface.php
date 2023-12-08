@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Ukrposhta\Tracking;
 
+use Ukrposhta\Tracking\Entities\TrackingRouteInterface;
+use Ukrposhta\Tracking\Entities\TrackingStatusCollectionInterface;
+use Ukrposhta\Tracking\Entities\TrackingStatusInterface;
+
 /**
  * Tracking interface to request tracking status by barcode.
  */

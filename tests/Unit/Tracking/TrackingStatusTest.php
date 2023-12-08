@@ -7,8 +7,8 @@ namespace Ukrposhta\Tests\Unit\Tracking;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
-use Ukrposhta\Tracking\TrackingStatus;
-use Ukrposhta\Tracking\TrackingStatusInterface;
+use Ukrposhta\Tracking\Entities\TrackingStatus;
+use Ukrposhta\Tracking\Entities\TrackingStatusInterface;
 
 #[CoversClass(TrackingStatus::class)]
 #[Small]
