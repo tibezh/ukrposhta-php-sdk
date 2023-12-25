@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ukrposhta\Tracking;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Ukrposhta\Exceptions\NoCredentialException;
 use Ukrposhta\Request\Request;
@@ -151,7 +152,7 @@ class Tracking extends Ukrposhta implements TrackingInterface
      * @return TrackingStatusInterface
      *   Tracking Status object from the response data.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function convertTrackingStatusResponse(array $trackingStatusResponseData): TrackingStatusInterface
     {
@@ -180,6 +181,12 @@ class Tracking extends Ukrposhta implements TrackingInterface
         return self::BASE_URL . self::BASE_ENDPOINT . '/' . self::VERSION;
     }
 
+    /**
+     * Retrieves the request object.
+     *
+     * @return RequestInterface
+     *   The request object.
+     */
     public function getRequest(): RequestInterface
     {
         if (null === $this->request) {

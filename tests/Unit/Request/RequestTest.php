@@ -187,7 +187,7 @@ class RequestTest extends TestCase
         $requestOptions = [
           'http_errors' => true,
           'headers' => [
-            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
             'Authorization' => "Bearer {$bearer}",
           ],
         ];

@@ -155,7 +155,7 @@ class Request implements RequestInterface, LoggerAwareInterface
         return [
           'http_errors' => true,
           'headers' => [
-            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
             'Authorization' => "Bearer {$this->getAccess()}",
           ],
         ];
