@@ -20,13 +20,26 @@ use Ukrposhta\AddressClassifier\Entities\District\DistrictCollection;
 use Ukrposhta\AddressClassifier\Entities\District\DistrictCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\LanguagesEnum;
 use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
+use Ukrposhta\AddressClassifier\Entities\NearestPostOffice\NearestPostOffice;
+use Ukrposhta\AddressClassifier\Entities\NearestPostOffice\NearestPostOfficeCollection;
+use Ukrposhta\AddressClassifier\Entities\NearestPostOffice\NearestPostOfficeCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\PostOffice\PostOffice;
 use Ukrposhta\AddressClassifier\Entities\PostOffice\PostOfficeCollection;
 use Ukrposhta\AddressClassifier\Entities\PostOffice\PostOfficeCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\PostOffice\PostOfficeInterface;
+use Ukrposhta\AddressClassifier\Entities\PostOfficeOpenHours\PostOfficeOpenHours;
+use Ukrposhta\AddressClassifier\Entities\PostOfficeOpenHours\PostOfficeOpenHoursCollection;
+use Ukrposhta\AddressClassifier\Entities\PostOfficeOpenHours\PostOfficeOpenHoursCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\PostOfficeOpenHours\PostOfficeOpenHoursInterface;
+use Ukrposhta\AddressClassifier\Entities\PostOfficeSettlement\PostOfficeSettlement;
+use Ukrposhta\AddressClassifier\Entities\PostOfficeSettlement\PostOfficeSettlementCollection;
+use Ukrposhta\AddressClassifier\Entities\PostOfficeSettlement\PostOfficeSettlementCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\Region\Region;
 use Ukrposhta\AddressClassifier\Entities\Region\RegionCollection;
 use Ukrposhta\AddressClassifier\Entities\Region\RegionCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\Settlement\Settlement;
+use Ukrposhta\AddressClassifier\Entities\Settlement\SettlementCollection;
+use Ukrposhta\AddressClassifier\Entities\Settlement\SettlementCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\Street\Street;
 use Ukrposhta\AddressClassifier\Entities\Street\StreetCollection;
 use Ukrposhta\AddressClassifier\Entities\Street\StreetCollectionInterface;
@@ -61,6 +74,14 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
     public const COURIER_AREA_BY_POST_INDEX = '/get_courierarea_by_postindex';
 
     public const POST_OFFICES_BY_POST_INDEX = '/get_postoffices_by_postindex';
+
+    public const POST_OFFICES_BY_CITY_ID = '/get_postoffices_by_city_id';
+
+    public const POST_OFFICES_OPEN_HOURS_BY_POST_INDEX = '/get_postoffices_openhours_by_postindex';
+
+    public const POST_OFFICES_BY_GEOLOCATION = '/get_postoffices_by_geolocation';
+
+    public const CITY_DETAILS_BY_POSTCODE = '/get_city_details_by_postcode';
 
     /**
      * Request object that uses in the class.
@@ -368,7 +389,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
     public function requestPostOfficeByPostCode(int $postCode): PostOfficeCollectionInterface
     {
       $requestData = ['pc' => $postCode];
-      return $this->requestPostOffice($requestData);
+      return $this->requestPostOffices($requestData);
     }
 
     /**
@@ -377,7 +398,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
     public function requestPostOfficeByPostIndex(int $postIndex): PostOfficeCollectionInterface
     {
       $requestData = ['pi' => $postIndex];
-      return $this->requestPostOffice($requestData);
+      return $this->requestPostOffices($requestData);
     }
 
     /**
@@ -386,7 +407,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
     public function requestPostOfficeByCityId(int $cityId): PostOfficeCollectionInterface
     {
       $requestData = ['poCityId' => $cityId];
-      return $this->requestPostOffice($requestData);
+      return $this->requestPostOffices($requestData);
     }
 
     /**
@@ -395,7 +416,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
     public function requestPostOfficeByDistrictId(int $districtId): PostOfficeCollectionInterface
     {
       $requestData = ['poDistrictId' => $districtId];
-      return $this->requestPostOffice($requestData);
+      return $this->requestPostOffices($requestData);
     }
 
     /**
@@ -404,7 +425,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
     public function requestPostOfficeByStreetId(int $streetId): PostOfficeCollectionInterface
     {
       $requestData = ['poStreetId' => $streetId];
-      return $this->requestPostOffice($requestData);
+      return $this->requestPostOffices($requestData);
     }
 
     /**
@@ -413,34 +434,34 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
     public function requestPostOfficeByRegionId(int $regionId): PostOfficeCollectionInterface
     {
       $requestData = ['poRegionId' => $regionId];
-      return $this->requestPostOffice($requestData);
+      return $this->requestPostOffices($requestData);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function requestPostOfficeByAdditionalCityId(int $additionalCityId): PostOfficeCollectionInterface
+    public function requestPostOfficeByServiceAreaCityId(int $serviceAreaCityId): PostOfficeCollectionInterface
     {
-      $requestData = ['pdCityId' => $additionalCityId];
-      return $this->requestPostOffice($requestData);
+      $requestData = ['pdCityId' => $serviceAreaCityId];
+      return $this->requestPostOffices($requestData);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function requestPostOfficeByAdditionalDistrictId(int $additionalDistrictId): PostOfficeCollectionInterface
+    public function requestPostOfficeByServiceAreaDistrictId(int $serviceAreaDistrictId): PostOfficeCollectionInterface
     {
-      $requestData = ['pdDistrictId' => $additionalDistrictId];
-      return $this->requestPostOffice($requestData);
+      $requestData = ['pdDistrictId' => $serviceAreaDistrictId];
+      return $this->requestPostOffices($requestData);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function requestPostOfficeByAdditionalRegionId(int $additionalRegionId): PostOfficeCollectionInterface
+    public function requestPostOfficeByServiceAreaRegionId(int $serviceAreaRegionId): PostOfficeCollectionInterface
     {
-      $requestData = ['pdRegionId' => $additionalRegionId];
-      return $this->requestPostOffice($requestData);
+      $requestData = ['pdRegionId' => $serviceAreaRegionId];
+      return $this->requestPostOffices($requestData);
     }
 
   /**
@@ -456,7 +477,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
    * @throws InvalidResponseException
    * @throws RequestException
    */
-    protected function requestPostOffice(array $requestData): PostOfficeCollectionInterface
+    protected function requestPostOffices(array $requestData): PostOfficeCollectionInterface
     {
       $response = $this->getRequest()->request(
         $this->getAccessToken(),
@@ -476,18 +497,22 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
       return $postOfficeCollection;
     }
 
-  /**
-   * @param array<string|int, string|mixed> $entry
-   *   City Entry response to process.
-   *
-   * @return PostOfficeInterface
-   */
+    /**
+     * Converts Post Office entry response into PostOffice object.
+     *
+     * @param array<string|int, string|mixed> $entry
+     *   Post Office Entry response to process.
+     *
+     * @return PostOfficeInterface
+     *   PostOffice object.
+     */
     protected function convertPostOfficeEntryResponse(array $entry): PostOfficeInterface
     {
       return new PostOffice(
         id: (int) $entry['ID'],
         code: (int) $entry['PO_CODE'],
         name: $entry['PO_LONG'],
+        shortName: $entry['PO_SHORT'],
         type: $entry['TYPE_LONG'],
         typeShort: $entry['TYPE_SHORT'],
         typeAcronym: $entry['TYPE_ACRONYM'],
@@ -498,9 +523,18 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
         lockEn: $entry['POLOCK_EN'],
         lockCode: (int) $entry['LOCK_CODE'],
         regionId: (int) $entry['POREGION_ID'],
+        serviceAreaRegionId: (int) $entry['PDREGION_ID'],
         districtId: (int) $entry['PODISTRICT_ID'],
+        serviceAreaDistrictId: (int) $entry['PDDISTRICT_ID'],
         cityId: (int) $entry['POCITY_ID'],
         cityType: $entry['CITYTYPE_UA'],
+        serviceAreaCityId: (int) $entry['PDCITY_ID'],
+        serviceAreaCityUa: $entry['PDCITY_UA'],
+        serviceAreaCityEn: $entry['PDCITY_EN'],
+        serviceAreaCityTypeUa: $entry['PDCITYTYPE_UA'],
+        serviceAreaCityTypeEn: $entry['PDCITYTYPE_EN'],
+        serviceAreaShortCityTypeUa: $entry['SHORTPDCITYTYPE_UA'],
+        serviceAreaShortCityTypeEn: $entry['SHORTPDCITYTYPE_EN'] ?? null,
         streetId: (int) $entry['POSTREET_ID'],
         parentId: (int) $entry['PARENT_ID'],
         address: $entry['ADDRESS'],
@@ -511,9 +545,288 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
         isAvailable: (bool) $entry['AVALIBLE'],
         mrtps: (int) $entry['MRTPS'],
         techIndex: (int) $entry['TECHINDEX'],
+        isDeliveryPossible: $entry['IS_NODISTRICT'] == 0,
       );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function requestPostOfficeSettlementsByCityId(int $cityId): PostOfficeSettlementCollectionInterface
+    {
+      $requestData = ['city_id' => $cityId];
+      return $this->requestPostOfficeSettlements($requestData);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function requestPostOfficeSettlementsByDistrictId(int $districtId): PostOfficeSettlementCollectionInterface
+    {
+      $requestData = ['district_id' => $districtId];
+      return $this->requestPostOfficeSettlements($requestData);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function requestPostOfficeSettlementsByRegionId(int $regionId): PostOfficeSettlementCollectionInterface
+    {
+        $requestData = ['region_id' => $regionId];
+        return $this->requestPostOfficeSettlements($requestData);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function requestPostOfficeSettlementsByPostIndex(int $postIndex): PostOfficeSettlementCollectionInterface
+    {
+      $requestData = ['postindex' => $postIndex];
+      return $this->requestPostOfficeSettlements($requestData);
+    }
+
+    /**
+     * Helper function to request PostOfficeSettlement.
+     *
+     * @param array<string|int, string|mixed> $requestData
+     *   Assoc array of request data.
+     *
+     * @return PostOfficeSettlementCollectionInterface
+     *   List of post office settlements.
+     *
+     * @throws GuzzleException
+     * @throws InvalidResponseException
+     * @throws RequestException
+     */
+    protected function requestPostOfficeSettlements(array $requestData): PostOfficeSettlementCollectionInterface
+    {
+      $response = $this->getRequest()->request(
+        $this->getAccessToken(),
+        'GET',
+        $this->getEndpointUrl() . self::POST_OFFICES_BY_CITY_ID,
+        $requestData
+      );
+      $response = $response->getResponseData();
+
+      $postOfficeSettlementCollection = new PostOfficeSettlementCollection();
+      if (!empty($response['Entries']['Entry'])) {
+        foreach ($response['Entries']['Entry'] as $entry) {
+          $postOfficeSettlement = $this->convertPostOfficeSettlementEntryResponse($entry);
+          $postOfficeSettlementCollection->add($postOfficeSettlement);
+        }
+      }
+      return $postOfficeSettlementCollection;
+    }
+
+    /**
+     * Converts Post Office entry response into PostOfficeSettlement object.
+     *
+     * @param array<string|int, string|mixed> $entry
+     *   Post Office Settlement Entry response to process.
+     *
+     * @return PostOfficeSettlement
+     *   PostOfficeSettlement object.
+     */
+    protected function convertPostOfficeSettlementEntryResponse(array $entry): PostOfficeSettlement
+    {
+      return new PostOfficeSettlement(
+        id: (int) $entry['ID'],
+        name: $entry['PO_LONG'],
+        shortName: $entry['PO_SHORT'],
+        type: $entry['TYPE_LONG'],
+        shortType: $entry['TYPE_SHORT'],
+        typeAcronym: $entry['TYPE_ACRONYM'],
+        parentId: (int) $entry['PARENT_ID'],
+        cityId: (int) $entry['CITY_ID'],
+        cityUa: $entry['CITY_UA'],
+        cityEn: $entry['CITY_EN'],
+        cityTypeUa: $entry['CITYTYPE_UA'],
+        cityTypeEn: $entry['CITYTYPE_EN'],
+        shortCityTypeUa: $entry['SHORTCITYTYPE_UA'],
+        shortCityTypeEn: $entry['SHORTCITYTYPE_EN'] ?? null,
+        postIndex: (int) $entry['POSTINDEX'],
+        regionId: (int) $entry['REGION_ID'],
+        regionUa: $entry['REGION_UA'],
+        regionEn: $entry['REGION_EN'],
+        districtId: (int) $entry['DISTRICT_ID'],
+        districtUa: $entry['DISTRICT_UA'],
+        districtEn: $entry['DISTRICT_EN'],
+        streetUa: $entry['STREET_UA'],
+        streetEn: $entry['STREET_EN'],
+        streetTypeUa: $entry['STREETTYPE_UA'],
+        streetTypeEn: $entry['STREETTYPE_EN'],
+        houseNumber: $entry['HOUSENUMBER'],
+        address: $entry['ADDRESS'],
+        longitude: (float) $entry['LONGITUDE'],
+        latitude: (float) $entry['LATTITUDE'],
+        isCash: (bool) $entry['IS_CASH'],
+        isDhl: (bool) $entry['IS_DHL'],
+        isSmartbox: (bool) $entry['IS_SMARTBOX'],
+        isUrgentPostalTransfers: (bool) $entry['PELPEREKAZY'],
+        isFlagman: (bool) $entry['IS_FLAGMAN'],
+        hasPostTerminal: (bool) $entry['POSTTERMINAL'],
+        isAutomated: (bool) $entry['IS_AUTOMATED'],
+        isSecurity: (bool) $entry['IS_SECURITY'],
+        lockCode: (int) $entry['LOCK_CODE'],
+        lockUa: $entry['LOCK_UA'],
+        lockEn: $entry['LOCK_EN'],
+        phone: $entry['PHONE'],
+        isVpz: (bool) $entry['ISVPZ'],
+        merezaNumber: (int) $entry['MEREZA_NUMBER'],
+        techIndex: (int) $entry['TECHINDEX'],
+      );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function requestPostOfficeOpenHoursByPostCode(int $serviceAreaPostCode): PostOfficeOpenHoursCollectionInterface
+    {
+      $requestData = ['pc' => $serviceAreaPostCode];
+      return $this->requestPostOfficeOpenHours($requestData);
+    }
+
+    /**
+     * Helper function to request PostOfficeOpenHours.
+     *
+     * @param array<string|int, string|mixed> $requestData
+     *   Assoc array of request data.
+     *
+     * @return PostOfficeOpenHoursCollectionInterface
+     *   List of Post Office Open Hours.
+     *
+     * @throws GuzzleException
+     * @throws InvalidResponseException
+     * @throws RequestException
+     */
+    protected function requestPostOfficeOpenHours(array $requestData): PostOfficeOpenHoursCollectionInterface
+    {
+      $response = $this->getRequest()->request(
+        $this->getAccessToken(),
+        'GET',
+        $this->getEndpointUrl() . self::POST_OFFICES_OPEN_HOURS_BY_POST_INDEX,
+        $requestData
+      );
+      $response = $response->getResponseData();
+
+      $postOfficeOpenHoursCollection = new PostOfficeOpenHoursCollection();
+      if (!empty($response['Entries']['Entry'])) {
+        foreach ($response['Entries']['Entry'] as $entry) {
+          $postOfficeOpenHours = $this->convertPostOfficeOpenHoursEntryResponse($entry);
+          $postOfficeOpenHoursCollection->add($postOfficeOpenHours);
+        }
+      }
+      return $postOfficeOpenHoursCollection;
+    }
+
+    /**
+     * Converts Post Office Open Hours entry response into PostOfficeOpenHours object.
+     *
+     * @param array<string|int, string|mixed> $entry
+     *   Post Office Open Hours response to process.
+     *
+     * @return PostOfficeOpenHoursInterface
+     *   PostOfficeSettlement object.
+     */
+    protected function convertPostOfficeOpenHoursEntryResponse(array $entry): PostOfficeOpenHoursInterface
+    {
+      return new PostOfficeOpenHours(
+        id: (int) $entry['id'],
+        type: $entry['POSTOFFICE_TYPE'],
+        name: $entry['FULLNAME'],
+        shortName: $entry['SHORTNAME'],
+        lockReason: $entry['LOCK_REASON'],
+        dayOfWeekNumber: (int) $entry['DAYOFWEEK_NUM'],
+        dayOfWeekUa: $entry['DAYOFWEEK_UA'],
+        dayOfWeekEn: $entry['DAYOFWEEK_EN'],
+        shortDayOfWeekUa: $entry['DAYOFWEEK_SHORTNAME_UA'],
+        shortDayOfWeekEn: $entry['DAYOFWEEK_SHORTNAME_EN'] ?? null,
+        intervalType: $entry['INTERVALTYPE'],
+        parentPostOfficeId: (int) $entry['POSTOFFICE_PARENT'],
+        openingTime: $entry['TFROM'],
+        closingTime: $entry['TTO'],
+        workComment: $entry['WORKCOMMENT']
+      );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function requestNearestPostOffices(
+      float $latitude,
+      float $longitude,
+      int $maxDistance
+    ): NearestPostOfficeCollectionInterface
+    {
+
+      $requestData = [
+        'lat' => $latitude,
+        'long' => $longitude,
+        'maxdistance' => $maxDistance,
+      ];
+      $response = $this->getRequest()->request(
+        $this->getAccessToken(),
+        'GET',
+        $this->getEndpointUrl() . self::POST_OFFICES_BY_GEOLOCATION,
+        $requestData
+      );
+      $response = $response->getResponseData();
+
+      $nearestPostOfficeCollection = new NearestPostOfficeCollection();
+      if (!empty($response['Entries']['Entry'])) {
+        foreach ($response['Entries']['Entry'] as $entry) {
+          $nearestPostOffice = new NearestPostOffice(
+            id: (int) $entry['ID'],
+            cityName: $entry['CITYNAME'],
+            address: $entry['ADDRESS'],
+            filialName: $entry['POSTFILIALNAME'],
+            distance: (int) $entry['DISTANCE'],
+          );
+          $nearestPostOfficeCollection->add($nearestPostOffice);
+        }
+      }
+      return $nearestPostOfficeCollection;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function requestSettlementsByPostCode(
+      int $postCode,
+      LanguagesEnumInterface $language = LanguagesEnum::UA
+    ): SettlementCollectionInterface
+    {
+      $requestData = [
+        'postcode' => $postCode,
+        'lang' => $language->value,
+      ];
+      $response = $this->getRequest()->request(
+        $this->getAccessToken(),
+        'GET',
+        $this->getEndpointUrl() . self::CITY_DETAILS_BY_POSTCODE,
+        $requestData
+      );
+      $response = $response->getResponseData();
+
+      $settlementCollection = new SettlementCollection();
+      if (!empty($response['Entries']['Entry'])) {
+        foreach ($response['Entries']['Entry'] as $entry) {
+          $settlement = new Settlement(
+            postCode: (int) $entry['POSTCODE'],
+            regionId: (int) $entry['REGION_ID'],
+            regionName: $entry['REGION_NAME'],
+            districtId: (int) $entry['DISTRICT_ID'],
+            districtName: $entry['DISTRICT_NAME'],
+            cityId: (int) $entry['CITY_ID'],
+            cityName: $entry['CITY_NAME'],
+            cityTypeName: $entry['CITYTYPE_NAME'] ?? null,
+            language: $language
+          );
+          $settlementCollection->add($settlement);
+        }
+      }
+      return $settlementCollection;
+    }
 
     /**
      * {@inheritDoc}

@@ -15,7 +15,7 @@ interface AddressInterface {
    * @return int
    *   Post code of the address.
    */
-  public function postCode(): int;
+  public function getPostCode(): int;
 
   /**
    * Gets address house number.
@@ -23,6 +23,14 @@ interface AddressInterface {
    * @return string
    *   House number of the address.
    */
-  public function houseNumber(): string;
+  public function getHouseNumber(): string;
+
+  /**
+   * Gets an associative array version of the Address.
+   *
+   * @return array<string, mixed>
+   *    Array version of the object.
+   */
+  public function toArray(): array;
 
 }

@@ -18,7 +18,7 @@ interface StreetInterface {
    * @return int
    *   ID of the street.
    */
-  public function id(): int;
+  public function getId(): int;
 
   /**
    * Gets street name.
@@ -28,7 +28,7 @@ interface StreetInterface {
    * @return string
    *   Name of the street.
    */
-  public function name(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
 
   /**
    * Gets street type.
@@ -38,7 +38,7 @@ interface StreetInterface {
    * @return string
    *   Type of the street.
    */
-  public function type(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getType(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
 
   /**
    * Gets street short type.
@@ -48,6 +48,17 @@ interface StreetInterface {
    * @return string|null
    *   Short type of the street, can be null for specific languages.
    */
-  public function shortType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string;
+  public function getShortType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string;
+
+  /**
+   * Gets an associative array version of the Street.
+   *
+   * @param LanguagesEnumInterface|null $language
+   *   Language of the value to return, NULL by default which returns all values.
+   *
+   * @return array<string, mixed>
+   *    Array version of the object.
+   */
+  public function toArray(?LanguagesEnumInterface $language = null): array;
 
 }

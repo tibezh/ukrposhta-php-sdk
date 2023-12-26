@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ukrposhta\AddressClassifier\Entities\Region;
 
 use Ukrposhta\AddressClassifier\Entities\LanguagesEnum;
+use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
 
 /**
  * Provides required methods for Region entity.
@@ -17,18 +18,18 @@ interface RegionInterface {
    * @return int
    *   The ID of the region.
    */
-  public function id(): int;
+  public function getId(): int;
 
   /**
    * Gets region name.
    *
-   * @param LanguagesEnum $language
+   * @param LanguagesEnumInterface $language
    *   Name in language, LanguagesEnum::UA by default.
    *
    * @return string
    *   Region name in specific language.
    */
-  public function name(LanguagesEnum $language = LanguagesEnum::UA): string;
+  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
 
   /**
    * Gets region katottg code.
@@ -36,7 +37,7 @@ interface RegionInterface {
    * @return int
    *   The katottg code of the region.
    */
-  public function katottg(): int;
+  public function getKatottg(): int;
 
   /**
    * Gets region koatuu code.
@@ -44,6 +45,17 @@ interface RegionInterface {
    * @return int
    *   The koatuu code of the region.
    */
-  public function koatuu(): int;
+  public function getKoatuu(): int;
+
+  /**
+   * Gets an associative array version of the Region.
+   *
+   * @param LanguagesEnumInterface|null $language
+   *   Language of the value to return, NULL by default which returns all values.
+   *
+   * @return array<string, mixed>
+   *    Array version of the object.
+   */
+  public function toArray(?LanguagesEnumInterface $language = null): array;
 
 }

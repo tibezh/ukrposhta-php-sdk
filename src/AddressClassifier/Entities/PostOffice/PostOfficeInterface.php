@@ -18,7 +18,7 @@ interface PostOfficeInterface {
    * @return int
    *   ID of the Post Office.
    */
-  public function id(): int;
+  public function getId(): int;
 
   /**
    * Gets code.
@@ -26,17 +26,23 @@ interface PostOfficeInterface {
    * @return int
    *   Code of the Post Office.
    */
-  public function code(): int;
+  public function getCode(): int;
 
   /**
    * Gets long name.
    *
-   * Warning! UA language only.
+   * @return string
+   *   Long name of the Post Office.
+   */
+  public function getName(): string;
+
+  /**
+   * Gets short name.
    *
    * @return string
-   *   Long name of the Post Office on UA language.
+   *   Short name of the Post Office.
    */
-  public function name(): string;
+  public function getShortName(): string;
 
   /**
    * Gets type.
@@ -46,7 +52,7 @@ interface PostOfficeInterface {
    * @return string
    *   Type of the Post Office.
    */
-  public function type(): string;
+  public function getType(): string;
 
   /**
    * Gets short type.
@@ -56,7 +62,7 @@ interface PostOfficeInterface {
    * @return string
    *   Short type of the Post Office.
    */
-  public function typeShort(): string;
+  public function getShortType(): string;
 
   /**
    * Gets type acronym.
@@ -64,7 +70,15 @@ interface PostOfficeInterface {
    * @return string
    *   Type acronym of the Post Office.
    */
-  public function typeAcronym(): string;
+  public function getTypeAcronym(): string;
+
+  /**
+   * Gets post index.
+   *
+   * @return int
+   *   Post index of the Post Office.
+   */
+  public function getPostIndex(): int;
 
   /**
    * Gets post code.
@@ -72,7 +86,7 @@ interface PostOfficeInterface {
    * @return int
    *   Post code of the Post Office.
    */
-  public function postCode(): int;
+  public function getPostCode(): int;
 
   /**
    * Gets mereza number.
@@ -80,7 +94,7 @@ interface PostOfficeInterface {
    * @return int
    *   Mereza number of the Post Office.
    */
-  public function merezaNumber(): int;
+  public function getMerezaNumber(): int;
 
   /**
    * Gets lock description.
@@ -91,7 +105,7 @@ interface PostOfficeInterface {
    * @return string
    *   Lock description of the Post Office.
    */
-  public function lock(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getLock(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
 
   /**
    * Gets lock code.
@@ -99,7 +113,7 @@ interface PostOfficeInterface {
    * @return int
    *   Lock code of the Post Office.
    */
-  public function lockCode(): int;
+  public function getLockCode(): int;
 
   /**
    * Gets region ID.
@@ -107,7 +121,15 @@ interface PostOfficeInterface {
    * @return int
    *   Region ID of the Post Office.
    */
-  public function regionId(): int;
+  public function getRegionId(): int;
+
+  /**
+   * Gets service area region ID.
+   *
+   * @return int
+   *   Service area region ID of the Post Office.
+   */
+  public function getServiceAreaRegionId(): int;
 
   /**
    * Gets district ID.
@@ -115,7 +137,15 @@ interface PostOfficeInterface {
    * @return int
    *   District ID of the Post Office.
    */
-  public function districtId(): int;
+  public function getDistrictId(): int;
+
+  /**
+   * Gets service area district ID.
+   *
+   * @return int
+   *   Service area district ID of the Post Office.
+   */
+  public function getServiceAreaDistrictId(): int;
 
   /**
    * Gets city ID.
@@ -123,7 +153,7 @@ interface PostOfficeInterface {
    * @return int
    *   City ID of the Post Office.
    */
-  public function cityId(): int;
+  public function getCityId(): int;
 
   /**
    * Gets city type.
@@ -133,7 +163,48 @@ interface PostOfficeInterface {
    * @return string
    *   City type of the Post Office.
    */
-  public function cityType(): string;
+  public function getCityType(): string;
+
+  /**
+   * Gets service area city ID.
+   *
+   * @return int
+   *   Service area city ID of the Post Office.
+   */
+  public function getServiceAreaCityId(): int;
+
+  /**
+   * Gets service area city name.
+   *
+   * @param LanguagesEnumInterface $language
+   *    Name in language, LanguagesEnum::UA by default.
+   *
+   * @return string
+   *   Service area city name of the Post Office.
+   */
+  public function getServiceAreaCity(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+
+  /**
+   * Gets service area city type.
+   *
+   * @param LanguagesEnumInterface $language
+   *   Name in language, LanguagesEnum::UA by default.
+   *
+   * @return string
+   *   Service area city type of the Post Office.
+   */
+  public function getServiceAreaCityType(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+
+  /**
+   * Gets service area short city type.
+   *
+   * @param LanguagesEnumInterface $language
+   *   Language of the value to return, LanguagesEnum::UA by default.
+   *
+   * @return string|null
+   *   Service area short city type of the Post Office, can be null for specific languages.
+   */
+  public function getServiceAreaShortCityType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string;
 
   /**
    * Gets street ID.
@@ -141,7 +212,7 @@ interface PostOfficeInterface {
    * @return int
    *   Street ID of the Post Office.
    */
-  public function streetId(): int;
+  public function getStreetId(): int;
 
   /**
    * Gets parent ID.
@@ -151,7 +222,7 @@ interface PostOfficeInterface {
    * @return int
    *   Parent ID of the Post Office.
    */
-  public function parentId(): int;
+  public function getParentId(): int;
 
   /**
    * Gets address
@@ -159,7 +230,7 @@ interface PostOfficeInterface {
    * @return string
    *   Address of the Post Office.
    */
-  public function address(): string;
+  public function getAddress(): string;
 
   /**
    * Get phone number.
@@ -167,7 +238,7 @@ interface PostOfficeInterface {
    * @return string
    *   Phone number of the Post Office.
    */
-  public function phone(): string;
+  public function getPhone(): string;
 
   /**
    * Gets longitude.
@@ -175,7 +246,7 @@ interface PostOfficeInterface {
    * @return float
    *   Longitude of the Post Office.
    */
-  public function longitude(): float;
+  public function getLongitude(): float;
 
   /**
    * Gets latitude.
@@ -183,10 +254,10 @@ interface PostOfficeInterface {
    * @return float
    *   Latitude of the Post Office.
    */
-  public function latitude(): float;
+  public function getLatitude(): float;
 
   /**
-   * Gets vpz sign.
+   * Gets vpz sign status.
    *
    * Post Office can also be sorting.
    *
@@ -222,7 +293,7 @@ interface PostOfficeInterface {
    * @return int
    *   Mrtps code of the Post Office.
    */
-  public function mrtps(): int;
+  public function getMrtps(): int;
 
   /**
    * Gets internal technical index.
@@ -230,6 +301,25 @@ interface PostOfficeInterface {
    * @return int
    *   Internal technical index of the Post Office.
    */
-  public function techIndex(): int;
+  public function getTechIndex(): int;
+
+  /**
+   * Gets delivery possible status.
+   *
+   * @return bool
+   *   True value if possible delivery to the Post Office, otherwise false.
+   */
+  public function isDeliveryPossible(): bool;
+
+  /**
+   * Gets an associative array version of the Post Office.
+   *
+   * @param LanguagesEnumInterface|null $language
+   *   Language of the value to return, NULL by default which returns all values.
+   *
+   * @return array<string, mixed>
+   *    Array version of the object.
+   */
+  public function toArray(?LanguagesEnumInterface $language = null): array;
 
 }

@@ -18,7 +18,7 @@ interface CityInterface {
    * @return int
    *   ID of the city.
    */
-  public function id(): int;
+  public function getId(): int;
 
   /**
    * City name.
@@ -29,7 +29,7 @@ interface CityInterface {
    * @return string
    *   Name of the city.
    */
-  public function name(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
 
   /**
    * City type.
@@ -40,7 +40,7 @@ interface CityInterface {
    * @return string
    *   Type of the city.
    */
-  public function type(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getType(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
 
   /**
    * City short type.
@@ -51,7 +51,7 @@ interface CityInterface {
    * @return string|null
    *   Short type of the city, can be null for non default languages.
    */
-  public function shortType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string;
+  public function getShortType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string;
 
   /**
    * Gets city katottg code.
@@ -59,7 +59,7 @@ interface CityInterface {
    * @return int
    *   The city katottg code
    */
-  public function katottg(): int;
+  public function getKatottg(): int;
 
   /**
    * Gets city koatuu code.
@@ -67,7 +67,7 @@ interface CityInterface {
    * @return int
    *   The city koatuu code
    */
-  public function koatuu(): int;
+  public function getKoatuu(): int;
 
   /**
    * Gets city longitude.
@@ -75,7 +75,7 @@ interface CityInterface {
    * @return float
    *   Longitude of the city.
    */
-  public function longitude(): float;
+  public function getLongitude(): float;
 
   /**
    * Gets city latitude.
@@ -83,7 +83,7 @@ interface CityInterface {
    * @return float
    *   Latitude of the city.
    */
-  public function latitude(): float;
+  public function getLatitude(): float;
 
   /**
    * Gets city population.
@@ -91,6 +91,17 @@ interface CityInterface {
    * @return int
    *   Population of the city.
    */
-  public function population(): int;
+  public function getPopulation(): int;
+
+  /**
+   * Gets an associative array version of the City.
+   *
+   * @param LanguagesEnumInterface|null $language
+   *   Language of the value to return, NULL by default which returns all values.
+   *
+   * @return array<string, mixed>
+   *    Array version of the object.
+   */
+  public function toArray(?LanguagesEnumInterface $language = null): array;
 
 }

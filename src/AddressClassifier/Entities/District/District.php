@@ -38,7 +38,7 @@ class District implements DistrictInterface {
   /**
    * {@inheritDoc}
    */
-  public function id(): int
+  public function getId(): int
   {
     return $this->id;
   }
@@ -46,7 +46,7 @@ class District implements DistrictInterface {
   /**
    * {@inheritDoc}
    */
-  public function name(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string
   {
     $propSuffix = $language->propSuffix();
     return $this->{"name{$propSuffix}"};
@@ -55,7 +55,7 @@ class District implements DistrictInterface {
   /**
    * {@inheritDoc}
    */
-  public function koatuu(): int
+  public function getKoatuu(): int
   {
     return $this->koatuu;
   }
@@ -63,9 +63,29 @@ class District implements DistrictInterface {
   /**
    * {@inheritDoc}
    */
-  public function katottg(): int
+  public function getKatottg(): int
   {
     return $this->katottg;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function toArray(?LanguagesEnumInterface $language = null): array
+  {
+    $data = [
+      'id' => $this->getId(),
+      'koatuu' => $this->getKoatuu(),
+      'katottg' => $this->getKatottg(),
+    ];
+    if (!$language) {
+      $data['name_ua'] = $this->getName();
+      $data['name_en'] = $this->getName(LanguagesEnum::EN);
+    }
+    else {
+      $data['name'] = $this->getName($language);
+    }
+    return $data;
   }
 
 }

@@ -10,8 +10,12 @@ use Ukrposhta\AddressClassifier\Entities\CourierArea\CourierAreaInterface;
 use Ukrposhta\AddressClassifier\Entities\District\DistrictCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\LanguagesEnum;
 use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
+use Ukrposhta\AddressClassifier\Entities\NearestPostOffice\NearestPostOfficeCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\PostOffice\PostOfficeCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\PostOfficeOpenHours\PostOfficeOpenHoursCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\PostOfficeSettlement\PostOfficeSettlementCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\Region\RegionCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\Settlement\SettlementCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\Street\StreetCollectionInterface;
 
 /**
@@ -154,7 +158,7 @@ interface AddressClassifierInterface {
   public function requestPostOfficeByPostCode(int $postCode): PostOfficeCollectionInterface;
 
   /**
-   * Request Post Offices by Post Index.
+   * Requests Post Offices by Post Index.
    *
    * @param int $postIndex
    *   Post index for the request.
@@ -165,7 +169,7 @@ interface AddressClassifierInterface {
   public function requestPostOfficeByPostIndex(int $postIndex): PostOfficeCollectionInterface;
 
   /**
-   * Request Post Offices by City ID.
+   * Requests Post Offices by City ID.
    *
    * @param int $cityId
    *   City ID for the request.
@@ -176,7 +180,7 @@ interface AddressClassifierInterface {
   public function requestPostOfficeByCityId(int $cityId): PostOfficeCollectionInterface;
 
   /**
-   * Request Post Offices by District ID.
+   * Requests Post Offices by District ID.
    *
    * @param int $districtId
    *   District ID for the request.
@@ -187,7 +191,7 @@ interface AddressClassifierInterface {
   public function requestPostOfficeByDistrictId(int $districtId): PostOfficeCollectionInterface;
 
   /**
-   * Request Post Offices by Street ID.
+   * Requests Post Offices by Street ID.
    *
    * @param int $streetId
    *   Street ID for the request.
@@ -198,7 +202,7 @@ interface AddressClassifierInterface {
   public function requestPostOfficeByStreetId(int $streetId): PostOfficeCollectionInterface;
 
   /**
-   * Request Post Offices by Region ID.
+   * Requests Post Offices by Region ID.
    *
    * @param int $regionId
    *   Region ID for the request.
@@ -209,36 +213,119 @@ interface AddressClassifierInterface {
   public function requestPostOfficeByRegionId(int $regionId): PostOfficeCollectionInterface;
 
   /**
-   * Request Post Offices by additional City ID.
+   * Requests Post Offices by service area City ID.
    *
-   * @param int $additionalCityId
-   *   Additional City ID for the request.
-   *
-   * @return PostOfficeCollectionInterface
-   *   Post Offices Collection object.
-   */
-  public function requestPostOfficeByAdditionalCityId(int $additionalCityId): PostOfficeCollectionInterface;
-
-  /**
-   * Request Post Offices by additional District ID.
-   *
-   * @param int $additionalDistrictId
-   *   Additional District ID for the request.
+   * @param int $serviceAreaCityId
+   *   Service area City ID for the request.
    *
    * @return PostOfficeCollectionInterface
    *   Post Offices Collection object.
    */
-  public function requestPostOfficeByAdditionalDistrictId(int $additionalDistrictId): PostOfficeCollectionInterface;
+  public function requestPostOfficeByServiceAreaCityId(int $serviceAreaCityId): PostOfficeCollectionInterface;
 
   /**
-   * Request Post Offices by additional Region ID.
+   * Requests Post Offices by service area District ID.
    *
-   * @param int $additionalRegionId
-   *   Additional Region ID for the request.
+   * @param int $serviceAreaDistrictId
+   *   Service area District ID for the request.
    *
    * @return PostOfficeCollectionInterface
-   *  Post Offices Collection object.
+   *   Post Offices Collection object.
    */
-  public function requestPostOfficeByAdditionalRegionId(int $additionalRegionId): PostOfficeCollectionInterface;
+  public function requestPostOfficeByServiceAreaDistrictId(int $serviceAreaDistrictId): PostOfficeCollectionInterface;
+
+  /**
+   * Requests Post Offices by service area Region ID.
+   *
+   * @param int $serviceAreaRegionId
+   *   Service area Region ID for the request.
+   *
+   * @return PostOfficeCollectionInterface
+   *   Post Offices Collection object.
+   */
+  public function requestPostOfficeByServiceAreaRegionId(int $serviceAreaRegionId): PostOfficeCollectionInterface;
+
+  /**
+   * Requests Post Office Settlements by City ID.
+   *
+   * @param int $cityId
+   *   City ID for the request.
+   *
+   * @return PostOfficeSettlementCollectionInterface
+   *   Post Office Settlement Collection object.
+   */
+  public function requestPostOfficeSettlementsByCityId(int $cityId): PostOfficeSettlementCollectionInterface;
+
+  /**
+   * Requests Post Office Settlements by District ID.
+   *
+   * @param int $districtId
+   *   District ID for the request.
+   *
+   * @return PostOfficeSettlementCollectionInterface
+   *   Post Office Settlement Collection object.
+   */
+  public function requestPostOfficeSettlementsByDistrictId(int $districtId): PostOfficeSettlementCollectionInterface;
+
+  /**
+   * Requests Post Office Settlements by Region ID.
+   *
+   * @param int $regionId
+   *   Region ID for the request.
+   *
+   * @return PostOfficeSettlementCollectionInterface
+   *   Post Office Settlement Collection object.
+   */
+  public function requestPostOfficeSettlementsByRegionId(int $regionId): PostOfficeSettlementCollectionInterface;
+
+  /**
+   * Requests Post Office Settlements by Post Index ID.
+   *
+   * @param int $postIndex
+   *   Post Index ID for the request.
+   *
+   * @return PostOfficeSettlementCollectionInterface
+   *   Post Office Settlement Collection object.
+   */
+  public function requestPostOfficeSettlementsByPostIndex(int $postIndex): PostOfficeSettlementCollectionInterface;
+
+  /**
+   * Requests Post Office Open Hours by service area post code.
+   *
+   * @param int $serviceAreaPostCode
+   *   Service area post code.
+   *
+   * @return PostOfficeOpenHoursCollectionInterface
+   *   Post Office Open Hours collection object.
+   */
+  public function requestPostOfficeOpenHoursByPostCode(int $serviceAreaPostCode): PostOfficeOpenHoursCollectionInterface;
+
+  /**
+   * Requests nearest Post Offices.
+   *
+   * @param float $latitude
+   *   Latitude coordinate.
+   * @param float $longitude
+   *   Longitude coordinate.
+   * @param int $maxDistance
+   *   Radius of distance to search.
+   *
+   * @return NearestPostOfficeCollectionInterface
+   *   Nearest Post Offices collection object.
+   */
+  public function requestNearestPostOffices(float $latitude, float $longitude, int $maxDistance): NearestPostOfficeCollectionInterface;
+
+  /**
+   * Request Settlements by post code.
+   *
+   * @param int $postCode
+   *   Post code for the request.
+   * @param LanguagesEnumInterface $language
+   *   Language for the request, LanguagesEnum::UA by default.
+   *
+   * @return SettlementCollectionInterface
+   *   Settlements collection object.
+   */
+  public function requestSettlementsByPostCode(int $postCode, LanguagesEnumInterface $language = LanguagesEnum::UA): SettlementCollectionInterface;
 
 }

@@ -6,7 +6,6 @@ namespace Ukrposhta\AddressClassifier\Entities\District;
 
 use Ukrposhta\AddressClassifier\Entities\LanguagesEnum;
 use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
-use Ukrposhta\AddressClassifier\Entities\Region\RegionInterface;
 
 /**
  * Provides required methods for District entity.
@@ -19,7 +18,7 @@ interface DistrictInterface {
    * @return int
    *   The district ID.
    */
-  public function id(): int;
+  public function getId(): int;
 
   /**
    * Gets district name.
@@ -30,7 +29,7 @@ interface DistrictInterface {
    * @return string
    *   The district name.
    */
-  public function name(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
 
   /**
    * Gets district koatuu code.
@@ -38,7 +37,7 @@ interface DistrictInterface {
    * @return int
    *   The district koatuu code
    */
-  public function koatuu(): int;
+  public function getKoatuu(): int;
 
   /**
    * Gets district katottg code.
@@ -46,6 +45,17 @@ interface DistrictInterface {
    * @return int
    *   The district katottg code
    */
-  public function katottg(): int;
+  public function getKatottg(): int;
+
+  /**
+   * Gets an associative array version of the District.
+   *
+   * @param LanguagesEnumInterface|null $language
+   *   Language of the value to return, NULL by default which returns all values.
+   *
+   * @return array<string, mixed>
+   *    Array version of the object.
+   */
+  public function toArray(?LanguagesEnumInterface $language = null): array;
 
 }

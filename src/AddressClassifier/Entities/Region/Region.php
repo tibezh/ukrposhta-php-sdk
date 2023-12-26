@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ukrposhta\AddressClassifier\Entities\Region;
 
 use Ukrposhta\AddressClassifier\Entities\LanguagesEnum;
+use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
 
 /**
  * Region main class.
@@ -37,7 +38,7 @@ class Region implements RegionInterface {
   /**
    * {@inheritDoc}
    */
-  public function id(): int
+  public function getId(): int
   {
     return $this->id;
   }
@@ -45,7 +46,7 @@ class Region implements RegionInterface {
   /**
    * {@inheritDoc}
    */
-  public function name(LanguagesEnum $language = LanguagesEnum::UA): string
+  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string
   {
     $propSuffix = $language->propSuffix();
     return $this->{"name{$propSuffix}"};
@@ -54,7 +55,7 @@ class Region implements RegionInterface {
   /**
    * {@inheritDoc}
    */
-  public function katottg(): int
+  public function getKatottg(): int
   {
     return $this->katottg;
   }
@@ -62,9 +63,29 @@ class Region implements RegionInterface {
   /**
    * {@inheritDoc}
    */
-  public function koatuu(): int
+  public function getKoatuu(): int
   {
     return $this->koatuu;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function toArray(?LanguagesEnumInterface $language = null): array
+  {
+    $data = [
+      'id' => $this->getId(),
+      'katottg' => $this->getKatottg(),
+      'koatuu' => $this->getKoatuu(),
+    ];
+    if (!$language) {
+      $data['name_ua'] = $this->getName();
+      $data['name_en'] = $this->getName(LanguagesEnum::EN);
+    }
+    else {
+      $data['name'] = $this->getName($language);
+    }
+    return $data;
   }
 
 }

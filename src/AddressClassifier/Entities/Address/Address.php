@@ -24,7 +24,7 @@ class Address implements AddressInterface {
   /**
    * {@inheritDoc}
    */
-  public function postCode(): int
+  public function getPostCode(): int
   {
     return $this->postCode;
   }
@@ -32,9 +32,20 @@ class Address implements AddressInterface {
   /**
    * {@inheritDoc}
    */
-  public function houseNumber(): string
+  public function getHouseNumber(): string
   {
     return $this->houseNumber;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function toArray(): array
+  {
+    return [
+      'post_code' => $this->getPostCode(),
+      'house_number' => $this->getHouseNumber(),
+    ];
   }
 
 }

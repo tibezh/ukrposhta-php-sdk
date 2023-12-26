@@ -59,7 +59,7 @@ class City implements CityInterface {
   /**
    * {@inheritDoc}
    */
-  public function id(): int
+  public function getId(): int
   {
     return $this->id;
   }
@@ -67,7 +67,7 @@ class City implements CityInterface {
   /**
    * {@inheritDoc}
    */
-  public function name(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string
   {
     $propSuffix = $language->propSuffix();
     return $this->{"name{$propSuffix}"};
@@ -76,7 +76,7 @@ class City implements CityInterface {
   /**
    * {@inheritDoc}
    */
-  public function type(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getType(LanguagesEnumInterface $language = LanguagesEnum::UA): string
   {
     $propSuffix = $language->propSuffix();
     return $this->{"type{$propSuffix}"};
@@ -85,7 +85,7 @@ class City implements CityInterface {
   /**
    * {@inheritDoc}
    */
-  public function shortType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string
+  public function getShortType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string
   {
     $propSuffix = $language->propSuffix();
     return $this->{"shortType{$propSuffix}"};
@@ -94,7 +94,7 @@ class City implements CityInterface {
   /**
    * {@inheritDoc}
    */
-  public function katottg(): int
+  public function getKatottg(): int
   {
     return $this->katottg;
   }
@@ -102,7 +102,7 @@ class City implements CityInterface {
   /**
    * {@inheritDoc}
    */
-  public function koatuu(): int
+  public function getKoatuu(): int
   {
     return $this->koatuu;
   }
@@ -110,7 +110,7 @@ class City implements CityInterface {
   /**
    * {@inheritDoc}
    */
-  public function longitude(): float
+  public function getLongitude(): float
   {
     return $this->longitude;
   }
@@ -118,7 +118,7 @@ class City implements CityInterface {
   /**
    * {@inheritDoc}
    */
-  public function latitude(): float
+  public function getLatitude(): float
   {
     return $this->latitude;
   }
@@ -126,9 +126,41 @@ class City implements CityInterface {
   /**
    * {@inheritDoc}
    */
-  public function population(): int
+  public function getPopulation(): int
   {
     return $this->population;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function toArray(?LanguagesEnumInterface $language = null): array
+  {
+
+    $data = [
+      'id' => $this->getId(),
+      'katottg' => $this->getKatottg(),
+      'koatuu' => $this->getKoatuu(),
+      'longitude' => $this->getLongitude(),
+      'latitude' => $this->getLatitude(),
+      'population' => $this->getPopulation(),
+    ];
+
+    if (!$language) {
+      $data['name_ua'] = $this->getName();
+      $data['name_en'] = $this->getName(LanguagesEnum::EN);
+      $data['type_ua'] = $this->getType();
+      $data['type_en'] = $this->getType(LanguagesEnum::EN);
+      $data['short_type_ua'] = $this->getShortType();
+      $data['short_type_en'] = $this->getShortType(LanguagesEnum::EN);
+    }
+    else {
+      $data['name'] = $this->getName($language);
+      $data['type'] = $this->getType($language);
+      $data['short_type'] = $this->getShortType($language);
+    }
+
+    return $data;
   }
 
 }
