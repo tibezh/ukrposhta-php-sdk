@@ -29,4 +29,12 @@ class CourierArea implements CourierAreaInterface {
     return $this->isCourierArea;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public static function fromResponseEntry(array $entry): CourierAreaInterface
+  {
+    return new CourierArea(isCourierArea: !empty($entry['IS_COURIERAREA']));
+  }
+
 }

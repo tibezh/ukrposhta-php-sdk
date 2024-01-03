@@ -4,33 +4,12 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\PostOffice;
 
+use Ukrposhta\AddressClassifier\Entities\EntityCollectionBase;
+
 /**
  *
  */
-class PostOfficeCollection implements PostOfficeCollectionInterface
+class PostOfficeCollection extends EntityCollectionBase implements PostOfficeCollectionInterface
 {
-
-  /**
-   * Simple array of Post Office objects.
-   *
-   * @var array<int, PostOfficeInterface>
-   */
-  private array $items = [];
-
-  /**
-   * {@inheritDoc}
-   */
-  public function add(PostOfficeInterface $postOffice): void
-  {
-    $this->items[] = $postOffice;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function all(): array
-  {
-    return $this->items;
-  }
 
 }

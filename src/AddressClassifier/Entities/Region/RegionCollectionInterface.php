@@ -4,28 +4,12 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\Region;
 
+use Ukrposhta\AddressClassifier\Entities\EntityCollectionInterface;
+
 /**
  * Region collection interface.
  */
-interface RegionCollectionInterface
+interface RegionCollectionInterface extends EntityCollectionInterface
 {
-
-  /**
-   * Adds region object to the collection.
-   *
-   * @param RegionInterface $region
-   *   Region object to add.
-   *
-   * @return void
-   */
-  public function add(RegionInterface $region): void;
-
-  /**
-   * Gets all region collection in array.
-   *
-   * @return array<int, RegionInterface>
-   *   Simple array with Region objects.
-   */
-  public function all(): array;
 
 }

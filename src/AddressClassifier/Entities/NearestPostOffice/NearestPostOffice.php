@@ -69,4 +69,30 @@ class NearestPostOffice implements NearestPostOfficeInterface
     return $this->distance;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public function toArray(): array {
+    return [
+      'id' => $this->getId(),
+      'city_name' => $this->getCityName(),
+      'address' => $this->getAddress(),
+      'filial_name' => $this->getFilialName(),
+      'distance' => $this->getDistance(),
+    ];
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public static function fromResponseEntry(array $entry): NearestPostOfficeInterface {
+    return new NearestPostOffice(
+      id: (int) $entry['ID'],
+      cityName: $entry['CITYNAME'],
+      address: $entry['ADDRESS'],
+      filialName: $entry['POSTFILIALNAME'],
+      distance: (int) $entry['DISTANCE'],
+    );
+  }
+
 }

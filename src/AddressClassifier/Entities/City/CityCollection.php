@@ -4,33 +4,12 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\City;
 
+use Ukrposhta\AddressClassifier\Entities\EntityCollectionBase;
+
 /**
  *
  */
-class CityCollection implements CityCollectionInterface
+class CityCollection extends EntityCollectionBase implements CityCollectionInterface
 {
-
-  /**
-   * Simple array of City objects.
-   *
-   * @var array<int, CityInterface>
-   */
-  private array $items = [];
-
-  /**
-   * {@inheritDoc}
-   */
-  public function add(CityInterface $city): void
-  {
-    $this->items[] = $city;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function all(): array
-  {
-    return $this->items;
-  }
 
 }

@@ -96,4 +96,19 @@ class Street implements StreetInterface {
     return $data;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public static function fromResponseEntry(array $entry): StreetInterface {
+    return new Street(
+      id: (int) $entry['STREET_ID'],
+      nameUa: $entry['STREET_UA'],
+      nameEn: $entry['STREET_EN'],
+      typeUa: $entry['STREETTYPE_UA'],
+      typeEn: $entry['STREETTYPE_EN'],
+      shortTypeUa: $entry['SHORTSTREETTYPE_UA'],
+      shortTypeEn: $entry['SHORTSTREETTYPE_EN'],
+    );
+  }
+
 }

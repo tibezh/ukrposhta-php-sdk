@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\City;
 
+use Ukrposhta\AddressClassifier\Entities\EntityInterface;
 use Ukrposhta\AddressClassifier\Entities\LanguagesEnum;
 use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
 
 /**
  * Provides required methods for City entity.
  */
-interface CityInterface {
+interface CityInterface extends EntityInterface {
 
   /**
    * Gets city ID.
@@ -103,5 +104,11 @@ interface CityInterface {
    *    Array version of the object.
    */
   public function toArray(?LanguagesEnumInterface $language = null): array;
+
+  /**
+   * {@inheritDoc}
+   */
+  public static function fromResponseEntry(array $entry): CityInterface;
+
 
 }

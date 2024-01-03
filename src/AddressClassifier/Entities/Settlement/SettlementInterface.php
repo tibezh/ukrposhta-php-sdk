@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\Settlement;
 
-use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
+use Ukrposhta\AddressClassifier\Entities\EntityInterface;
 
 /**
  *
  */
-interface SettlementInterface
+interface SettlementInterface extends EntityInterface
 {
 
   /**
@@ -77,11 +77,16 @@ interface SettlementInterface
   public function getCityTypeName(): string;
 
   /**
-   * Gets language.
+   * Gets an associative array version of the Settlement.
    *
-   * @return LanguagesEnumInterface
-   *   Language of the Settlement object.
+   * @return array<string, mixed>
+   *    Array version of the object.
    */
-  public function getLanguage(): LanguagesEnumInterface;
+  public function toArray(): array;
+
+  /**
+   * {@inheritDoc}
+   */
+  public static function fromResponseEntry(array $entry): SettlementInterface;
 
 }

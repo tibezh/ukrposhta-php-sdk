@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\NearestPostOffice;
 
+use Ukrposhta\AddressClassifier\Entities\EntityInterface;
+
 /**
  *
  */
-interface NearestPostOfficeInterface
+interface NearestPostOfficeInterface extends EntityInterface
 {
 
   /**
-   * Gets Post Office ID.
+   * Gets Nearest Post Office ID.
    *
    * @return int
-   *   Post Office unique identifier.
+   *   Nearest Post Office unique identifier.
    */
   public function getId(): int;
 
@@ -22,7 +24,7 @@ interface NearestPostOfficeInterface
    * Gets city name.
    *
    * @return string
-   *   City name of the Post Office.
+   *   City name of the Nearest Post Office.
    */
   public function getCityName(): string;
 
@@ -30,7 +32,7 @@ interface NearestPostOfficeInterface
    * Gets address.
    *
    * @return string
-   *   Address of the Post Office.
+   *   Address of the Nearest Post Office.
    */
   public function getAddress(): string;
 
@@ -38,7 +40,7 @@ interface NearestPostOfficeInterface
    * Gets filial name.
    *
    * @return string
-   *   Filial name of the Post Office.
+   *   Filial name of the Nearest Post Office.
    */
   public function getFilialName(): string;
 
@@ -46,8 +48,21 @@ interface NearestPostOfficeInterface
    * Gets distance.
    *
    * @return int
-   *   Distance in kilometers to the Post Office.
+   *   Distance in kilometers to the Nearest Post Office.
    */
   public function getDistance(): int;
+
+  /**
+   * Gets an associative array version of the Nearest Post Office.
+   *
+   * @return array<string, mixed>
+   *    Array version of the object.
+   */
+  public function toArray(): array;
+
+  /**
+   * {@inheritDoc}
+   */
+  public static function fromResponseEntry(array $entry): NearestPostOfficeInterface;
 
 }

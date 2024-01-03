@@ -163,4 +163,25 @@ class City implements CityInterface {
     return $data;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public static function fromResponseEntry(array $entry): CityInterface
+  {
+    return new City(
+      id: (int) $entry['CITY_ID'],
+      nameUa: $entry['CITY_UA'],
+      nameEn: $entry['CITY_EN'],
+      typeUa: $entry['CITYTYPE_UA'],
+      typeEn: $entry['CITYTYPE_EN'],
+      shortTypeUa: $entry['SHORTCITYTYPE_UA'],
+      shortTypeEn: $entry['SHORTCITYTYPE_EN'],
+      katottg: (int) $entry['CITY_KATOTTG'],
+      koatuu: (int) $entry['CITY_KOATUU'],
+      longitude: (float) $entry['LONGITUDE'],
+      latitude: (float) $entry['LATTITUDE'],
+      population: (int) $entry['POPULATION']
+    );
+  }
+
 }

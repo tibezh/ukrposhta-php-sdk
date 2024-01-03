@@ -334,8 +334,19 @@ interface PostOfficeSettlementInterface
    *   Language of the value to return, NULL by default which returns all values.
    *
    * @return array<string, mixed>
-   *    Array version of the object.
+   *   Array version of the object.
    */
   public function toArray(?LanguagesEnumInterface $language = null): array;
+
+  /**
+   * Gets Post Office Settlement object from response entry.
+   *
+   * @param array<string|mixed> $entry
+   *   Entry from a response.
+   *
+   * @return PostOfficeSettlementInterface
+   *   Post Office Settlement object.
+   */
+  public static function fromResponseEntry(array $entry): PostOfficeSettlementInterface;
 
 }

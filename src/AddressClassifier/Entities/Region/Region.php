@@ -88,4 +88,17 @@ class Region implements RegionInterface {
     return $data;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public static function fromResponseEntry(array $entry): RegionInterface {
+    return new Region(
+      id: (int) $entry['REGION_ID'],
+      nameUa: $entry['REGION_UA'],
+      nameEn: $entry['REGION_EN'],
+      koatuu: (int) $entry['REGION_KOATUU'],
+      katottg: (int) $entry['REGION_KATOTTG']
+    );
+  }
+
 }

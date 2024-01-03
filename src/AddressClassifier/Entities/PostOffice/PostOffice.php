@@ -413,7 +413,7 @@ class PostOffice implements PostOfficeInterface {
       'short_type' => $this->getShortType(),
       'type_acronym' => $this->getTypeAcronym(),
       'post_index' => $this->getPostIndex(),
-      'post_code' => $this->getPostCode(),
+      'postcode' => $this->getPostCode(),
       'mereza_number' => $this->getMerezaNumber(),
       'lock_code' => $this->getLockCode(),
       'region_id' => $this->getRegionId(),
@@ -454,6 +454,51 @@ class PostOffice implements PostOfficeInterface {
     }
 
     return $data;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public static function fromResponseEntry(array $entry): PostOfficeInterface {
+    return new PostOffice(
+      id: (int) $entry['ID'],
+      code: (int) $entry['PO_CODE'],
+      name: $entry['PO_LONG'],
+      shortName: $entry['PO_SHORT'],
+      type: $entry['TYPE_LONG'],
+      typeShort: $entry['TYPE_SHORT'],
+      typeAcronym: $entry['TYPE_ACRONYM'],
+      postIndex: (int) $entry['POSTCODE'],
+      postCode: (int) $entry['POSTCODE'],
+      merezaNumber: (int) $entry['MEREZA_NUMBER'],
+      lockUa: $entry['POLOCK_UA'],
+      lockEn: $entry['POLOCK_EN'],
+      lockCode: (int) $entry['LOCK_CODE'],
+      regionId: (int) $entry['POREGION_ID'],
+      serviceAreaRegionId: (int) $entry['PDREGION_ID'],
+      districtId: (int) $entry['PODISTRICT_ID'],
+      serviceAreaDistrictId: (int) $entry['PDDISTRICT_ID'],
+      cityId: (int) $entry['POCITY_ID'],
+      cityType: $entry['CITYTYPE_UA'],
+      serviceAreaCityId: (int) $entry['PDCITY_ID'],
+      serviceAreaCityUa: $entry['PDCITY_UA'],
+      serviceAreaCityEn: $entry['PDCITY_EN'],
+      serviceAreaCityTypeUa: $entry['PDCITYTYPE_UA'],
+      serviceAreaCityTypeEn: $entry['PDCITYTYPE_EN'],
+      serviceAreaShortCityTypeUa: $entry['SHORTPDCITYTYPE_UA'],
+      serviceAreaShortCityTypeEn: $entry['SHORTPDCITYTYPE_EN'] ?? null,
+      streetId: (int) $entry['POSTREET_ID'],
+      parentId: (int) $entry['PARENT_ID'],
+      address: $entry['ADDRESS'],
+      phone: $entry['PHONE'],
+      longitude: (float) $entry['LONGITUDE'],
+      latitude: (float) $entry['LATTITUDE'],
+      isVpz: (bool) $entry['ISVPZ'],
+      isAvailable: (bool) $entry['AVALIBLE'],
+      mrtps: (int) $entry['MRTPS'],
+      techIndex: (int) $entry['TECHINDEX'],
+      isDeliveryPossible: $entry['IS_NODISTRICT'] == 0,
+    );
   }
 
 }

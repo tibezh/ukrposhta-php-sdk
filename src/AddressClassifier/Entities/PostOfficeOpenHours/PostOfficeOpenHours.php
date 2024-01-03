@@ -190,4 +190,27 @@ class PostOfficeOpenHours implements PostOfficeOpenHoursInterface
     return $data;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public static function fromResponseEntry(array $entry): PostOfficeOpenHoursInterface {
+    return new PostOfficeOpenHours(
+      id: (int) $entry['id'],
+      type: $entry['POSTOFFICE_TYPE'],
+      name: $entry['FULLNAME'],
+      shortName: $entry['SHORTNAME'],
+      lockReason: $entry['LOCK_REASON'],
+      dayOfWeekNumber: (int) $entry['DAYOFWEEK_NUM'],
+      dayOfWeekUa: $entry['DAYOFWEEK_UA'],
+      dayOfWeekEn: $entry['DAYOFWEEK_EN'],
+      shortDayOfWeekUa: $entry['DAYOFWEEK_SHORTNAME_UA'],
+      shortDayOfWeekEn: $entry['DAYOFWEEK_SHORTNAME_EN'] ?? null,
+      intervalType: $entry['INTERVALTYPE'],
+      parentPostOfficeId: (int) $entry['POSTOFFICE_PARENT'],
+      openingTime: $entry['TFROM'],
+      closingTime: $entry['TTO'],
+      workComment: $entry['WORKCOMMENT']
+    );
+  }
+
 }

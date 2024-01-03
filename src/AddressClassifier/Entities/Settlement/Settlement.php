@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\Settlement;
 
-use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
-
 /**
  *
  */
@@ -23,7 +21,6 @@ class Settlement implements SettlementInterface
    * @param int $cityId
    * @param string $cityName
    * @param string|null $cityTypeName
-   * @param LanguagesEnumInterface $language
    */
   public function __construct(
     protected readonly int $postCode,
@@ -33,8 +30,7 @@ class Settlement implements SettlementInterface
     protected readonly string $districtName,
     protected readonly int $cityId,
     protected readonly string $cityName,
-    protected readonly ?string $cityTypeName,
-    protected readonly LanguagesEnumInterface $language
+    protected readonly ?string $cityTypeName
   ) {
   }
 
@@ -105,9 +101,35 @@ class Settlement implements SettlementInterface
   /**
    * {@inheritDoc}
    */
-  public function getLanguage(): LanguagesEnumInterface
+  public function toArray(): array
   {
-    return $this->language;
+    return [
+      'postcode' => $this->getPostCode(),
+      'region_id' => $this->getRegionId(),
+      'region_name' => $this->getRegionName(),
+      'district_id' => $this->getDistrictId(),
+      'district_name' => $this->getDistrictName(),
+      'city_id' => $this->getCityId(),
+      'city_name' => $this->getCityName(),
+      'city_type_name' => $this->getCityTypeName(),
+    ];
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public static function fromResponseEntry(array $entry): SettlementInterface
+  {
+    return new Settlement(
+      postCode: (int) $entry['POSTCODE'],
+      regionId: (int) $entry['REGION_ID'],
+      regionName: $entry['REGION_NAME'],
+      districtId: (int) $entry['DISTRICT_ID'],
+      districtName: $entry['DISTRICT_NAME'],
+      cityId: (int) $entry['CITY_ID'],
+      cityName: $entry['CITY_NAME'],
+      cityTypeName: $entry['CITYTYPE_NAME'] ?? null
+    );
   }
 
 }

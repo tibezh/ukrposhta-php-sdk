@@ -4,33 +4,12 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\PostOfficeOpenHours;
 
+use Ukrposhta\AddressClassifier\Entities\EntityCollectionBase;
+
 /**
  *
  */
-class PostOfficeOpenHoursCollection implements PostOfficeOpenHoursCollectionInterface
+class PostOfficeOpenHoursCollection extends EntityCollectionBase implements PostOfficeOpenHoursCollectionInterface
 {
-
-  /**
-   * Simple array of Post Office Open Hours objects.
-   *
-   * @var array<int, PostOfficeOpenHours>
-   */
-  private array $items = [];
-
-  /**
-   * {@inheritDoc}
-   */
-  public function add(PostOfficeOpenHours $postOfficeOpenHours): void
-  {
-    $this->items[] = $postOfficeOpenHours;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function all(): array
-  {
-    return $this->items;
-  }
 
 }

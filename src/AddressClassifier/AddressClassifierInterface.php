@@ -7,7 +7,9 @@ namespace Ukrposhta\AddressClassifier;
 use Ukrposhta\AddressClassifier\Entities\Address\AddressCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\City\CityCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\CourierArea\CourierAreaInterface;
+use Ukrposhta\AddressClassifier\Entities\DeliveryArea\DeliveryAreaCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\District\DistrictCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\House\HouseCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\LanguagesEnum;
 use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
 use Ukrposhta\AddressClassifier\Entities\NearestPostOffice\NearestPostOfficeCollectionInterface;
@@ -17,6 +19,7 @@ use Ukrposhta\AddressClassifier\Entities\PostOfficeSettlement\PostOfficeSettleme
 use Ukrposhta\AddressClassifier\Entities\Region\RegionCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\Settlement\SettlementCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\Street\StreetCollectionInterface;
+use Ukrposhta\Response\ResponseInterface;
 
 /**
  *
@@ -120,20 +123,20 @@ interface AddressClassifierInterface {
   ): StreetCollectionInterface;
 
   /**
-   * Requests address (post code) by Street ID and house number.
+   * Requests house (post code) by Street ID and house number.
    *
    * @param int $streetId
-   *   ID of the street that related to Address.
+   *   ID of the street that related to House.
    * @param string|null $houseNumber
-   *   Number of the house that related to Address.
+   *   Number of the house.
    *
-   * @return AddressCollectionInterface
+   * @return HouseCollectionInterface
    *   Address Collection object.
    */
   public function requestAddressHouseByStreetId(
     int $streetId,
     ?string $houseNumber = null
-  ): AddressCollectionInterface;
+  ): HouseCollectionInterface;
 
   /**
    * Requests Courier Area information by Post Code.
@@ -316,7 +319,7 @@ interface AddressClassifierInterface {
   public function requestNearestPostOffices(float $latitude, float $longitude, int $maxDistance): NearestPostOfficeCollectionInterface;
 
   /**
-   * Request Settlements by post code.
+   * Requests Settlements by post code.
    *
    * @param int $postCode
    *   Post code for the request.
@@ -327,5 +330,29 @@ interface AddressClassifierInterface {
    *   Settlements collection object.
    */
   public function requestSettlementsByPostCode(int $postCode, LanguagesEnumInterface $language = LanguagesEnum::UA): SettlementCollectionInterface;
+
+  /**
+   * Requests Addresses by post code.
+   *
+   * @param int $postCode
+   *   Post code for the request.
+   * @param LanguagesEnumInterface $language
+   *   Language for the request, LanguagesEnum::UA by default.
+   *
+   * @return AddressCollectionInterface
+   *   Address collection object.
+   */
+  public function requestAddressesByPostCode(int $postCode, LanguagesEnumInterface $language = LanguagesEnum::UA): AddressCollectionInterface;
+
+  /**
+   * Requests Delivery Area by City ID.
+   *
+   * @param int $cityId
+   *   City ID for the request.
+   *
+   * @return DeliveryAreaCollectionInterface
+   *   Delivery Area collection object.
+   */
+  public function requestAreaDeliveryByCityId(int $cityId): DeliveryAreaCollectionInterface;
 
 }

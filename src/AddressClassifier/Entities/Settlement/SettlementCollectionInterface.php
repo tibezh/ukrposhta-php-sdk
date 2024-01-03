@@ -4,28 +4,12 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\Settlement;
 
+use Ukrposhta\AddressClassifier\Entities\EntityCollectionInterface;
+
 /**
  *
  */
-interface SettlementCollectionInterface
+interface SettlementCollectionInterface extends EntityCollectionInterface
 {
-
-  /**
-   * Adds Settlement object to the collection.
-   *
-   * @param SettlementInterface $settlement
-   *   Settlement object to add.
-   *
-   * @return void
-   */
-  public function add(SettlementInterface $settlement): void;
-
-  /**
-   * Gets all Settlement collection in array.
-   *
-   * @return array<int, SettlementInterface>
-   *   Simple array with Settlement objects.
-   */
-  public function all(): array;
 
 }

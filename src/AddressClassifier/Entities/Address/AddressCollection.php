@@ -4,33 +4,12 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\Address;
 
+use Ukrposhta\AddressClassifier\Entities\EntityCollectionBase;
+
 /**
  *
  */
-class AddressCollection implements AddressCollectionInterface
+class AddressCollection extends EntityCollectionBase implements AddressCollectionInterface
 {
-
-  /**
-   * Simple array of Address objects.
-   *
-   * @var array<int, AddressInterface>
-   */
-  private array $items = [];
-
-  /**
-   * {@inheritDoc}
-   */
-  public function add(AddressInterface $address): void
-  {
-    $this->items[] = $address;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public function all(): array
-  {
-    return $this->items;
-  }
 
 }

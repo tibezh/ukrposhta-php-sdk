@@ -88,4 +88,18 @@ class District implements DistrictInterface {
     return $data;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public static function fromResponseEntry(array $entry): DistrictInterface
+  {
+    return new District(
+      id: (int) $entry['DISTRICT_ID'],
+      nameUa: $entry['DISTRICT_UA'],
+      nameEn: $entry['DISTRICT_EN'],
+      koatuu: (int) $entry['DISTRICT_KOATUU'],
+      katottg: (int) $entry['DISTRICT_KATOTTG']
+    );
+  }
+
 }
