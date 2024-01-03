@@ -11,7 +11,7 @@ interface ResponseInterface
 {
 
     /**
-     * Gets a response object.
+     * Gets a response data.
      *
      * @return array<string|int, string|mixed|array<string, mixed>>
      */
