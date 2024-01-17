@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Ukrposhta\AddressClassifier\Entities\District;
 
 use Ukrposhta\AddressClassifier\Entities\EntityInterface;
-use Ukrposhta\AddressClassifier\Entities\LanguagesEnum;
-use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\LanguagesEnum;
+use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
 
 /**
  * Provides required methods for District entity.

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Ukrposhta\AddressClassifier\Entities\PostOffice;
 
 use Ukrposhta\AddressClassifier\Entities\EntityInterface;
-use Ukrposhta\AddressClassifier\Entities\LanguagesEnum;
-use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\LanguagesEnum;
+use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
 
 /**
  * Provides required methods for PostOffice entity.
@@ -66,12 +66,12 @@ interface PostOfficeInterface extends EntityInterface {
   public function getShortType(): string;
 
   /**
-   * Gets type acronym.
+   * Gets type acronym name.
    *
    * @return string
    *   Type acronym of the Post Office.
    */
-  public function getTypeAcronym(): string;
+  public function getTypeAcronymName(): string;
 
   /**
    * Gets post index.
@@ -239,7 +239,7 @@ interface PostOfficeInterface extends EntityInterface {
    * @return string
    *   Phone number of the Post Office.
    */
-  public function getPhone(): string;
+  public function getPhoneNumber(): string;
 
   /**
    * Gets longitude.

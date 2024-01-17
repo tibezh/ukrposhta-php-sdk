@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\PostOffice;
 
-use Ukrposhta\AddressClassifier\Entities\LanguagesEnum;
-use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\LanguagesEnum;
+use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
 
 /**
  *
@@ -182,7 +182,7 @@ class PostOffice implements PostOfficeInterface {
   /**
    * {@inheritDoc}
    */
-  public function getTypeAcronym(): string
+  public function getTypeAcronymName(): string
   {
     return $this->typeAcronym;
   }
@@ -338,7 +338,7 @@ class PostOffice implements PostOfficeInterface {
   /**
    * {@inheritDoc}
    */
-  public function getPhone(): string
+  public function getPhoneNumber(): string
   {
     return $this->phone;
   }
@@ -411,7 +411,7 @@ class PostOffice implements PostOfficeInterface {
       'short_name' => $this->getShortName(),
       'type' => $this->getType(),
       'short_type' => $this->getShortType(),
-      'type_acronym' => $this->getTypeAcronym(),
+      'type_acronym' => $this->getTypeAcronymName(),
       'post_index' => $this->getPostIndex(),
       'postcode' => $this->getPostCode(),
       'mereza_number' => $this->getMerezaNumber(),
@@ -426,7 +426,7 @@ class PostOffice implements PostOfficeInterface {
       'street_id' => $this->getStreetId(),
       'parent_id' => $this->getParentId(),
       'address' => $this->getAddress(),
-      'phone' => $this->getPhone(),
+      'phone' => $this->getPhoneNumber(),
       'longitude' => $this->getLongitude(),
       'latitude' => $this->getLatitude(),
       'is_vpz' => $this->isVpz(),

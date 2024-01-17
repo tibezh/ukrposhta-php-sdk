@@ -6,20 +6,23 @@ namespace Ukrposhta\AddressClassifier;
 
 use Ukrposhta\AddressClassifier\Entities\Address\AddressCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\City\CityCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\CitySearchItem\CitySearchItemCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\CourierArea\CourierAreaInterface;
 use Ukrposhta\AddressClassifier\Entities\DeliveryArea\DeliveryAreaCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\District\DistrictCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\DistrictSearchItem\DistrictSearchItemCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\House\HouseCollectionInterface;
-use Ukrposhta\AddressClassifier\Entities\LanguagesEnum;
-use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
 use Ukrposhta\AddressClassifier\Entities\NearestPostOffice\NearestPostOfficeCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\PostOffice\PostOfficeCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\PostOfficeKoatuu\PostOfficeKoatuuCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\PostOfficeOpenHours\PostOfficeOpenHoursCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\PostOfficeSettlement\PostOfficeSettlementCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\Region\RegionCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\Settlement\SettlementCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\Street\StreetCollectionInterface;
-use Ukrposhta\Response\ResponseInterface;
+use Ukrposhta\AddressClassifier\Entities\StreetSearchItem\StreetSearchItemCollectionInterface;
+use Ukrposhta\Utilities\Languages\LanguagesEnum;
+use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
 
 /**
  *
@@ -354,5 +357,107 @@ interface AddressClassifierInterface {
    *   Delivery Area collection object.
    */
   public function requestAreaDeliveryByCityId(int $cityId): DeliveryAreaCollectionInterface;
+
+  /**
+   * Requests Post Office Koatuu by City Koatuu.
+   *
+   * @param int $cityKoatuu
+   *   City Koatuu for the request.
+   *
+   * @return PostOfficeKoatuuCollectionInterface
+   *   Post Office Koatuu collection object.
+   */
+  public function requestPostOfficeKoatuuByCityKoatuu(int $cityKoatuu): PostOfficeKoatuuCollectionInterface;
+
+  /**
+   * Requests Post Office Koatuu by City Koatuu.
+   *
+   * @param int $cityKatottg
+   *   City Katottg for the request.
+   *
+   * @return PostOfficeKoatuuCollectionInterface
+   *   Post Office Koatuu collection object.
+   */
+  public function requestPostOfficeKoatuuByCityKatottg(int $cityKatottg): PostOfficeKoatuuCollectionInterface;
+
+  /**
+   * Requests Post Office Koatuu by City Koatuu.
+   *
+   * @param int $cityVpzKatottg
+   *   City Vpz Katottg for the request.
+   *
+   * @return PostOfficeKoatuuCollectionInterface
+   *   Post Office Koatuu collection object.
+   */
+  public function requestPostOfficeKoatuuByCityVpzKatottg(int $cityVpzKatottg): PostOfficeKoatuuCollectionInterface;
+
+  /**
+   * Request search District.
+   *
+   * @param int $regionId
+   *   Region ID to the request.
+   * @param string $districtName
+   *   District name use in the search.
+   * @param LanguagesEnumInterface $language
+   *   Language key, LanguagesEnum::UA by default.
+   * @param bool $fuzzy
+   *   Use fuzzy search functions, true by default.
+   *
+   * @return DistrictSearchItemCollectionInterface
+   *   District Search Item collection object with search results.
+   */
+  public function requestSearchDistrict(
+    int $regionId,
+    string $districtName,
+    LanguagesEnumInterface $language = LanguagesEnum::UA,
+    bool $fuzzy = true
+  ): DistrictSearchItemCollectionInterface;
+
+  /**
+   * Request search City.
+   *
+   * @param int $regionId
+   *   Region ID to the request.
+   * @param int $districtId
+   *   District ID to the request.
+   * @param string $cityName
+   *   City name use in the search.
+   * @param LanguagesEnumInterface $language
+   *   Language key, LanguagesEnum::UA by default.
+   * @param bool $fuzzy
+   *   Use fuzzy search functions, true by default.
+   *
+   * @return CitySearchItemCollectionInterface
+   *   City Search Item collection object with search results.
+   */
+  public function requestSearchCity(
+    int $regionId,
+    int $districtId,
+    string $cityName,
+    LanguagesEnumInterface $language = LanguagesEnum::UA,
+    bool $fuzzy = true
+  ): CitySearchItemCollectionInterface;
+
+  /**
+   * Request search Street.
+   *
+   * @param int $cityId
+   *   City ID to the request.
+   * @param string $streetName
+   *   Street name use in the search.
+   * @param LanguagesEnumInterface $language
+   *   Language key, LanguagesEnum::UA by default.
+   * @param bool $fuzzy
+   *   Use fuzzy search functions, true by default.
+   *
+   * @return StreetSearchItemCollectionInterface
+   *   Street Search Item collection object with search results.
+   */
+  public function requestSearchStreet(
+    int $cityId,
+    string $streetName,
+    LanguagesEnumInterface $language = LanguagesEnum::UA,
+    bool $fuzzy = true
+  ): StreetSearchItemCollectionInterface;
 
 }

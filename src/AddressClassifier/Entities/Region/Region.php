@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\Region;
 
-use Ukrposhta\AddressClassifier\Entities\LanguagesEnum;
-use Ukrposhta\AddressClassifier\Entities\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\LanguagesEnum;
+use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
 
 /**
  * Region main class.
