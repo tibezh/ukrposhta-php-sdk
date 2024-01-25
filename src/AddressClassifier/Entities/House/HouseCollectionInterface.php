@@ -13,4 +13,3 @@ interface HouseCollectionInterface extends EntityCollectionInterface
 {
 
 }
-

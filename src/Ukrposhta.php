@@ -106,7 +106,7 @@ abstract class Ukrposhta implements LoggerAwareInterface
      */
     public function getOptions(): array
     {
-      return $this->options;
+        return $this->options;
     }
 
 }

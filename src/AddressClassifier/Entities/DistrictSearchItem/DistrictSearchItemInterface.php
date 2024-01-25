@@ -12,30 +12,30 @@ use Ukrposhta\AddressClassifier\Entities\EntityInterface;
 interface DistrictSearchItemInterface extends EntityInterface
 {
 
-  /**
-   * @return int
-   */
-  public function getId(): int;
+    /**
+     * @return int
+     */
+    public function getId(): int;
 
-  /**
-   * @return string
-   */
-  public function getName(): string;
+    /**
+     * @return string
+     */
+    public function getName(): string;
 
-  /**
-   * @return int
-   */
-  public function getRegionId(): int;
+    /**
+     * @return int
+     */
+    public function getRegionId(): int;
 
-  /**
-   * @return string
-   */
-  public function getRegionName(): string;
+    /**
+     * @return string
+     */
+    public function getRegionName(): string;
 
-  /**
-   * @return array<string, mixed>
-   *   Array version of the object.
-   */
-  public function toArray(): array;
+    /**
+     * @return array<string, mixed>
+     *   Array version of the object.
+     */
+    public function toArray(): array;
 
 }

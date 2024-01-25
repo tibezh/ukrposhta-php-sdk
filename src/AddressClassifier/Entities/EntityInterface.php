@@ -10,15 +10,15 @@ namespace Ukrposhta\AddressClassifier\Entities;
 interface EntityInterface
 {
 
-  /**
-   * Gets Entity object from response entry.
-   *
-   * @param array<string|mixed> $entry
-   *   Entry from a response.
-   *
-   * @return EntityInterface
-   *   Entity object.
-   */
-  public static function fromResponseEntry(array $entry): EntityInterface;
+    /**
+     * Gets Entity object from response entry.
+     *
+     * @param array<string|mixed> $entry
+     *   Entry from a response.
+     *
+     * @return EntityInterface
+     *   Entity object.
+     */
+    public static function fromResponseEntry(array $entry): EntityInterface;
 
 }

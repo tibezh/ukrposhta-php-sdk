@@ -68,7 +68,8 @@ use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
 /**
  *
  */
-class AddressClassifier extends Ukrposhta implements AddressClassifierInterface {
+class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
+{
 
     /** @var string Base endpoint to get address classifier information. */
     public const BASE_ENDPOINT = 'address-classifier-ws';
@@ -128,27 +129,26 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      * {@inheritDoc}
      */
     public function __construct(
-      string $bearerEcom = null,
-      string $bearerStatusTracking = null,
-      string $bearerCounterparty = null,
-      bool $sandbox = false,
-      array $options = [],
-      LoggerInterface $logger = null,
-      RequestInterface $request = null,
-    )
-    {
+        string $bearerEcom = null,
+        string $bearerStatusTracking = null,
+        string $bearerCounterparty = null,
+        bool $sandbox = false,
+        array $options = [],
+        LoggerInterface $logger = null,
+        RequestInterface $request = null,
+    ) {
         parent::__construct(
-          $bearerEcom,
-          $bearerStatusTracking,
-          $bearerCounterparty,
-          $sandbox,
-          $options,
-          $logger
+            $bearerEcom,
+            $bearerStatusTracking,
+            $bearerCounterparty,
+            $sandbox,
+            $options,
+            $logger
         );
 
         // Prepare request object.
         if (null !== $request) {
-          $this->setRequest($request);
+            $this->setRequest($request);
         }
     }
 
@@ -156,62 +156,59 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      * {@inheritDoc}
      */
     public function requestRegions(
-      string $name,
-      LanguagesEnumInterface $language = LanguagesEnum::UA
-    ): RegionCollectionInterface
-    {
-      $requestParams = ["region_name{$language->requestSuffix()}" => $name];
-      $response = $this->getResponseData(
-        self::REGIONS_ENDPOINT,
-        $requestParams
-      );
+        string $name,
+        LanguagesEnumInterface $language = LanguagesEnum::UA
+    ): RegionCollectionInterface {
+        $requestParams = ["region_name{$language->requestSuffix()}" => $name];
+        $response = $this->getResponseData(
+            self::REGIONS_ENDPOINT,
+            $requestParams
+        );
 
-      $regionCollection = new RegionCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $region = Region::fromResponseEntry($entry);
-          $regionCollection->add($region);
+        $regionCollection = new RegionCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $region = Region::fromResponseEntry($entry);
+                $regionCollection->add($region);
+            }
         }
-      }
-      return $regionCollection;
+        return $regionCollection;
     }
 
     /**
      * {@inheritDoc}
      */
     public function requestDistrictsByRegionId(
-      int $regionId,
-      ?string $nameUa = null
-    ): DistrictCollectionInterface
-    {
-      $requestParams = ['region_id' => $regionId];
-      if ($nameUa) {
-        $requestParams['district_ua'] = $nameUa;
-      }
-
-      $response = $this->getResponseData(self::DISTRICTS_BY_REGION_ID, $requestParams);
-
-      $districtCollection = new DistrictCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $district = District::fromResponseEntry($entry);
-          $districtCollection->add($district);
+        int $regionId,
+        ?string $nameUa = null
+    ): DistrictCollectionInterface {
+        $requestParams = ['region_id' => $regionId];
+        if ($nameUa) {
+            $requestParams['district_ua'] = $nameUa;
         }
-      }
-      return $districtCollection;
+
+        $response = $this->getResponseData(self::DISTRICTS_BY_REGION_ID, $requestParams);
+
+        $districtCollection = new DistrictCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $district = District::fromResponseEntry($entry);
+                $districtCollection->add($district);
+            }
+        }
+        return $districtCollection;
     }
 
     /**
      * {@inheritDoc}
      */
     public function requestCityByRegionIdAndDistrictId(
-      int $regionId,
-      int $districtId,
-      ?string $nameUa = null
-    ): CityCollectionInterface
-    {
-      $requestParams = ['region_id' => $regionId, 'district_id' => $districtId];
-      return $this->requestCity($requestParams, $nameUa);
+        int $regionId,
+        int $districtId,
+        ?string $nameUa = null
+    ): CityCollectionInterface {
+        $requestParams = ['region_id' => $regionId, 'district_id' => $districtId];
+        return $this->requestCity($requestParams, $nameUa);
     }
 
     /**
@@ -219,8 +216,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestCityByDistrictId(int $districtId, ?string $nameUa = null): CityCollectionInterface
     {
-      $requestParams = ['district_id' => $districtId];
-      return $this->requestCity($requestParams, $nameUa);
+        $requestParams = ['district_id' => $districtId];
+        return $this->requestCity($requestParams, $nameUa);
     }
 
     /**
@@ -228,8 +225,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestCityByRegionId(int $regionId, ?string $nameUa = null): CityCollectionInterface
     {
-      $requestParams = ['region_id' => $regionId];
-      return $this->requestCity($requestParams, $nameUa);
+        $requestParams = ['region_id' => $regionId];
+        return $this->requestCity($requestParams, $nameUa);
     }
 
     /**
@@ -249,77 +246,75 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     protected function requestCity(array $requestParams, ?string $nameUa = null): CityCollectionInterface
     {
-      if ($nameUa) {
-        $requestParams['city_ua'] = $nameUa;
-      }
-      $response = $this->getResponseData(self::CITIES_BY_REGION_ID_AND_DISTRICT_ID, $requestParams);
-
-      $cityCollection = new CityCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $city = City::fromResponseEntry($entry);
-          $cityCollection->add($city);
+        if ($nameUa) {
+            $requestParams['city_ua'] = $nameUa;
         }
-      }
-      return $cityCollection;
+        $response = $this->getResponseData(self::CITIES_BY_REGION_ID_AND_DISTRICT_ID, $requestParams);
+
+        $cityCollection = new CityCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $city = City::fromResponseEntry($entry);
+                $cityCollection->add($city);
+            }
+        }
+        return $cityCollection;
     }
 
     /**
      * {@inheritDoc}
      */
     public function requestStreetByRegionIdAndDistrictIdAndCityId(
-      int $regionId,
-      int $districtId,
-      int $cityId,
-      ?string $nameUa = null
-    ): StreetCollectionInterface
-    {
-      $requestParams = [
-        'region_id' => $regionId,
-        'district_id' => $districtId,
-        'city_id' => $cityId,
-      ];
-      if ($nameUa) {
-        $requestParams['street_ua'] = $nameUa;
-      }
-
-      $response = $this->getResponseData(
-        self::STREETS_BY_REGION_ID_AND_DISTRICT_ID_AND_CITY_ID,
-        $requestParams
-      );
-
-      $streetCollection = new StreetCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $street = Street::fromResponseEntry($entry);
-          $streetCollection->add($street);
+        int $regionId,
+        int $districtId,
+        int $cityId,
+        ?string $nameUa = null
+    ): StreetCollectionInterface {
+        $requestParams = [
+          'region_id' => $regionId,
+          'district_id' => $districtId,
+          'city_id' => $cityId,
+        ];
+        if ($nameUa) {
+            $requestParams['street_ua'] = $nameUa;
         }
-      }
-      return $streetCollection;
+
+        $response = $this->getResponseData(
+            self::STREETS_BY_REGION_ID_AND_DISTRICT_ID_AND_CITY_ID,
+            $requestParams
+        );
+
+        $streetCollection = new StreetCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $street = Street::fromResponseEntry($entry);
+                $streetCollection->add($street);
+            }
+        }
+        return $streetCollection;
     }
 
     /**
      * {@inheritDoc}
      */
     public function requestAddressHouseByStreetId(
-      int $streetId,
-      ?string $houseNumber = null
-    ): HouseCollectionInterface
-    {
-      $requestParams = ['street_id' => $streetId];
-      if ($houseNumber) {
-        $requestParams['housenumber'] = $houseNumber;
-      }
-      $response = $this->getResponseData(self::ADDR_HOUSE_BY_STREET_ID, $requestParams);
-
-      $houseCollection = new HouseCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $house = House::fromResponseEntry($entry);
-          $houseCollection->add($house);
+        int $streetId,
+        ?string $houseNumber = null
+    ): HouseCollectionInterface {
+        $requestParams = ['street_id' => $streetId];
+        if ($houseNumber) {
+            $requestParams['housenumber'] = $houseNumber;
         }
-      }
-      return $houseCollection;
+        $response = $this->getResponseData(self::ADDR_HOUSE_BY_STREET_ID, $requestParams);
+
+        $houseCollection = new HouseCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $house = House::fromResponseEntry($entry);
+                $houseCollection->add($house);
+            }
+        }
+        return $houseCollection;
     }
 
     /**
@@ -327,9 +322,9 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestCourierAreaByPostCode(int $postCode): CourierAreaInterface
     {
-      $requestParams = ['postindex' => $postCode];
-      $response = $this->getResponseData(self::COURIER_AREA_BY_POST_INDEX, $requestParams);
-      return new CourierArea(!empty($response['Entries']['Entry'][0]['IS_COURIERAREA']));
+        $requestParams = ['postindex' => $postCode];
+        $response = $this->getResponseData(self::COURIER_AREA_BY_POST_INDEX, $requestParams);
+        return new CourierArea(!empty($response['Entries']['Entry'][0]['IS_COURIERAREA']));
     }
 
     /**
@@ -337,8 +332,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeByPostCode(int $postCode): PostOfficeCollectionInterface
     {
-      $requestParams = ['pc' => $postCode];
-      return $this->requestPostOffices($requestParams);
+        $requestParams = ['pc' => $postCode];
+        return $this->requestPostOffices($requestParams);
     }
 
     /**
@@ -346,8 +341,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeByPostIndex(int $postIndex): PostOfficeCollectionInterface
     {
-      $requestParams = ['pi' => $postIndex];
-      return $this->requestPostOffices($requestParams);
+        $requestParams = ['pi' => $postIndex];
+        return $this->requestPostOffices($requestParams);
     }
 
     /**
@@ -355,8 +350,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeByCityId(int $cityId): PostOfficeCollectionInterface
     {
-      $requestParams = ['poCityId' => $cityId];
-      return $this->requestPostOffices($requestParams);
+        $requestParams = ['poCityId' => $cityId];
+        return $this->requestPostOffices($requestParams);
     }
 
     /**
@@ -364,8 +359,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeByDistrictId(int $districtId): PostOfficeCollectionInterface
     {
-      $requestParams = ['poDistrictId' => $districtId];
-      return $this->requestPostOffices($requestParams);
+        $requestParams = ['poDistrictId' => $districtId];
+        return $this->requestPostOffices($requestParams);
     }
 
     /**
@@ -373,8 +368,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeByStreetId(int $streetId): PostOfficeCollectionInterface
     {
-      $requestParams = ['poStreetId' => $streetId];
-      return $this->requestPostOffices($requestParams);
+        $requestParams = ['poStreetId' => $streetId];
+        return $this->requestPostOffices($requestParams);
     }
 
     /**
@@ -382,8 +377,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeByRegionId(int $regionId): PostOfficeCollectionInterface
     {
-      $requestParams = ['poRegionId' => $regionId];
-      return $this->requestPostOffices($requestParams);
+        $requestParams = ['poRegionId' => $regionId];
+        return $this->requestPostOffices($requestParams);
     }
 
     /**
@@ -391,8 +386,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeByServiceAreaCityId(int $serviceAreaCityId): PostOfficeCollectionInterface
     {
-      $requestParams = ['pdCityId' => $serviceAreaCityId];
-      return $this->requestPostOffices($requestParams);
+        $requestParams = ['pdCityId' => $serviceAreaCityId];
+        return $this->requestPostOffices($requestParams);
     }
 
     /**
@@ -400,8 +395,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeByServiceAreaDistrictId(int $serviceAreaDistrictId): PostOfficeCollectionInterface
     {
-      $requestParams = ['pdDistrictId' => $serviceAreaDistrictId];
-      return $this->requestPostOffices($requestParams);
+        $requestParams = ['pdDistrictId' => $serviceAreaDistrictId];
+        return $this->requestPostOffices($requestParams);
     }
 
     /**
@@ -409,35 +404,35 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeByServiceAreaRegionId(int $serviceAreaRegionId): PostOfficeCollectionInterface
     {
-      $requestParams = ['pdRegionId' => $serviceAreaRegionId];
-      return $this->requestPostOffices($requestParams);
+        $requestParams = ['pdRegionId' => $serviceAreaRegionId];
+        return $this->requestPostOffices($requestParams);
     }
 
-  /**
-   * Helper function to request PostOffice.
-   *
-   * @param array<string|int, string|mixed> $requestParams
-   *   Assoc array of request parameters.
-   *
-   * @return PostOfficeCollectionInterface
-   *   List of post offices.
-   *
-   * @throws GuzzleException
-   * @throws InvalidResponseException
-   * @throws RequestException
-   */
+    /**
+     * Helper function to request PostOffice.
+     *
+     * @param array<string|int, string|mixed> $requestParams
+     *   Assoc array of request parameters.
+     *
+     * @return PostOfficeCollectionInterface
+     *   List of post offices.
+     *
+     * @throws GuzzleException
+     * @throws InvalidResponseException
+     * @throws RequestException
+     */
     protected function requestPostOffices(array $requestParams): PostOfficeCollectionInterface
     {
-      $response = $this->getResponseData(self::POST_OFFICES_BY_POST_INDEX, $requestParams);
+        $response = $this->getResponseData(self::POST_OFFICES_BY_POST_INDEX, $requestParams);
 
-      $postOfficeCollection = new PostOfficeCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $postOffice = PostOffice::fromResponseEntry($entry);
-          $postOfficeCollection->add($postOffice);
+        $postOfficeCollection = new PostOfficeCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $postOffice = PostOffice::fromResponseEntry($entry);
+                $postOfficeCollection->add($postOffice);
+            }
         }
-      }
-      return $postOfficeCollection;
+        return $postOfficeCollection;
     }
 
     /**
@@ -445,8 +440,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeSettlementsByCityId(int $cityId): PostOfficeSettlementCollectionInterface
     {
-      $requestParams = ['city_id' => $cityId];
-      return $this->requestPostOfficeSettlements($requestParams);
+        $requestParams = ['city_id' => $cityId];
+        return $this->requestPostOfficeSettlements($requestParams);
     }
 
     /**
@@ -454,8 +449,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeSettlementsByDistrictId(int $districtId): PostOfficeSettlementCollectionInterface
     {
-      $requestParams = ['district_id' => $districtId];
-      return $this->requestPostOfficeSettlements($requestParams);
+        $requestParams = ['district_id' => $districtId];
+        return $this->requestPostOfficeSettlements($requestParams);
     }
 
     /**
@@ -463,7 +458,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeSettlementsByRegionId(int $regionId): PostOfficeSettlementCollectionInterface
     {
-      $requestParams = ['region_id' => $regionId];
+        $requestParams = ['region_id' => $regionId];
         return $this->requestPostOfficeSettlements($requestParams);
     }
 
@@ -472,8 +467,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeSettlementsByPostIndex(int $postIndex): PostOfficeSettlementCollectionInterface
     {
-      $requestParams = ['postindex' => $postIndex];
-      return $this->requestPostOfficeSettlements($requestParams);
+        $requestParams = ['postindex' => $postIndex];
+        return $this->requestPostOfficeSettlements($requestParams);
     }
 
     /**
@@ -491,16 +486,16 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     protected function requestPostOfficeSettlements(array $requestParams): PostOfficeSettlementCollectionInterface
     {
-      $response = $this->getResponseData(self::POST_OFFICES_BY_CITY_ID, $requestParams);
+        $response = $this->getResponseData(self::POST_OFFICES_BY_CITY_ID, $requestParams);
 
-      $postOfficeSettlementCollection = new PostOfficeSettlementCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $postOfficeSettlement = PostOfficeSettlement::fromResponseEntry($entry);
-          $postOfficeSettlementCollection->add($postOfficeSettlement);
+        $postOfficeSettlementCollection = new PostOfficeSettlementCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $postOfficeSettlement = PostOfficeSettlement::fromResponseEntry($entry);
+                $postOfficeSettlementCollection->add($postOfficeSettlement);
+            }
         }
-      }
-      return $postOfficeSettlementCollection;
+        return $postOfficeSettlementCollection;
     }
 
     /**
@@ -508,91 +503,88 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeOpenHoursByPostCode(int $serviceAreaPostCode): PostOfficeOpenHoursCollectionInterface
     {
-      $requestParams = ['pc' => $serviceAreaPostCode];
-      $response = $this->getResponseData(self::POST_OFFICES_OPEN_HOURS_BY_POST_INDEX, $requestParams);
+        $requestParams = ['pc' => $serviceAreaPostCode];
+        $response = $this->getResponseData(self::POST_OFFICES_OPEN_HOURS_BY_POST_INDEX, $requestParams);
 
-      $postOfficeOpenHoursCollection = new PostOfficeOpenHoursCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $postOfficeOpenHours = PostOfficeOpenHours::fromResponseEntry($entry);
-          $postOfficeOpenHoursCollection->add($postOfficeOpenHours);
+        $postOfficeOpenHoursCollection = new PostOfficeOpenHoursCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $postOfficeOpenHours = PostOfficeOpenHours::fromResponseEntry($entry);
+                $postOfficeOpenHoursCollection->add($postOfficeOpenHours);
+            }
         }
-      }
-      return $postOfficeOpenHoursCollection;
+        return $postOfficeOpenHoursCollection;
     }
 
     /**
      * {@inheritDoc}
      */
     public function requestNearestPostOffices(
-      float $latitude,
-      float $longitude,
-      int $maxDistance
-    ): NearestPostOfficeCollectionInterface
-    {
-      $requestParams = [
-        'lat' => $latitude,
-        'long' => $longitude,
-        'maxdistance' => $maxDistance,
-      ];
-      $response = $this->getResponseData(self::POST_OFFICES_BY_GEOLOCATION, $requestParams);
+        float $latitude,
+        float $longitude,
+        int $maxDistance
+    ): NearestPostOfficeCollectionInterface {
+        $requestParams = [
+          'lat' => $latitude,
+          'long' => $longitude,
+          'maxdistance' => $maxDistance,
+        ];
+        $response = $this->getResponseData(self::POST_OFFICES_BY_GEOLOCATION, $requestParams);
 
-      $nearestPostOfficeCollection = new NearestPostOfficeCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $nearestPostOffice = NearestPostOffice::fromResponseEntry($entry);
-          $nearestPostOfficeCollection->add($nearestPostOffice);
+        $nearestPostOfficeCollection = new NearestPostOfficeCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $nearestPostOffice = NearestPostOffice::fromResponseEntry($entry);
+                $nearestPostOfficeCollection->add($nearestPostOffice);
+            }
         }
-      }
-      return $nearestPostOfficeCollection;
+        return $nearestPostOfficeCollection;
     }
 
     /**
      * {@inheritDoc}
      */
     public function requestSettlementsByPostCode(
-      int $postCode,
-      LanguagesEnumInterface $language = LanguagesEnum::UA
-    ): SettlementCollectionInterface
-    {
-      $requestParams = [
-        'postcode' => $postCode,
-        'lang' => $language->value,
-      ];
-      $response = $this->getResponseData(self::CITY_DETAILS_BY_POSTCODE, $requestParams);
+        int $postCode,
+        LanguagesEnumInterface $language = LanguagesEnum::UA
+    ): SettlementCollectionInterface {
+        $requestParams = [
+          'postcode' => $postCode,
+          'lang' => $language->value,
+        ];
+        $response = $this->getResponseData(self::CITY_DETAILS_BY_POSTCODE, $requestParams);
 
-      $settlementCollection = new SettlementCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $settlement = Settlement::fromResponseEntry($entry);
-          $settlementCollection->add($settlement);
+        $settlementCollection = new SettlementCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $settlement = Settlement::fromResponseEntry($entry);
+                $settlementCollection->add($settlement);
+            }
         }
-      }
-      return $settlementCollection;
+        return $settlementCollection;
     }
 
     /**
      * {@inheritDoc}
      */
     public function requestAddressesByPostCode(
-      int $postCode,
-      LanguagesEnumInterface $language = LanguagesEnum::UA
-    ): AddressCollectionInterface
-    {
-      $requestParams = [
-        'postcode' => $postCode,
-        'lang' => $language->value,
-      ];
-      $response = $this->getResponseData(self::ADDRESS_DETAILS_BY_POSTCODE, $requestParams);
+        int $postCode,
+        LanguagesEnumInterface $language = LanguagesEnum::UA
+    ): AddressCollectionInterface {
+        $requestParams = [
+          'postcode' => $postCode,
+          'lang' => $language->value,
+        ];
+        $response = $this->getResponseData(self::ADDRESS_DETAILS_BY_POSTCODE, $requestParams);
 
-      $addressCollection = new AddressCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $address = Address::fromResponseEntry($entry);
-          $addressCollection->add($address);
+        $addressCollection = new AddressCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $address = Address::fromResponseEntry($entry);
+                $addressCollection->add($address);
+            }
         }
-      }
-      return $addressCollection;
+        return $addressCollection;
     }
 
     /**
@@ -600,17 +592,17 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestAreaDeliveryByCityId(int $cityId): DeliveryAreaCollectionInterface
     {
-      $requestParams = ['city_id' => $cityId];
-      $response = $this->getResponseData(self::POSTCODE_BY_CITY_ID, $requestParams);
+        $requestParams = ['city_id' => $cityId];
+        $response = $this->getResponseData(self::POSTCODE_BY_CITY_ID, $requestParams);
 
-      $deliveryAreaCollection = new DeliveryAreaCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $deliveryArea = DeliveryArea::fromResponseEntry($entry);
-          $deliveryAreaCollection->add($deliveryArea);
+        $deliveryAreaCollection = new DeliveryAreaCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $deliveryArea = DeliveryArea::fromResponseEntry($entry);
+                $deliveryAreaCollection->add($deliveryArea);
+            }
         }
-      }
-      return $deliveryAreaCollection;
+        return $deliveryAreaCollection;
     }
 
     /**
@@ -618,8 +610,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeKoatuuByCityKoatuu(int $cityKoatuu): PostOfficeKoatuuCollectionInterface
     {
-      $requestParams = ['city_koatuu' => $cityKoatuu];
-      return $this->requestPostOfficeKoatuu($requestParams);
+        $requestParams = ['city_koatuu' => $cityKoatuu];
+        return $this->requestPostOfficeKoatuu($requestParams);
     }
 
     /**
@@ -627,8 +619,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeKoatuuByCityKatottg(int $cityKatottg): PostOfficeKoatuuCollectionInterface
     {
-      $requestParams = ['city_katottg' => $cityKatottg];
-      return $this->requestPostOfficeKoatuu($requestParams);
+        $requestParams = ['city_katottg' => $cityKatottg];
+        return $this->requestPostOfficeKoatuu($requestParams);
     }
 
     /**
@@ -636,8 +628,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function requestPostOfficeKoatuuByCityVpzKatottg(int $cityVpzKatottg): PostOfficeKoatuuCollectionInterface
     {
-      $requestParams = ['city_vpz_katottg' => $cityVpzKatottg];
-      return $this->requestPostOfficeKoatuu($requestParams);
+        $requestParams = ['city_vpz_katottg' => $cityVpzKatottg];
+        return $this->requestPostOfficeKoatuu($requestParams);
     }
 
     /**
@@ -655,95 +647,95 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     protected function requestPostOfficeKoatuu(array $requestParams): PostOfficeKoatuuCollectionInterface
     {
-      $response = $this->getResponseData(self::POST_OFFICES_BY_KOATUU, $requestParams);
-      $postOfficeKoatuuCollection = new PostOfficeKoatuuCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $postOfficeKoatuu = PostOfficeKoatuu::fromResponseEntry($entry);
-          $postOfficeKoatuuCollection->add($postOfficeKoatuu);
+        $response = $this->getResponseData(self::POST_OFFICES_BY_KOATUU, $requestParams);
+        $postOfficeKoatuuCollection = new PostOfficeKoatuuCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $postOfficeKoatuu = PostOfficeKoatuu::fromResponseEntry($entry);
+                $postOfficeKoatuuCollection->add($postOfficeKoatuu);
+            }
         }
-      }
-      return $postOfficeKoatuuCollection;
+        return $postOfficeKoatuuCollection;
     }
 
     /**
      * {@inheritDoc}
      */
     public function requestSearchDistrict(
-      int $regionId,
-      string $districtName,
-      LanguagesEnumInterface $language = LanguagesEnum::UA,
-      bool $fuzzy = true
+        int $regionId,
+        string $districtName,
+        LanguagesEnumInterface $language = LanguagesEnum::UA,
+        bool $fuzzy = true
     ): DistrictSearchItemCollectionInterface {
-      $requestParams = [
-        'region_id' => $regionId,
-        'district_name' => $districtName,
-        'lang' => $language->value,
-        'fuzzy' => $fuzzy ? 1 : 0,
-      ];
-      $response = $this->getResponseData(self::DISTRICT_BY_NAME, $requestParams);
-      $districtSearchItemCollection = new DistrictSearchItemCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $districtSearchItem = DistrictSearchItem::fromResponseEntry($entry);
-          $districtSearchItemCollection->add($districtSearchItem);
+        $requestParams = [
+          'region_id' => $regionId,
+          'district_name' => $districtName,
+          'lang' => $language->value,
+          'fuzzy' => $fuzzy ? 1 : 0,
+        ];
+        $response = $this->getResponseData(self::DISTRICT_BY_NAME, $requestParams);
+        $districtSearchItemCollection = new DistrictSearchItemCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $districtSearchItem = DistrictSearchItem::fromResponseEntry($entry);
+                $districtSearchItemCollection->add($districtSearchItem);
+            }
         }
-      }
-      return $districtSearchItemCollection;
+        return $districtSearchItemCollection;
     }
 
     /**
      * {@inheritDoc}
      */
     public function requestSearchCity(
-      int $regionId,
-      int $districtId,
-      string $cityName,
-      LanguagesEnumInterface $language = LanguagesEnum::UA,
-      bool $fuzzy = true
+        int $regionId,
+        int $districtId,
+        string $cityName,
+        LanguagesEnumInterface $language = LanguagesEnum::UA,
+        bool $fuzzy = true
     ): CitySearchItemCollectionInterface {
-      $requestParams = [
-        'region_id' => $regionId,
-        'district_id' => $districtId,
-        'city_name' => $cityName,
-        'lang' => $language->value,
-        'fuzzy' => $fuzzy ? 1 : 0,
-      ];
-      $response = $this->getResponseData(self::CITY_BY_NAME, $requestParams);
-      $citySearchItemCollection = new CitySearchItemCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $citySearchItem = CitySearchItem::fromResponseEntry($entry);
-          $citySearchItemCollection->add($citySearchItem);
+        $requestParams = [
+          'region_id' => $regionId,
+          'district_id' => $districtId,
+          'city_name' => $cityName,
+          'lang' => $language->value,
+          'fuzzy' => $fuzzy ? 1 : 0,
+        ];
+        $response = $this->getResponseData(self::CITY_BY_NAME, $requestParams);
+        $citySearchItemCollection = new CitySearchItemCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $citySearchItem = CitySearchItem::fromResponseEntry($entry);
+                $citySearchItemCollection->add($citySearchItem);
+            }
         }
-      }
-      return $citySearchItemCollection;
+        return $citySearchItemCollection;
     }
 
     /**
      * {@inheritDoc}
      */
     public function requestSearchStreet(
-      int $cityId,
-      string $streetName,
-      LanguagesEnumInterface $language = LanguagesEnum::UA,
-      bool $fuzzy = true
+        int $cityId,
+        string $streetName,
+        LanguagesEnumInterface $language = LanguagesEnum::UA,
+        bool $fuzzy = true
     ): StreetSearchItemCollectionInterface {
-      $requestParams = [
-        'city_id' => $cityId,
-        'street_name' => $streetName,
-        'lang' => $language->value,
-        'fuzzy' => $fuzzy ? 1 : 0,
-      ];
-      $response = $this->getResponseData(self::STREET_BY_NAME, $requestParams);
-      $streetSearchItemCollection = new StreetSearchItemCollection();
-      if (!empty($response['Entries']['Entry'])) {
-        foreach ($response['Entries']['Entry'] as $entry) {
-          $streetSearchItem = StreetSearchItem::fromResponseEntry($entry);
-          $streetSearchItemCollection->add($streetSearchItem);
+        $requestParams = [
+          'city_id' => $cityId,
+          'street_name' => $streetName,
+          'lang' => $language->value,
+          'fuzzy' => $fuzzy ? 1 : 0,
+        ];
+        $response = $this->getResponseData(self::STREET_BY_NAME, $requestParams);
+        $streetSearchItemCollection = new StreetSearchItemCollection();
+        if (!empty($response['Entries']['Entry'])) {
+            foreach ($response['Entries']['Entry'] as $entry) {
+                $streetSearchItem = StreetSearchItem::fromResponseEntry($entry);
+                $streetSearchItemCollection->add($streetSearchItem);
+            }
         }
-      }
-      return $streetSearchItemCollection;
+        return $streetSearchItemCollection;
     }
 
     /**
@@ -751,7 +743,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function getEndpointUrl(): string
     {
-      return self::BASE_URL . self::BASE_ENDPOINT;
+        return self::BASE_URL . self::BASE_ENDPOINT;
     }
 
     /**
@@ -762,10 +754,10 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function getRequest(): RequestInterface
     {
-      if (null === $this->request) {
-        $this->request = new Request($this->getLogger());
-      }
-      return $this->request;
+        if (null === $this->request) {
+            $this->request = new Request($this->getLogger());
+        }
+        return $this->request;
     }
 
     /**
@@ -775,8 +767,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function setRequest(RequestInterface $request): static
     {
-      $this->request = $request;
-      return $this;
+        $this->request = $request;
+        return $this;
     }
 
     /**
@@ -786,8 +778,8 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function setAccessToken(string $bearerCounterpartyAccessToken): static
     {
-      $this->accessToken = $bearerCounterpartyAccessToken;
-      return $this;
+        $this->accessToken = $bearerCounterpartyAccessToken;
+        return $this;
     }
 
     /**
@@ -797,16 +789,16 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     protected function getAccessToken(): string
     {
-      if (!$this->accessToken) {
-        if (!$this->{static::CREDENTIALS_TYPE}) {
-          throw new NoCredentialException(sprintf('The %s token is required.', static::CREDENTIALS_TYPE));
-        } else {
-          $this->setAccessToken($this->{static::CREDENTIALS_TYPE});
+        if (!$this->accessToken) {
+            if (!$this->{static::CREDENTIALS_TYPE}) {
+                throw new NoCredentialException(sprintf('The %s token is required.', static::CREDENTIALS_TYPE));
+            } else {
+                $this->setAccessToken($this->{static::CREDENTIALS_TYPE});
+            }
         }
-      }
-      // todo: fix phpstan error with return type.
-      /** @phpstan-ignore-next-line */
-      return $this->accessToken;
+        // todo: fix phpstan error with return type.
+        /** @phpstan-ignore-next-line */
+        return $this->accessToken;
     }
 
     /**
@@ -826,13 +818,13 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface 
      */
     public function getResponseData(string $endpoint, array $requestParams = []): array
     {
-      $response = $this->getRequest()->request(
-        $this->getAccessToken(),
-        'GET',
-        $this->getEndpointUrl() . $endpoint,
-        $requestParams
-      );
-      return $response->getResponseData();
+        $response = $this->getRequest()->request(
+            $this->getAccessToken(),
+            'GET',
+            $this->getEndpointUrl() . $endpoint,
+            $requestParams
+        );
+        return $response->getResponseData();
     }
 
 }

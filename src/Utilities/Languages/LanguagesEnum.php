@@ -10,7 +10,7 @@ namespace Ukrposhta\Utilities\Languages;
 enum LanguagesEnum: string implements LanguagesEnumInterface
 {
 
-  case UA = 'ua';
-  case EN = 'en';
+    case UA = 'ua';
+    case EN = 'en';
 
 }
