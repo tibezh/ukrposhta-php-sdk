@@ -23,7 +23,7 @@ class StringMultilingual implements StringMultilingualInterface
 
     public function __toString(): string
     {
-        return $this->getByLanguage($this->getDefaultLanguage()) ?? '';
+        return (string) $this->getByLanguage($this->getDefaultLanguage());
     }
 
     /**
@@ -45,7 +45,7 @@ class StringMultilingual implements StringMultilingualInterface
     /**
      * {@inheritDoc}
      */
-    public function getByLangOrArray(?LanguagesEnumInterface $language): string|array|null
+    public function getByLangOrArray(?LanguagesEnumInterface $language = null): string|array|null
     {
         return $language ? $this->getByLanguage($language) : $this->toArray();
     }
