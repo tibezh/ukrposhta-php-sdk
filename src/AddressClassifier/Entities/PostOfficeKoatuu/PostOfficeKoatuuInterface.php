@@ -107,10 +107,10 @@ interface PostOfficeKoatuuInterface extends EntityInterface
     /**
      * Gets House number.
      *
-     * @return string
+     * @return string|null
      *   House number of the Post Office.
      */
-    public function getHouseNumber(): string;
+    public function getHouseNumber(): ?string;
 
     /**
      * Gets unique identifier.

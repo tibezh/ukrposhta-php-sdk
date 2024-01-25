@@ -93,7 +93,7 @@ class Settlement implements SettlementInterface
     /**
      * {@inheritDoc}
      */
-    public function getCityTypeName(): string
+    public function getCityTypeName(): ?string
     {
         return $this->cityTypeName;
     }

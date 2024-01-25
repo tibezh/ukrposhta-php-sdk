@@ -13,14 +13,14 @@ class PostOfficeSettlementCollection implements PostOfficeSettlementCollectionIn
     /**
      * Simple array of Post Office Settlement objects.
      *
-     * @var array<int, PostOfficeSettlement>
+     * @var array<int, PostOfficeSettlementInterface>
      */
     private array $items = [];
 
     /**
      * {@inheritDoc}
      */
-    public function add(PostOfficeSettlement $postOfficeSettlement): void
+    public function add(PostOfficeSettlementInterface $postOfficeSettlement): void
     {
         $this->items[] = $postOfficeSettlement;
     }

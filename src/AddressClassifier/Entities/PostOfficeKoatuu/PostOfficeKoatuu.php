@@ -178,7 +178,7 @@ class PostOfficeKoatuu implements PostOfficeKoatuuInterface
     /**
      * {@inheritDoc}
      */
-    public function getHouseNumber(): string
+    public function getHouseNumber(): ?string
     {
         return $this->houseNumber;
     }

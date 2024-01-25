@@ -159,7 +159,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
         string $name,
         LanguagesEnumInterface $language = LanguagesEnum::UA
     ): RegionCollectionInterface {
-        $requestParams = ["region_name{$language->requestSuffix()}" => $name];
+        $requestParams = ["region_name{$language->value()}" => $name];
         $response = $this->getResponseData(
             self::REGIONS_ENDPOINT,
             $requestParams
@@ -232,7 +232,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
     /**
      * Helper function to request City.
      *
-     * @param array<string|int, string|mixed> $requestParams
+     * @param array<string, string|mixed> $requestParams
      *   Assoc array of request parameters.
      * @param string|null $nameUa
      *   Name of the city on UA language, null to fetch all cities, null by default.
@@ -411,7 +411,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
     /**
      * Helper function to request PostOffice.
      *
-     * @param array<string|int, string|mixed> $requestParams
+     * @param array<string, string|mixed> $requestParams
      *   Assoc array of request parameters.
      *
      * @return PostOfficeCollectionInterface
@@ -474,7 +474,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
     /**
      * Helper function to request PostOfficeSettlement.
      *
-     * @param array<string|int, string|mixed> $requestParams
+     * @param array<string, string|mixed> $requestParams
      *   Assoc array of request parameters.
      *
      * @return PostOfficeSettlementCollectionInterface
@@ -550,7 +550,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
     ): SettlementCollectionInterface {
         $requestParams = [
           'postcode' => $postCode,
-          'lang' => $language->value,
+          'lang' => $language->value(),
         ];
         $response = $this->getResponseData(self::CITY_DETAILS_BY_POSTCODE, $requestParams);
 
@@ -573,7 +573,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
     ): AddressCollectionInterface {
         $requestParams = [
           'postcode' => $postCode,
-          'lang' => $language->value,
+          'lang' => $language->value(),
         ];
         $response = $this->getResponseData(self::ADDRESS_DETAILS_BY_POSTCODE, $requestParams);
 
@@ -635,7 +635,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
     /**
      * Helper function to request Post Office Koatuu.
      *
-     * @param array<string|int, string|mixed> $requestParams
+     * @param array<string, string|mixed> $requestParams
      *   Assoc array of request parameters.
      *
      * @return PostOfficeKoatuuCollectionInterface
@@ -670,7 +670,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
         $requestParams = [
           'region_id' => $regionId,
           'district_name' => $districtName,
-          'lang' => $language->value,
+          'lang' => $language->value(),
           'fuzzy' => $fuzzy ? 1 : 0,
         ];
         $response = $this->getResponseData(self::DISTRICT_BY_NAME, $requestParams);
@@ -698,7 +698,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
           'region_id' => $regionId,
           'district_id' => $districtId,
           'city_name' => $cityName,
-          'lang' => $language->value,
+          'lang' => $language->value(),
           'fuzzy' => $fuzzy ? 1 : 0,
         ];
         $response = $this->getResponseData(self::CITY_BY_NAME, $requestParams);
@@ -724,7 +724,7 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
         $requestParams = [
           'city_id' => $cityId,
           'street_name' => $streetName,
-          'lang' => $language->value,
+          'lang' => $language->value(),
           'fuzzy' => $fuzzy ? 1 : 0,
         ];
         $response = $this->getResponseData(self::STREET_BY_NAME, $requestParams);

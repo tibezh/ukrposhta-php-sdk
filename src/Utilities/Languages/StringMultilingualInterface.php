@@ -32,7 +32,7 @@ interface StringMultilingualInterface
     /**
      * @param LanguagesEnumInterface|null $language
      *
-     * @return string|array|null
+     * @return string|array<string, mixed>|null
      */
     public function getByLangOrArray(?LanguagesEnumInterface $language): string|array|null;
 
@@ -47,7 +47,7 @@ interface StringMultilingualInterface
     public function isEmpty(): bool;
 
     /**
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     public function toArray(): array;
 

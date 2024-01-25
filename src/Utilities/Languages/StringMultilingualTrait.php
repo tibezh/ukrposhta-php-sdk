@@ -11,7 +11,7 @@ trait StringMultilingualTrait
 {
 
     /**
-     * @param array $entry
+     * @param array<string, mixed> $entry
      * @param string $keyPattern
      *   Pattern to the key, for example "CITYTYPE_#lang".
      * @param LanguagesEnumInterface $defaultLanguage

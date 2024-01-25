@@ -71,10 +71,10 @@ interface SettlementInterface extends EntityInterface
     /**
      * Gets City type name.
      *
-     * @return string
+     * @return string|null
      *   City type name of the Settlement.
      */
-    public function getCityTypeName(): string;
+    public function getCityTypeName(): ?string;
 
     /**
      * Gets an associative array version of the Settlement.

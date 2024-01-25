@@ -31,7 +31,7 @@ class StringMultilingual implements StringMultilingualInterface
      */
     public function hasByLanguage(LanguagesEnumInterface $language): bool
     {
-        return isset($this->strings[$language->value]);
+        return isset($this->strings[$language->value()]);
     }
 
     /**
@@ -39,7 +39,7 @@ class StringMultilingual implements StringMultilingualInterface
      */
     public function getByLanguage(LanguagesEnumInterface $language): ?string
     {
-        return $this->strings[$language->value] ?? null;
+        return $this->strings[$language->value()] ?? null;
     }
 
     /**
@@ -77,11 +77,14 @@ class StringMultilingual implements StringMultilingualInterface
         return empty($this->strings);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function toArray(): array
     {
         $strings = [];
         foreach ($this->getAvailableLanguages() as $language) {
-            $strings[$language->value] = $this->strings[$language->value];
+            $strings[$language->value()] = $this->strings[$language->value()];
         }
         return $strings;
     }
