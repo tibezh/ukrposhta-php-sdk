@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Ukrposhta\AddressClassifier\Entities\City;
 
 use Ukrposhta\AddressClassifier\Entities\EntityInterface;
-use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
 
 /**
  * Provides required methods for City entity.
@@ -24,35 +24,23 @@ interface CityInterface extends EntityInterface {
   /**
    * City name.
    *
-   * @param LanguagesEnumInterface $language
-   *  Name in language, LanguagesEnum::UA by default.
-   *
-   * @return string
-   *   Name of the city.
+   * @return StringMultilingualInterface
    */
-  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getName(): StringMultilingualInterface;
 
   /**
    * City type.
    *
-   * @param LanguagesEnumInterface $language
-   *   Type in language, LanguagesEnum::UA by default.
-   *
-   * @return string
-   *   Type of the city.
+   * @return StringMultilingualInterface
    */
-  public function getType(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getType(): StringMultilingualInterface;
 
   /**
    * City short type.
    *
-   * @param LanguagesEnumInterface $language
-   *   Short type in language, LanguagesEnum::UA by default.
-   *
-   * @return string|null
-   *   Short type of the city, can be null for non default languages.
+   * @return StringMultilingualInterface
    */
-  public function getShortType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string;
+  public function getShortType(): StringMultilingualInterface;
 
   /**
    * Gets city katottg code.

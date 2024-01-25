@@ -6,29 +6,24 @@ namespace Ukrposhta\AddressClassifier\Entities\City;
 
 use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualTrait;
 
 /**
  *
  */
 class City implements CityInterface {
 
+  use StringMultilingualTrait;
+
   /**
    * City constructor.
    *
    * @param int $id
    *   City ID.
-   * @param string $nameUa
-   *   Name on UA language.
-   * @param string $nameEn
-   *   Name on EN language.
-   * @param string $typeUa
-   *   Type on UA language.
-   * @param string $typeEn
-   *   Type on EN language.
-   * @param string $shortTypeUa
-   *   Short type on UA language.
-   * @param string|null $shortTypeEn
-   *   Short type on EN language.
+   * @param StringMultilingualInterface $name
+   * @param StringMultilingualInterface $type
+   * @param StringMultilingualInterface $shortType
    * @param int $katottg
    *   Katottg code.
    * @param int $koatuu
@@ -42,12 +37,9 @@ class City implements CityInterface {
    */
   public function __construct(
     protected readonly int $id,
-    protected readonly string $nameUa,
-    protected readonly string $nameEn,
-    protected readonly string $typeUa,
-    protected readonly string $typeEn,
-    protected readonly string $shortTypeUa,
-    protected readonly ?string $shortTypeEn,
+    protected readonly StringMultilingualInterface $name,
+    protected readonly StringMultilingualInterface $type,
+    protected readonly StringMultilingualInterface $shortType,
     protected readonly int $katottg,
     protected readonly int $koatuu,
     protected readonly float $longitude,
@@ -67,28 +59,25 @@ class City implements CityInterface {
   /**
    * {@inheritDoc}
    */
-  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getName(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"name{$propSuffix}"};
+    return $this->name;
   }
 
   /**
    * {@inheritDoc}
    */
-  public function getType(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getType(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"type{$propSuffix}"};
+    return $this->type;
   }
 
   /**
    * {@inheritDoc}
    */
-  public function getShortType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string
+  public function getShortType(LanguagesEnumInterface $language = LanguagesEnum::UA): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"shortType{$propSuffix}"};
+    return $this->shortType;
   }
 
   /**
@@ -136,31 +125,17 @@ class City implements CityInterface {
    */
   public function toArray(?LanguagesEnumInterface $language = null): array
   {
-
-    $data = [
+    return [
       'id' => $this->getId(),
+      'name' => $this->getName()->getByLangOrArray($language),
+      'type' => $this->getType()->getByLangOrArray($language),
+      'short_type' => $this->getShortType()->getByLangOrArray($language),
       'katottg' => $this->getKatottg(),
       'koatuu' => $this->getKoatuu(),
       'longitude' => $this->getLongitude(),
       'latitude' => $this->getLatitude(),
       'population' => $this->getPopulation(),
     ];
-
-    if (!$language) {
-      $data['name_ua'] = $this->getName();
-      $data['name_en'] = $this->getName(LanguagesEnum::EN);
-      $data['type_ua'] = $this->getType();
-      $data['type_en'] = $this->getType(LanguagesEnum::EN);
-      $data['short_type_ua'] = $this->getShortType();
-      $data['short_type_en'] = $this->getShortType(LanguagesEnum::EN);
-    }
-    else {
-      $data['name'] = $this->getName($language);
-      $data['type'] = $this->getType($language);
-      $data['short_type'] = $this->getShortType($language);
-    }
-
-    return $data;
   }
 
   /**
@@ -170,12 +145,9 @@ class City implements CityInterface {
   {
     return new City(
       id: (int) $entry['CITY_ID'],
-      nameUa: $entry['CITY_UA'],
-      nameEn: $entry['CITY_EN'],
-      typeUa: $entry['CITYTYPE_UA'],
-      typeEn: $entry['CITYTYPE_EN'],
-      shortTypeUa: $entry['SHORTCITYTYPE_UA'],
-      shortTypeEn: $entry['SHORTCITYTYPE_EN'],
+      name: self::getMultilingualStringFromEntryAndKey($entry, 'CITY_#lang'),
+      type: self::getMultilingualStringFromEntryAndKey($entry, 'CITYTYPE_#lang'),
+      shortType: self::getMultilingualStringFromEntryAndKey($entry, 'SHORTCITYTYPE_#lang'),
       katottg: (int) $entry['CITY_KATOTTG'],
       koatuu: (int) $entry['CITY_KOATUU'],
       longitude: (float) $entry['LONGITUDE'],

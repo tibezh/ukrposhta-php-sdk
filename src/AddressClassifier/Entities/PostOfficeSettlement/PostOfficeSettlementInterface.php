@@ -6,6 +6,7 @@ namespace Ukrposhta\AddressClassifier\Entities\PostOfficeSettlement;
 
 use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
 
 /**
  * Provides required methods for PostOfficeSettlement entity.
@@ -80,35 +81,26 @@ interface PostOfficeSettlementInterface
   /**
    * Gets city name.
    *
-   * @param LanguagesEnumInterface $language
-   *   Language of the value to return, LanguagesEnum::UA by default.
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   City name on provided language of the Post Office Settlement.
    */
-  public function getCity(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getCity(): StringMultilingualInterface;
 
   /**
    * Gets city type.
    *
-   * @param LanguagesEnumInterface $language
-   *   Language of the value to return, LanguagesEnum::UA by default.
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   City type on provided language of the Post Office Settlement.
    */
-  public function getCityType(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getCityType(): StringMultilingualInterface;
 
   /**
    * Gets short city type.
    *
-   * @param LanguagesEnumInterface $language
-   *   Language of the value to return, LanguagesEnum::UA by default.
-   *
-   * @return string|null
+   * @return StringMultilingualInterface
    *   Short city type on provided language of the Post Office Settlement, can be null.
    */
-  public function getShortCityType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string;
+  public function getShortCityType(): StringMultilingualInterface;
 
   /**
    * Gets post index.
@@ -129,13 +121,10 @@ interface PostOfficeSettlementInterface
   /**
    * Gets region name.
    *
-   * @param LanguagesEnumInterface $language
-   *   Language of the value to return, LanguagesEnum::UA by default.
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   Region name on provided language of the Post Office Settlement.
    */
-  public function getRegion(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getRegion(): StringMultilingualInterface;
 
   /**
    * Gets district ID.
@@ -148,35 +137,26 @@ interface PostOfficeSettlementInterface
   /**
    * Gets district name.
    *
-   * @param LanguagesEnumInterface $language
-   *   Language of the value to return, LanguagesEnum::UA by default.
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   District name on provided language of the Post Office Settlement.
    */
-  public function getDistrict(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getDistrict(): StringMultilingualInterface;
 
   /**
    * Gets street name.
    *
-   * @param LanguagesEnumInterface $language
-   *   Language of the value to return, LanguagesEnum::UA by default.
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   Street name on provided language of the Post Office Settlement.
    */
-  public function getStreet(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getStreet(): StringMultilingualInterface;
 
   /**
    * Gets street type.
    *
-   * @param LanguagesEnumInterface $language
-   *   Language of the value to return, LanguagesEnum::UA by default.
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   Street type on provided language of the Post Office Settlement.
    */
-  public function getStreetType(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getStreetType(): StringMultilingualInterface;
 
   /**
    * Gets house number.
@@ -285,13 +265,10 @@ interface PostOfficeSettlementInterface
   /**
    * Gets lock name.
    *
-   * @param LanguagesEnumInterface $language
-   *   Language of the value to return, LanguagesEnum::UA by default.
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   Lock name on provided language of the Post Office Settlement.
    */
-  public function getLock(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getLock(): StringMultilingualInterface;
 
   /**
    * Gets phone number.

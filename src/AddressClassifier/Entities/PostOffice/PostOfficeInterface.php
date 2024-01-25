@@ -7,6 +7,7 @@ namespace Ukrposhta\AddressClassifier\Entities\PostOffice;
 use Ukrposhta\AddressClassifier\Entities\EntityInterface;
 use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
 
 /**
  * Provides required methods for PostOffice entity.
@@ -100,13 +101,10 @@ interface PostOfficeInterface extends EntityInterface {
   /**
    * Gets lock description.
    *
-   * @param LanguagesEnumInterface $language
-   *   Name in language, LanguagesEnum::UA by default.
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   Lock description of the Post Office.
    */
-  public function getLock(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getLock(): StringMultilingualInterface;
 
   /**
    * Gets lock code.
@@ -177,35 +175,26 @@ interface PostOfficeInterface extends EntityInterface {
   /**
    * Gets service area city name.
    *
-   * @param LanguagesEnumInterface $language
-   *    Name in language, LanguagesEnum::UA by default.
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   Service area city name of the Post Office.
    */
-  public function getServiceAreaCity(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getServiceAreaCity(): StringMultilingualInterface;
 
   /**
    * Gets service area city type.
    *
-   * @param LanguagesEnumInterface $language
-   *   Name in language, LanguagesEnum::UA by default.
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   Service area city type of the Post Office.
    */
-  public function getServiceAreaCityType(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getServiceAreaCityType(): StringMultilingualInterface;
 
   /**
    * Gets service area short city type.
    *
-   * @param LanguagesEnumInterface $language
-   *   Language of the value to return, LanguagesEnum::UA by default.
-   *
-   * @return string|null
+   * @return StringMultilingualInterface
    *   Service area short city type of the Post Office, can be null for specific languages.
    */
-  public function getServiceAreaShortCityType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string;
+  public function getServiceAreaShortCityType(): StringMultilingualInterface;
 
   /**
    * Gets street ID.
@@ -291,10 +280,10 @@ interface PostOfficeInterface extends EntityInterface {
    *
    * @todo probably can be defined via enum.
    *
-   * @return int
+   * @return int|null
    *   Mrtps code of the Post Office.
    */
-  public function getMrtps(): int;
+  public function getMrtps(): ?int;
 
   /**
    * Gets internal technical index.

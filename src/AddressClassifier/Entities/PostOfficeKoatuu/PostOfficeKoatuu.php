@@ -17,6 +17,37 @@ class PostOfficeKoatuu implements PostOfficeKoatuuInterface
 
   use StringMultilingualTrait;
 
+  /**
+   * PostOfficeKoatuu constructor.
+   *
+   * @param int $postCode
+   * @param int $postIndex
+   * @param int $cityId
+   * @param int $cityKoatuu
+   * @param int $cityKatottg
+   * @param int $cityVpzId
+   * @param StringMultilingualInterface $cityTypeName
+   * @param StringMultilingualInterface $cityVpzName
+   * @param int $cityVpzKoatuu
+   * @param int $cityVpzKatottg
+   * @param int $streetVpzId
+   * @param StringMultilingualInterface $streetVpzName
+   * @param string|null $houseNumber
+   * @param int $postOfficeId
+   * @param StringMultilingualInterface $postOfficeName
+   * @param StringMultilingualInterface $postOfficeDetails
+   * @param string $phoneNumber
+   * @param float $longitude
+   * @param float $latitude
+   * @param int $typeId
+   * @param string $typeAcronymName
+   * @param string $typeLongName
+   * @param bool $hasPostTerminal
+   * @param bool $isAutomated
+   * @param bool $isSecurity
+   * @param int $lockCode
+   * @param StringMultilingualInterface $lockName
+   */
   public function __construct(
     protected readonly int $postCode,
     protected readonly int $postIndex,
@@ -276,16 +307,16 @@ class PostOfficeKoatuu implements PostOfficeKoatuuInterface
       'city_koatuu' => $this->getCityKoatuu(),
       'city_katottg' => $this->getCityKatottg(),
       'city_vpz_id' => $this->getCityVpzId(),
-      'city_type_name' => $this->getCityTypeName()->toArray(),
-      'city_vpz_name' => $this->getCityVpzName()->toArray(),
+      'city_type_name' => $this->getCityTypeName()->getByLangOrArray($language),
+      'city_vpz_name' => $this->getCityVpzName()->getByLangOrArray($language),
       'city_vpz_koatuu' => $this->getCityVpzKoatuu(),
       'city_vpz_katottg' => $this->getCityKatottg(),
       'street_vpz_id' => $this->getStreetVpzId(),
-      'street_vpz_name' => $this->getStreetVpzName()->toArray(),
+      'street_vpz_name' => $this->getStreetVpzName()->getByLangOrArray($language),
       'house_number' => $this->getHouseNumber(),
       'post_office_id' => $this->getPostOfficeId(),
-      'post_office_name' => $this->getPostOfficeName()->toArray(),
-      'post_office_details' => $this->getPostOfficeDetails()->toArray(),
+      'post_office_name' => $this->getPostOfficeName()->getByLangOrArray($language),
+      'post_office_details' => $this->getPostOfficeDetails()->getByLangOrArray($language),
       'phone_number' => $this->getPhoneNumber(),
       'longitude' => $this->getLongitude(),
       'latitude' => $this->getLatitude(),
@@ -295,7 +326,7 @@ class PostOfficeKoatuu implements PostOfficeKoatuuInterface
       'is_automated' => $this->isAutomated(),
       'is_security' => $this->isSecurity(),
       'lock_code' => $this->getLockCode(),
-      'lock_name' => $this->getLockName()->toArray(),
+      'lock_name' => $this->getLockName()->getByLangOrArray($language),
     ];
   }
 

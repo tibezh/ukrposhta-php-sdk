@@ -7,6 +7,7 @@ namespace Ukrposhta\AddressClassifier\Entities\PostOfficeOpenHours;
 use Ukrposhta\AddressClassifier\Entities\EntityInterface;
 use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
 
 /**
  *
@@ -66,22 +67,18 @@ interface PostOfficeOpenHoursInterface extends EntityInterface
   /**
    * Gets working day name.
    *
-   * @param LanguagesEnumInterface $language
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   Working day of week name.
    */
-  public function getDayOfWeek(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getDayOfWeek(): StringMultilingualInterface;
 
   /**
    * Gets short name of the working day.
    *
-   * @param LanguagesEnumInterface $language
-   *
-   * @return string|null
+   * @return StringMultilingualInterface
    *   Short name of the working day, can be null for specific languages.
    */
-  public function getShortDayOfWeek(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string;
+  public function getShortDayOfWeek(): StringMultilingualInterface;
 
   /**
    * Gets interval type.

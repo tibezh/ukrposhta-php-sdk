@@ -7,6 +7,7 @@ namespace Ukrposhta\AddressClassifier\Entities\Region;
 use Ukrposhta\AddressClassifier\Entities\EntityInterface;
 use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
 
 /**
  * Provides required methods for Region entity.
@@ -24,13 +25,10 @@ interface RegionInterface extends EntityInterface {
   /**
    * Gets region name.
    *
-   * @param LanguagesEnumInterface $language
-   *   Name in language, LanguagesEnum::UA by default.
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   Region name in specific language.
    */
-  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getName(): StringMultilingualInterface;
 
   /**
    * Gets region katottg code.

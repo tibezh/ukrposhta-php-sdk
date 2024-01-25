@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\Region;
 
-use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualTrait;
 
 /**
  * Region main class.
  */
 class Region implements RegionInterface {
 
+  use StringMultilingualTrait;
+
   /**
    * Region constructor.
    *
    * @param int $id
    *   Region ID.
-   * @param string $nameUa
-   *   Region name on UA language.
-   * @param string $nameEn
-   *   Region name on EN language.
+   * @param StringMultilingualInterface $name
    * @param int $koatuu
    *   Region KOATUU code.
    * @param int $katottg
@@ -28,8 +28,7 @@ class Region implements RegionInterface {
    */
   public function __construct(
     protected readonly int $id,
-    protected readonly string $nameUa,
-    protected readonly string $nameEn,
+    protected readonly StringMultilingualInterface $name,
     protected readonly int $koatuu,
     protected readonly int $katottg
   ) {
@@ -46,10 +45,9 @@ class Region implements RegionInterface {
   /**
    * {@inheritDoc}
    */
-  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getName(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"name{$propSuffix}"};
+    return $this->name;
   }
 
   /**
@@ -73,19 +71,12 @@ class Region implements RegionInterface {
    */
   public function toArray(?LanguagesEnumInterface $language = null): array
   {
-    $data = [
+    return [
       'id' => $this->getId(),
+      'name' => $this->getName()->getByLangOrArray($language),
       'katottg' => $this->getKatottg(),
       'koatuu' => $this->getKoatuu(),
     ];
-    if (!$language) {
-      $data['name_ua'] = $this->getName();
-      $data['name_en'] = $this->getName(LanguagesEnum::EN);
-    }
-    else {
-      $data['name'] = $this->getName($language);
-    }
-    return $data;
   }
 
   /**
@@ -94,8 +85,7 @@ class Region implements RegionInterface {
   public static function fromResponseEntry(array $entry): RegionInterface {
     return new Region(
       id: (int) $entry['REGION_ID'],
-      nameUa: $entry['REGION_UA'],
-      nameEn: $entry['REGION_EN'],
+      name: self::getMultilingualStringFromEntryAndKey($entry, 'REGION_#lang'),
       koatuu: (int) $entry['REGION_KOATUU'],
       katottg: (int) $entry['REGION_KATOTTG']
     );

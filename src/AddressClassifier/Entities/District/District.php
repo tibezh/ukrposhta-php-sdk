@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\District;
 
-use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualTrait;
 
 /**
  *
  */
 class District implements DistrictInterface {
 
+  use StringMultilingualTrait;
+
   /**
    * District constructor.
    *
    * @param int $id
    *   District ID.
-   * @param string $nameUa
-   *   Region name on UA language.
-   * @param string $nameEn
-   *   Region name on EN language.
+   * @param StringMultilingualInterface $name
+   *   Region name.
    * @param int $koatuu
    *   District KOATUU code.
    * @param int $katottg
@@ -28,8 +29,7 @@ class District implements DistrictInterface {
    */
   public function __construct(
     protected readonly int $id,
-    protected readonly string $nameUa,
-    protected readonly string $nameEn,
+    protected readonly StringMultilingualInterface $name,
     protected readonly int $koatuu,
     protected readonly int $katottg
   ) {
@@ -46,10 +46,9 @@ class District implements DistrictInterface {
   /**
    * {@inheritDoc}
    */
-  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getName(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"name{$propSuffix}"};
+    return $this->name;
   }
 
   /**
@@ -73,19 +72,12 @@ class District implements DistrictInterface {
    */
   public function toArray(?LanguagesEnumInterface $language = null): array
   {
-    $data = [
+    return [
       'id' => $this->getId(),
+      'name' => $this->getName()->getByLangOrArray($language),
       'koatuu' => $this->getKoatuu(),
       'katottg' => $this->getKatottg(),
     ];
-    if (!$language) {
-      $data['name_ua'] = $this->getName();
-      $data['name_en'] = $this->getName(LanguagesEnum::EN);
-    }
-    else {
-      $data['name'] = $this->getName($language);
-    }
-    return $data;
   }
 
   /**
@@ -95,8 +87,7 @@ class District implements DistrictInterface {
   {
     return new District(
       id: (int) $entry['DISTRICT_ID'],
-      nameUa: $entry['DISTRICT_UA'],
-      nameEn: $entry['DISTRICT_EN'],
+      name: self::getMultilingualStringFromEntryAndKey($entry, 'DISTRICT_#lang'),
       koatuu: (int) $entry['DISTRICT_KOATUU'],
       katottg: (int) $entry['DISTRICT_KATOTTG']
     );

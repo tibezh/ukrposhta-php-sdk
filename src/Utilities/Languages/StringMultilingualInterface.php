@@ -25,9 +25,16 @@ interface StringMultilingualInterface
   /**
    * @param LanguagesEnumInterface $language
    *
-   * @return string
+   * @return string|null
    */
-  public function getByLanguage(LanguagesEnumInterface $language): string;
+  public function getByLanguage(LanguagesEnumInterface $language): ?string;
+
+  /**
+   * @param LanguagesEnumInterface|null $language
+   *
+   * @return string|array|null
+   */
+  public function getByLangOrArray(?LanguagesEnumInterface $language): string|array|null;
 
   /**
    * @return LanguagesEnumInterface[]

@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\PostOfficeSettlement;
 
-use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualTrait;
 
 /**
  *
  */
 class PostOfficeSettlement implements PostOfficeSettlementInterface
 {
+
+  use StringMultilingualTrait;
 
   /**
    * PostOfficeSettlement constructor.
@@ -24,23 +27,16 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
    * @param string $typeAcronym
    * @param int $parentId
    * @param int $cityId
-   * @param string $cityUa
-   * @param string $cityEn
-   * @param string $cityTypeUa
-   * @param string $cityTypeEn
-   * @param string $shortCityTypeUa
-   * @param string|null $shortCityTypeEn
+   * @param StringMultilingualInterface $city
+   * @param StringMultilingualInterface $cityType
+   * @param StringMultilingualInterface $shortCityType
    * @param int $postIndex
    * @param int $regionId
-   * @param string $regionUa
-   * @param string $regionEn
+   * @param StringMultilingualInterface $region
    * @param int $districtId
-   * @param string $districtUa
-   * @param string $districtEn
-   * @param string $streetUa
-   * @param string $streetEn
-   * @param string $streetTypeUa
-   * @param string $streetTypeEn
+   * @param StringMultilingualInterface $district
+   * @param StringMultilingualInterface $street
+   * @param StringMultilingualInterface $streetType
    * @param string $houseNumber
    * @param string $address
    * @param float $longitude
@@ -54,8 +50,7 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
    * @param bool $isAutomated
    * @param bool $isSecurity
    * @param int $lockCode
-   * @param string $lockUa
-   * @param string $lockEn
+   * @param StringMultilingualInterface $lock
    * @param string $phone
    * @param bool $isVpz
    * @param int $merezaNumber
@@ -70,23 +65,16 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
     protected readonly string $typeAcronym,
     protected readonly int $parentId,
     protected readonly int $cityId,
-    protected readonly string $cityUa,
-    protected readonly string $cityEn,
-    protected readonly string $cityTypeUa,
-    protected readonly string $cityTypeEn,
-    protected readonly string $shortCityTypeUa,
-    protected readonly ?string $shortCityTypeEn,
+    protected readonly StringMultilingualInterface $city,
+    protected readonly StringMultilingualInterface $cityType,
+    protected readonly StringMultilingualInterface $shortCityType,
     protected readonly int $postIndex,
     protected readonly int $regionId,
-    protected readonly string $regionUa,
-    protected readonly string $regionEn,
+    protected readonly StringMultilingualInterface $region,
     protected readonly int $districtId,
-    protected readonly string $districtUa,
-    protected readonly string $districtEn,
-    protected readonly string $streetUa,
-    protected readonly string $streetEn,
-    protected readonly string $streetTypeUa,
-    protected readonly string $streetTypeEn,
+    protected readonly StringMultilingualInterface $district,
+    protected readonly StringMultilingualInterface $street,
+    protected readonly StringMultilingualInterface $streetType,
     protected readonly string $houseNumber,
     protected readonly string $address,
     protected readonly float $longitude,
@@ -100,8 +88,7 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
     protected readonly bool $isAutomated,
     protected readonly bool $isSecurity,
     protected readonly int $lockCode,
-    protected readonly string $lockUa,
-    protected readonly string $lockEn,
+    protected readonly StringMultilingualInterface $lock,
     protected readonly string $phone,
     protected readonly bool $isVpz,
     protected readonly int $merezaNumber,
@@ -176,28 +163,25 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
   /**
    * {@inheritDoc}
    */
-  public function getCity(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getCity(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"city$propSuffix"};
+    return $this->city;
   }
 
   /**
    * {@inheritDoc}
    */
-  public function getCityType(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getCityType(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"cityType$propSuffix"};
+    return $this->cityType;
   }
 
   /**
    * {@inheritDoc}
    */
-  public function getShortCityType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string
+  public function getShortCityType(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"shortCityType$propSuffix"};
+    return $this->shortCityType;
   }
 
   /**
@@ -219,10 +203,9 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
   /**
    * {@inheritDoc}
    */
-  public function getRegion(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getRegion(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"region$propSuffix"};
+    return $this->region;
   }
 
   /**
@@ -236,28 +219,25 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
   /**
    * {@inheritDoc}
    */
-  public function getDistrict(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getDistrict(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"district$propSuffix"};
+    return $this->district;
   }
 
   /**
    * {@inheritDoc}
    */
-  public function getStreet(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getStreet(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"street$propSuffix"};
+    return $this->street;
   }
 
   /**
    * {@inheritDoc}
    */
-  public function getStreetType(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getStreetType(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"streetType$propSuffix"};
+    return $this->streetType;
   }
 
   /**
@@ -367,10 +347,9 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
   /**
    * {@inheritDoc}
    */
-  public function getLock(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getLock(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"lock$propSuffix"};
+    return $this->lock;
   }
 
   /**
@@ -410,8 +389,7 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
    */
   public function toArray(?LanguagesEnumInterface $language = null): array
   {
-
-    $data = [
+    return [
       'id' => $this->getId(),
       'name' => $this->getName(),
       'short_name' => $this->getShortName(),
@@ -420,9 +398,16 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
       'type_acronym' => $this->getTypeAcronym(),
       'parent_id' => $this->getParentId(),
       'city_id' => $this->getCityId(),
+      'city' => $this->getCity()->getByLangOrArray($language),
+      'city_type' => $this->getCityType()->getByLangOrArray($language),
+      'short_city_type' => $this->getShortCityType()->getByLangOrArray($language),
       'post_index' => $this->getpostIndex(),
       'region_id' => $this->getregionId(),
+      'region' => $this->getRegion()->getByLangOrArray($language),
       'district_id' => $this->getdistrictId(),
+      'district' => $this->getDistrict()->getByLangOrArray($language),
+      'street' => $this->getStreet()->getByLangOrArray($language),
+      'street_type' => $this->getStreetType()->getByLangOrArray($language),
       'house_number' => $this->gethouseNumber(),
       'address' => $this->getaddress(),
       'longitude' => $this->getlongitude(),
@@ -436,42 +421,12 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
       'is_automated' => $this->isAutomated(),
       'is_security' => $this->isSecurity(),
       'lock_code' => $this->getlockCode(),
+      'lock' => $this->getLock()->getByLangOrArray($language),
       'phone' => $this->getphone(),
       'isVpz' => $this->isVpz(),
       'mereza_number' => $this->getmerezaNumber(),
       'tech_index' => $this->gettechIndex(),
     ];
-
-    if (!$language) {
-      $data['city_ua'] = $this->getCity();
-      $data['city_en'] = $this->getCity(LanguagesEnum::EN);
-      $data['city_type_ua'] = $this->getCityType();
-      $data['city_type_en'] = $this->getCityType(LanguagesEnum::EN);
-      $data['short_city_type_ua'] = $this->getShortCityType();
-      $data['short_city_type_en'] = $this->getShortCityType(LanguagesEnum::EN);
-      $data['region_ua'] = $this->getRegion();
-      $data['region_en'] = $this->getRegion(LanguagesEnum::EN);
-      $data['district_ua'] = $this->getDistrict();
-      $data['district_en'] = $this->getDistrict(LanguagesEnum::EN);
-      $data['street_ua'] = $this->getStreet();
-      $data['street_en'] = $this->getStreet(LanguagesEnum::EN);
-      $data['street_type_ua'] = $this->getStreetType();
-      $data['street_type_en'] = $this->getStreetType(LanguagesEnum::EN);
-      $data['lock_ua'] = $this->getLock();
-      $data['lock_en'] = $this->getLock(LanguagesEnum::EN);
-    }
-    else {
-      $data['city'] = $this->getCity($language);
-      $data['city_type'] = $this->getCityType($language);
-      $data['short_city_type'] = $this->getShortCityType($language);
-      $data['region'] = $this->getRegion($language);
-      $data['district'] = $this->getDistrict($language);
-      $data['street'] = $this->getStreet($language);
-      $data['street_type'] = $this->getStreetType($language);
-      $data['lock'] = $this->getLock($language);
-    }
-
-    return $data;
   }
 
   /**
@@ -487,23 +442,16 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
       typeAcronym: $entry['TYPE_ACRONYM'],
       parentId: (int) $entry['PARENT_ID'],
       cityId: (int) $entry['CITY_ID'],
-      cityUa: $entry['CITY_UA'],
-      cityEn: $entry['CITY_EN'],
-      cityTypeUa: $entry['CITYTYPE_UA'],
-      cityTypeEn: $entry['CITYTYPE_EN'],
-      shortCityTypeUa: $entry['SHORTCITYTYPE_UA'],
-      shortCityTypeEn: $entry['SHORTCITYTYPE_EN'] ?? null,
+      city: self::getMultilingualStringFromEntryAndKey($entry, 'CITY_#lang'),
+      cityType: self::getMultilingualStringFromEntryAndKey($entry, 'CITYTYPE_#lang'),
+      shortCityType: self::getMultilingualStringFromEntryAndKey($entry, 'SHORTCITYTYPE_#lang'),
       postIndex: (int) $entry['POSTINDEX'],
       regionId: (int) $entry['REGION_ID'],
-      regionUa: $entry['REGION_UA'],
-      regionEn: $entry['REGION_EN'],
+      region: self::getMultilingualStringFromEntryAndKey($entry, 'REGION_#lang'),
       districtId: (int) $entry['DISTRICT_ID'],
-      districtUa: $entry['DISTRICT_UA'],
-      districtEn: $entry['DISTRICT_EN'],
-      streetUa: $entry['STREET_UA'],
-      streetEn: $entry['STREET_EN'],
-      streetTypeUa: $entry['STREETTYPE_UA'],
-      streetTypeEn: $entry['STREETTYPE_EN'],
+      district: self::getMultilingualStringFromEntryAndKey($entry, 'DISTRICT_#lang'),
+      street: self::getMultilingualStringFromEntryAndKey($entry, 'STREET_#lang'),
+      streetType: self::getMultilingualStringFromEntryAndKey($entry, 'STREETTYPE_#lang'),
       houseNumber: $entry['HOUSENUMBER'],
       address: $entry['ADDRESS'],
       longitude: (float) $entry['LONGITUDE'],
@@ -517,8 +465,7 @@ class PostOfficeSettlement implements PostOfficeSettlementInterface
       isAutomated: (bool) $entry['IS_AUTOMATED'],
       isSecurity: (bool) $entry['IS_SECURITY'],
       lockCode: (int) $entry['LOCK_CODE'],
-      lockUa: $entry['LOCK_UA'],
-      lockEn: $entry['LOCK_EN'],
+      lock: self::getMultilingualStringFromEntryAndKey($entry, 'LOCK_#lang'),
       phone: $entry['PHONE'],
       isVpz: (bool) $entry['ISVPZ'],
       merezaNumber: (int) $entry['MEREZA_NUMBER'],

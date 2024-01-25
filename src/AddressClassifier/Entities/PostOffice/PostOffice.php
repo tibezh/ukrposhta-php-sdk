@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\PostOffice;
 
-use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualTrait;
 
 /**
  *
  */
 class PostOffice implements PostOfficeInterface {
+
+  use StringMultilingualTrait;
 
   /**
    * PostOffice constructor.
@@ -35,10 +38,7 @@ class PostOffice implements PostOfficeInterface {
    *   Post code.
    * @param int $merezaNumber
    *   Mereza number.
-   * @param string $lockUa
-   *   Lock in UA language.
-   * @param string $lockEn
-   *   Lock in EN language.
+   * @param StringMultilingualInterface $lock
    * @param int $lockCode
    *   Lock code.
    * @param int $regionId
@@ -55,18 +55,9 @@ class PostOffice implements PostOfficeInterface {
    *   City type in UA language.
    * @param int $serviceAreaCityId
    *   Service area city ID.
-   * @param string $serviceAreaCityUa
-   *   Service area city name in UA language.
-   * @param string $serviceAreaCityEn
-   *   Service area city name in EN language.
-   * @param string $serviceAreaCityTypeUa
-   *   Service area city type name in UA language.
-   * @param string $serviceAreaCityTypeEn
-   *   Service area city type name in EN language.
-   * @param string $serviceAreaShortCityTypeUa
-   *   Service area short city name in UA language.
-   * @param string|null $serviceAreaShortCityTypeEn
-   *   Service area short city name in EN language, can be null.
+   * @param StringMultilingualInterface $serviceAreaCity
+   * @param StringMultilingualInterface $serviceAreaCityType
+   * @param StringMultilingualInterface $serviceAreaShortCityType
    * @param int $streetId
    *   Street ID.
    * @param int $parentId
@@ -101,8 +92,7 @@ class PostOffice implements PostOfficeInterface {
     protected readonly int $postIndex,
     protected readonly int $postCode,
     protected readonly int $merezaNumber,
-    protected readonly string $lockUa,
-    protected readonly string $lockEn,
+    protected readonly StringMultilingualInterface $lock,
     protected readonly int $lockCode,
     protected readonly int $regionId,
     protected readonly int $serviceAreaRegionId,
@@ -111,12 +101,9 @@ class PostOffice implements PostOfficeInterface {
     protected readonly int $cityId,
     protected readonly string $cityType,
     protected readonly int $serviceAreaCityId,
-    protected readonly string $serviceAreaCityUa,
-    protected readonly string $serviceAreaCityEn,
-    protected readonly string $serviceAreaCityTypeUa,
-    protected readonly string $serviceAreaCityTypeEn,
-    protected readonly string $serviceAreaShortCityTypeUa,
-    protected readonly ?string $serviceAreaShortCityTypeEn,
+    protected readonly StringMultilingualInterface $serviceAreaCity,
+    protected readonly StringMultilingualInterface $serviceAreaCityType,
+    protected readonly StringMultilingualInterface $serviceAreaShortCityType,
     protected readonly int $streetId,
     protected readonly int $parentId,
     protected readonly string $address,
@@ -125,7 +112,7 @@ class PostOffice implements PostOfficeInterface {
     protected readonly float $latitude,
     protected readonly bool $isVpz,
     protected readonly bool $isAvailable,
-    protected readonly int $mrtps,
+    protected readonly ?int $mrtps,
     protected readonly int $techIndex,
     protected readonly bool $isDeliveryPossible
   ) {
@@ -214,10 +201,9 @@ class PostOffice implements PostOfficeInterface {
   /**
    * {@inheritDoc}
    */
-  public function getLock(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getLock(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"lock{$propSuffix}"};
+    return $this->lock;
   }
 
   /**
@@ -287,28 +273,25 @@ class PostOffice implements PostOfficeInterface {
   /**
    * {@inheritDoc}
    */
-  public function getServiceAreaCity(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getServiceAreaCity(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"serviceAreaCity{$propSuffix}"};
+    return $this->serviceAreaCity;
   }
 
   /**
    * {@inheritDoc}
    */
-  public function getServiceAreaCityType(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getServiceAreaCityType(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"serviceAreaCityType{$propSuffix}"};
+    return $this->serviceAreaCityType;
   }
 
   /**
    * {@inheritDoc}
    */
-  public function getServiceAreaShortCityType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string
+  public function getServiceAreaShortCityType(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"serviceAreaShortCityType{$propSuffix}"} ?? null;
+    return $this->serviceAreaShortCityType;
   }
 
   /**
@@ -378,7 +361,7 @@ class PostOffice implements PostOfficeInterface {
   /**
    * {@inheritDoc}
    */
-  public function getMrtps(): int
+  public function getMrtps(): ?int
   {
     return $this->mrtps;
   }
@@ -404,7 +387,7 @@ class PostOffice implements PostOfficeInterface {
    */
   public function toArray(?LanguagesEnumInterface $language = null): array
   {
-    $data = [
+    return [
       'id' => $this->getId(),
       'code' => $this->getCode(),
       'name' => $this->getName(),
@@ -414,6 +397,7 @@ class PostOffice implements PostOfficeInterface {
       'type_acronym' => $this->getTypeAcronymName(),
       'post_index' => $this->getPostIndex(),
       'postcode' => $this->getPostCode(),
+      'lock' => $this->getLock()->getByLangOrArray($language),
       'mereza_number' => $this->getMerezaNumber(),
       'lock_code' => $this->getLockCode(),
       'region_id' => $this->getRegionId(),
@@ -423,6 +407,9 @@ class PostOffice implements PostOfficeInterface {
       'city_id' => $this->getCityId(),
       'city_type' => $this->getCityType(),
       'service_area_city_id' => $this->getServiceAreaCityId(),
+      'service_area_city' => $this->getServiceAreaCity()->getByLangOrArray($language),
+      'service_area_city_type' => $this->getServiceAreaCityType()->getByLangOrArray($language),
+      'service_area_short_city_type' => $this->getServiceAreaShortCityType()->getByLangOrArray($language),
       'street_id' => $this->getStreetId(),
       'parent_id' => $this->getParentId(),
       'address' => $this->getAddress(),
@@ -435,25 +422,6 @@ class PostOffice implements PostOfficeInterface {
       'tech_index' => $this->getTechIndex(),
       'is_delivery_possible' => $this->isDeliveryPossible(),
     ];
-
-    if (!$language) {
-      $data['lock_ua'] = $this->getLock();
-      $data['lock_en'] = $this->getLock(LanguagesEnum::EN);
-      $data['service_area_city_ua'] = $this->getServiceAreaCity();
-      $data['service_area_city_en'] = $this->getServiceAreaCity(LanguagesEnum::EN);
-      $data['service_area_city_type_ua'] = $this->getServiceAreaCityType();
-      $data['service_area_city_type_en'] = $this->getServiceAreaCityType(LanguagesEnum::EN);
-      $data['service_area_short_city_type_ua'] = $this->getServiceAreaShortCityType();
-      $data['service_area_short_city_type_en'] = $this->getServiceAreaShortCityType(LanguagesEnum::EN);
-    }
-    else {
-      $data['lock'] = $this->getLock($language);
-      $data['service_area_city'] = $this->getServiceAreaCity($language);
-      $data['service_area_city_type'] = $this->getServiceAreaCityType($language);
-      $data['service_area_short_city_type'] = $this->getServiceAreaShortCityType($language);
-    }
-
-    return $data;
   }
 
   /**
@@ -471,8 +439,7 @@ class PostOffice implements PostOfficeInterface {
       postIndex: (int) $entry['POSTCODE'],
       postCode: (int) $entry['POSTCODE'],
       merezaNumber: (int) $entry['MEREZA_NUMBER'],
-      lockUa: $entry['POLOCK_UA'],
-      lockEn: $entry['POLOCK_EN'],
+      lock: self::getMultilingualStringFromEntryAndKey($entry, 'POLOCK_#lang'),
       lockCode: (int) $entry['LOCK_CODE'],
       regionId: (int) $entry['POREGION_ID'],
       serviceAreaRegionId: (int) $entry['PDREGION_ID'],
@@ -481,12 +448,9 @@ class PostOffice implements PostOfficeInterface {
       cityId: (int) $entry['POCITY_ID'],
       cityType: $entry['CITYTYPE_UA'],
       serviceAreaCityId: (int) $entry['PDCITY_ID'],
-      serviceAreaCityUa: $entry['PDCITY_UA'],
-      serviceAreaCityEn: $entry['PDCITY_EN'],
-      serviceAreaCityTypeUa: $entry['PDCITYTYPE_UA'],
-      serviceAreaCityTypeEn: $entry['PDCITYTYPE_EN'],
-      serviceAreaShortCityTypeUa: $entry['SHORTPDCITYTYPE_UA'],
-      serviceAreaShortCityTypeEn: $entry['SHORTPDCITYTYPE_EN'] ?? null,
+      serviceAreaCity: self::getMultilingualStringFromEntryAndKey($entry, 'PDCITY_#lang'),
+      serviceAreaCityType: self::getMultilingualStringFromEntryAndKey($entry, 'PDCITYTYPE_#lang'),
+      serviceAreaShortCityType: self::getMultilingualStringFromEntryAndKey($entry, 'SHORTPDCITYTYPE_#lang'),
       streetId: (int) $entry['POSTREET_ID'],
       parentId: (int) $entry['PARENT_ID'],
       address: $entry['ADDRESS'],
@@ -495,7 +459,7 @@ class PostOffice implements PostOfficeInterface {
       latitude: (float) $entry['LATTITUDE'],
       isVpz: (bool) $entry['ISVPZ'],
       isAvailable: (bool) $entry['AVALIBLE'],
-      mrtps: (int) $entry['MRTPS'],
+      mrtps: $entry['MRTPS'] ? (int) $entry['MRTPS'] : null,
       techIndex: (int) $entry['TECHINDEX'],
       isDeliveryPossible: $entry['IS_NODISTRICT'] == 0,
     );

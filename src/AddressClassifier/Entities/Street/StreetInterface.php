@@ -7,6 +7,7 @@ namespace Ukrposhta\AddressClassifier\Entities\Street;
 use Ukrposhta\AddressClassifier\Entities\EntityInterface;
 use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
 
 /**
  * Provides required methods for Street entity.
@@ -24,32 +25,26 @@ interface StreetInterface extends EntityInterface {
   /**
    * Gets street name.
    *
-   * @param LanguagesEnumInterface $language
-   *   Name in language, LanguagesEnum::UA by default.
-   * @return string
+   * @return StringMultilingualInterface
    *   Name of the street.
    */
-  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getName(): StringMultilingualInterface;
 
   /**
    * Gets street type.
    *
-   * @param LanguagesEnumInterface $language
-   *   Name in language, LanguagesEnum::UA by default.
-   * @return string
+   * @return StringMultilingualInterface
    *   Type of the street.
    */
-  public function getType(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getType(): StringMultilingualInterface;
 
   /**
    * Gets street short type.
    *
-   * @param LanguagesEnumInterface $language
-   *   Name in language, LanguagesEnum::UA by default.
-   * @return string|null
+   * @return StringMultilingualInterface
    *   Short type of the street, can be null for specific languages.
    */
-  public function getShortType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string;
+  public function getShortType(): StringMultilingualInterface;
 
   /**
    * Gets an associative array version of the Street.

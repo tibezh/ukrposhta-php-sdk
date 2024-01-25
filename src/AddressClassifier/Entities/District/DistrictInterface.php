@@ -7,6 +7,7 @@ namespace Ukrposhta\AddressClassifier\Entities\District;
 use Ukrposhta\AddressClassifier\Entities\EntityInterface;
 use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
 
 /**
  * Provides required methods for District entity.
@@ -24,13 +25,10 @@ interface DistrictInterface extends EntityInterface {
   /**
    * Gets district name.
    *
-   * @param LanguagesEnumInterface $language
-   *   Name in language, LanguagesEnum::UA by default.
-   *
-   * @return string
+   * @return StringMultilingualInterface
    *   The district name.
    */
-  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string;
+  public function getName(): StringMultilingualInterface;
 
   /**
    * Gets district koatuu code.

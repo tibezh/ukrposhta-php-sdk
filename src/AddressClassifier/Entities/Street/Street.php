@@ -4,36 +4,31 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\Street;
 
-use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualTrait;
 
 /**
  *
  */
 class Street implements StreetInterface {
 
+  use StringMultilingualTrait;
+
   /**
    * Street constructor.
    *
    * @param int $id
    *   Street ID.
-   * @param string $nameUa
-   *   Name on UA language.
-   * @param string $nameEn
-   *   Name on EN language.
-   * @param string $shortTypeUa
-   *   Short type on UA language.
-   * @param string|null $shortTypeEn
-   *   Short type on EN language.
+   * @param StringMultilingualInterface $name
+   * @param StringMultilingualInterface $type
+   * @param StringMultilingualInterface $shortType
    */
   public function __construct(
     protected readonly int $id,
-    protected readonly string $nameUa,
-    protected readonly string $nameEn,
-    protected readonly string $typeUa,
-    protected readonly string $typeEn,
-    protected readonly string $shortTypeUa,
-    protected readonly ?string $shortTypeEn
+    protected readonly StringMultilingualInterface $name,
+    protected readonly StringMultilingualInterface $type,
+    protected readonly StringMultilingualInterface $shortType,
   ) {
   }
 
@@ -48,28 +43,25 @@ class Street implements StreetInterface {
   /**
    * {@inheritDoc}
    */
-  public function getName(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getName(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"name{$propSuffix}"};
+    return $this->name;
   }
 
   /**
    * {@inheritDoc}
    */
-  public function getType(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getType(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"type{$propSuffix}"};
+    return $this->type;
   }
 
   /**
    * {@inheritDoc}
    */
-  public function getShortType(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string
+  public function getShortType(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"shortType{$propSuffix}"};
+    return $this->shortType;
   }
 
   /**
@@ -77,23 +69,12 @@ class Street implements StreetInterface {
    */
   public function toArray(?LanguagesEnumInterface $language = null): array
   {
-    $data = ['id' => $this->getId()];
-
-    if (!$language) {
-      $data['name_ua'] = $this->getName();
-      $data['name_en'] = $this->getName(LanguagesEnum::EN);
-      $data['type_ua'] = $this->getType();
-      $data['type_en'] = $this->getType(LanguagesEnum::EN);
-      $data['short_type_ua'] = $this->getShortType();
-      $data['short_type_en'] = $this->getShortType(LanguagesEnum::EN);
-    }
-    else {
-      $data['name'] = $this->getName($language);
-      $data['type'] = $this->getType($language);
-      $data['short_type'] = $this->getShortType($language);
-    }
-
-    return $data;
+    return [
+      'id' => $this->getId(),
+      'name' => $this->getName()->getByLangOrArray($language),
+      'type' => $this->getType()->getByLangOrArray($language),
+      'short_type' => $this->getShortType()->getByLangOrArray($language),
+    ];
   }
 
   /**
@@ -102,12 +83,9 @@ class Street implements StreetInterface {
   public static function fromResponseEntry(array $entry): StreetInterface {
     return new Street(
       id: (int) $entry['STREET_ID'],
-      nameUa: $entry['STREET_UA'],
-      nameEn: $entry['STREET_EN'],
-      typeUa: $entry['STREETTYPE_UA'],
-      typeEn: $entry['STREETTYPE_EN'],
-      shortTypeUa: $entry['SHORTSTREETTYPE_UA'],
-      shortTypeEn: $entry['SHORTSTREETTYPE_EN'],
+      name: self::getMultilingualStringFromEntryAndKey($entry, 'STREET_#lang'),
+      type: self::getMultilingualStringFromEntryAndKey($entry, 'STREETTYPE_#lang'),
+      shortType: self::getMultilingualStringFromEntryAndKey($entry, 'SHORTSTREETTYPE_#lang'),
     );
   }
 

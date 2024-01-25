@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities\PostOfficeOpenHours;
 
-use Ukrposhta\Utilities\Languages\LanguagesEnum;
 use Ukrposhta\Utilities\Languages\LanguagesEnumInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
+use Ukrposhta\Utilities\Languages\StringMultilingualTrait;
 
 /**
  *
  */
 class PostOfficeOpenHours implements PostOfficeOpenHoursInterface
 {
+
+  use StringMultilingualTrait;
 
   /**
    * PostOfficeOpenHours constructor.
@@ -22,10 +25,8 @@ class PostOfficeOpenHours implements PostOfficeOpenHoursInterface
    * @param string $shortName
    * @param string $lockReason
    * @param int $dayOfWeekNumber
-   * @param string $dayOfWeekUa
-   * @param string $dayOfWeekEn
-   * @param string $shortDayOfWeekUa
-   * @param string|null $shortDayOfWeekEn
+   * @param StringMultilingualInterface $dayOfWeek
+   * @param StringMultilingualInterface $shortDayOfWeek
    * @param string $intervalType
    * @param int $parentPostOfficeId
    * @param string $openingTime
@@ -39,10 +40,8 @@ class PostOfficeOpenHours implements PostOfficeOpenHoursInterface
     protected readonly string $shortName,
     protected readonly string $lockReason,
     protected readonly int $dayOfWeekNumber,
-    protected readonly string $dayOfWeekUa,
-    protected readonly string $dayOfWeekEn,
-    protected readonly string $shortDayOfWeekUa,
-    protected readonly ?string $shortDayOfWeekEn,
+    protected readonly StringMultilingualInterface $dayOfWeek,
+    protected readonly StringMultilingualInterface $shortDayOfWeek,
     protected readonly string $intervalType,
     protected readonly int $parentPostOfficeId,
     protected readonly string $openingTime,
@@ -102,19 +101,17 @@ class PostOfficeOpenHours implements PostOfficeOpenHoursInterface
   /**
    * {@inheritDoc}
    */
-  public function getDayOfWeek(LanguagesEnumInterface $language = LanguagesEnum::UA): string
+  public function getDayOfWeek(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"dayOfWeek{$propSuffix}"};
+    return $this->dayOfWeek;
   }
 
   /**
    * {@inheritDoc}
    */
-  public function getShortDayOfWeek(LanguagesEnumInterface $language = LanguagesEnum::UA): ?string
+  public function getShortDayOfWeek(): StringMultilingualInterface
   {
-    $propSuffix = $language->propSuffix();
-    return $this->{"shortDayOfWeek{$propSuffix}"} ?? null;
+    return $this->shortDayOfWeek;
   }
 
   /**
@@ -162,32 +159,21 @@ class PostOfficeOpenHours implements PostOfficeOpenHoursInterface
    */
   public function toArray(?LanguagesEnumInterface $language = null): array
   {
-    $data = [
+    return [
       'id' => $this->getPostOfficeId(),
       'type' => $this->getPostOfficeType(),
       'name' => $this->getPostOfficeName(),
       'short_name' => $this->getPostOfficeShortName(),
       'lock_reason' => $this->getLockReason(),
       'days_of_week_number' => $this->getDayOfWeekNumber(),
+      'days_of_week' => $this->getDayOfWeek()->getByLangOrArray($language),
+      'short_days_of_week' => $this->getShortDayOfWeek()->getByLangOrArray($language),
       'interval_type' => $this->getIntervalType(),
       'parent_post_office_id' => $this->getParentPostOfficeId(),
       'opening_time' => $this->getOpeningTime(),
       'closing_time' => $this->getClosingTime(),
       'work_comment' => $this->getWorkComment(),
     ];
-
-    if (!$language) {
-      $data['days_of_week_ua'] = $this->getDayOfWeek();
-      $data['days_of_week_en'] = $this->getDayOfWeek(LanguagesEnum::EN);
-      $data['short_days_of_week_ua'] = $this->getShortDayOfWeek();
-      $data['short_days_of_week_en'] = $this->getShortDayOfWeek(LanguagesEnum::EN);
-    }
-    else {
-      $data['days_of_week'] = $this->getDayOfWeek($language);
-      $data['short_days_of_week'] = $this->getShortDayOfWeek($language);
-    }
-
-    return $data;
   }
 
   /**
@@ -201,10 +187,8 @@ class PostOfficeOpenHours implements PostOfficeOpenHoursInterface
       shortName: $entry['SHORTNAME'],
       lockReason: $entry['LOCK_REASON'],
       dayOfWeekNumber: (int) $entry['DAYOFWEEK_NUM'],
-      dayOfWeekUa: $entry['DAYOFWEEK_UA'],
-      dayOfWeekEn: $entry['DAYOFWEEK_EN'],
-      shortDayOfWeekUa: $entry['DAYOFWEEK_SHORTNAME_UA'],
-      shortDayOfWeekEn: $entry['DAYOFWEEK_SHORTNAME_EN'] ?? null,
+      dayOfWeek: self::getMultilingualStringFromEntryAndKey($entry, 'DAYOFWEEK_#lang'),
+      shortDayOfWeek: self::getMultilingualStringFromEntryAndKey($entry, 'DAYOFWEEK_SHORTNAME_#lang'),
       intervalType: $entry['INTERVALTYPE'],
       parentPostOfficeId: (int) $entry['POSTOFFICE_PARENT'],
       openingTime: $entry['TFROM'],
