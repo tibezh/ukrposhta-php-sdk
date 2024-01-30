@@ -21,6 +21,9 @@ class StringMultilingual implements StringMultilingualInterface
     ) {
     }
 
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return (string) $this->getByLanguage($this->getDefaultLanguage());

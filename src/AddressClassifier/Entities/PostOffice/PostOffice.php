@@ -438,7 +438,7 @@ class PostOffice implements PostOfficeInterface
             type: $entry['TYPE_LONG'],
             typeShort: $entry['TYPE_SHORT'],
             typeAcronym: $entry['TYPE_ACRONYM'],
-            postIndex: (int) $entry['POSTCODE'],
+            postIndex: (int) $entry['POSTINDEX'],
             postCode: (int) $entry['POSTCODE'],
             merezaNumber: (int) $entry['MEREZA_NUMBER'],
             lock: self::getMultilingualStringFromEntryAndKey($entry, 'POLOCK_#lang'),

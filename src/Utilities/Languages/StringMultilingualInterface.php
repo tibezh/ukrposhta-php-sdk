@@ -34,7 +34,7 @@ interface StringMultilingualInterface
      *
      * @return string|array<string, mixed>|null
      */
-    public function getByLangOrArray(?LanguagesEnumInterface $language): string|array|null;
+    public function getByLangOrArray(?LanguagesEnumInterface $language = null): string|array|null;
 
     /**
      * @return LanguagesEnumInterface[]
