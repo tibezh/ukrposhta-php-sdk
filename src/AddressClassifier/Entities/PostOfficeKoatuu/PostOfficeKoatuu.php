@@ -29,7 +29,6 @@ class PostOfficeKoatuu implements PostOfficeKoatuuInterface
      * @param StringMultilingualInterface $cityTypeName
      * @param StringMultilingualInterface $cityVpzName
      * @param int $cityVpzKoatuu
-     * @param int $cityVpzKatottg
      * @param int $streetVpzId
      * @param StringMultilingualInterface $streetVpzName
      * @param string|null $houseNumber
@@ -58,7 +57,6 @@ class PostOfficeKoatuu implements PostOfficeKoatuuInterface
         protected readonly StringMultilingualInterface $cityTypeName,
         protected readonly StringMultilingualInterface $cityVpzName,
         protected readonly int $cityVpzKoatuu,
-        protected readonly int $cityVpzKatottg,
         protected readonly int $streetVpzId,
         protected readonly StringMultilingualInterface $streetVpzName,
         protected readonly ?string $houseNumber,
@@ -149,14 +147,6 @@ class PostOfficeKoatuu implements PostOfficeKoatuuInterface
     public function getCityVpzKoatuu(): int
     {
         return $this->cityVpzKoatuu;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getCityVpzKatottg(): int
-    {
-        return $this->cityVpzKatottg;
     }
 
     /**
@@ -310,7 +300,6 @@ class PostOfficeKoatuu implements PostOfficeKoatuuInterface
           'city_type_name' => $this->getCityTypeName()->getByLangOrArray($language),
           'city_vpz_name' => $this->getCityVpzName()->getByLangOrArray($language),
           'city_vpz_koatuu' => $this->getCityVpzKoatuu(),
-          'city_vpz_katottg' => $this->getCityKatottg(),
           'street_vpz_id' => $this->getStreetVpzId(),
           'street_vpz_name' => $this->getStreetVpzName()->getByLangOrArray($language),
           'house_number' => $this->getHouseNumber(),
@@ -322,6 +311,7 @@ class PostOfficeKoatuu implements PostOfficeKoatuuInterface
           'latitude' => $this->getLatitude(),
           'type_id' => $this->getTypeId(),
           'type_acronym_name' => $this->getTypeAcronymName(),
+          'type_long_name' => $this->getTypeLongName(),
           'has_post_terminal' => $this->hasPostTerminal(),
           'is_automated' => $this->isAutomated(),
           'is_security' => $this->isSecurity(),
@@ -345,7 +335,6 @@ class PostOfficeKoatuu implements PostOfficeKoatuuInterface
             cityTypeName: self::getMultilingualStringFromEntryAndKey($entry, 'CITY_#lang_TYPE'),
             cityVpzName: self::getMultilingualStringFromEntryAndKey($entry, 'CITY_#lang_VPZ'),
             cityVpzKoatuu: (int) $entry['CITY_VPZ_KOATUU'],
-            cityVpzKatottg: (int) $entry['CITY_KATOTTG'],
             streetVpzId: (int) $entry['STREET_ID_VPZ'],
             streetVpzName: self::getMultilingualStringFromEntryAndKey($entry, 'STREET_#lang_VPZ'),
             houseNumber: $entry['HOUSENUMBER'],

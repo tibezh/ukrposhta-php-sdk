@@ -10,7 +10,7 @@ use Ukrposhta\Utilities\Languages\StringMultilingualInterface;
 /**
  * Provides required methods for PostOfficeSettlement entity.
  */
-interface PostOfficeSettlementInterface
+interface PostOfficeSettlementInterface extends \Ukrposhta\AddressClassifier\Entities\EntityInterface
 {
 
     /**

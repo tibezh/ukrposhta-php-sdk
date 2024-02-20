@@ -81,14 +81,6 @@ interface PostOfficeKoatuuInterface extends EntityInterface
     public function getCityVpzKoatuu(): int;
 
     /**
-     * Gets City VPZ Katottg.
-     *
-     * @return int
-     *   City VPZ Katottg of the Post Office.
-     */
-    public function getCityVpzKatottg(): int;
-
-    /**
      * Gets Street VPZ ID.
      *
      * @return int
