@@ -10,8 +10,17 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Ukrposhta\AddressClassifier\AddressClassifier;
+use Ukrposhta\AddressClassifier\Entities\City\CityCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\City\CityInterface;
+use Ukrposhta\AddressClassifier\Entities\CourierArea\CourierAreaInterface;
 use Ukrposhta\AddressClassifier\Entities\District\DistrictInterface;
+use Ukrposhta\AddressClassifier\Entities\House\HouseCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\House\HouseInterface;
+use Ukrposhta\AddressClassifier\Entities\PostOffice\PostOfficeCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\PostOffice\PostOfficeInterface;
 use Ukrposhta\AddressClassifier\Entities\Region\RegionInterface;
+use Ukrposhta\AddressClassifier\Entities\Street\StreetCollectionInterface;
+use Ukrposhta\AddressClassifier\Entities\Street\StreetInterface;
 use Ukrposhta\Exceptions\NoCredentialException;
 use Ukrposhta\Request\RequestInterface;
 use Ukrposhta\Response\ResponseInterface;
@@ -145,11 +154,11 @@ class AddressClassifierTest extends TestCase
         $this->assertCount(2, $regions->all());
 
         foreach ($regions->all() as $key => $region) {
-            $region_id = $key + 1;
+            $regionId = $key + 1;
             $this->assertInstanceOf(RegionInterface::class, $region);
-            $this->assertEquals($region_id, $region->getId());
-            $this->assertEquals("Test Region UA $region_id", $region->getName()->getByLanguage(LanguagesEnum::UA));
-            $this->assertEquals("Test Region EN $region_id", $region->getName()->getByLanguage(LanguagesEnum::EN));
+            $this->assertEquals($regionId, $region->getId());
+            $this->assertEquals("Test Region UA $regionId", $region->getName()->getByLanguage(LanguagesEnum::UA));
+            $this->assertEquals("Test Region EN $regionId", $region->getName()->getByLanguage(LanguagesEnum::EN));
             $this->assertEquals($key === 0 ? 123 : 321, $region->getKoatuu());
             $this->assertEquals($key === 0 ? 321 : 123, $region->getKatottg());
         }
@@ -189,13 +198,623 @@ class AddressClassifierTest extends TestCase
         $this->assertCount(2, $districts->all());
 
         foreach ($districts->all() as $key => $district) {
-            $district_id = $key + 1;
+            $districtId = $key + 1;
             $this->assertInstanceOf(DistrictInterface::class, $district);
-            $this->assertEquals($district_id, $district->getId());
-            $this->assertEquals("District $district_id UA", $district->getName()->getByLanguage(LanguagesEnum::UA));
-            $this->assertEquals("District $district_id EN", $district->getName()->getByLanguage(LanguagesEnum::EN));
+            $this->assertEquals($districtId, $district->getId());
+            $this->assertEquals("District $districtId UA", $district->getName()->getByLanguage(LanguagesEnum::UA));
+            $this->assertEquals("District $districtId EN", $district->getName()->getByLanguage(LanguagesEnum::EN));
             $this->assertEquals($key === 0 ? 123 : 321, $district->getKoatuu());
             $this->assertEquals($key === 0 ? 321 : 123, $district->getKatottg());
+        }
+    }
+
+    /** @phpstan-ignore-next-line */
+    private function getRequestCityResponseData(): array
+    {
+        return [
+            'Entries' => [
+                'Entry' => [
+                    [
+                        'CITY_ID' => '1',
+                        'CITY_UA' => 'City 1 UA',
+                        'CITY_EN' => 'City 1 EN',
+                        'CITYTYPE_UA' => 'City 1 type UA',
+                        'CITYTYPE_EN' => 'City 1 type EN',
+                        'SHORTCITYTYPE_UA' => 'City 1 short type UA',
+                        'SHORTCITYTYPE_EN' => 'City 1 short type EN',
+                        'CITY_KATOTTG' => '2',
+                        'CITY_KOATUU' => '3',
+                        'LONGITUDE' => '1.123',
+                        'LATTITUDE' => '2.123',
+                        'POPULATION' => '112345',
+                    ],
+                    [
+                        'CITY_ID' => '2',
+                        'CITY_UA' => 'City 2 UA',
+                        'CITY_EN' => 'City 2 EN',
+                        'CITYTYPE_UA' => 'City 2 type UA',
+                        'CITYTYPE_EN' => 'City 2 type EN',
+                        'SHORTCITYTYPE_UA' => 'City 2 short type UA',
+                        'SHORTCITYTYPE_EN' => 'City 2 short type EN',
+                        'CITY_KATOTTG' => '3',
+                        'CITY_KOATUU' => '4',
+                        'LONGITUDE' => '2.123',
+                        'LATTITUDE' => '3.123',
+                        'POPULATION' => '212345',
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    private function assertCityResponseData(CityInterface $city, int $cityId): void
+    {
+        $this->assertEquals("City {$cityId} UA", $city->getName()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals("City {$cityId} EN", $city->getName()->getByLanguage(LanguagesEnum::EN));
+        $this->assertEquals("City {$cityId} type UA", $city->getType()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals("City {$cityId} type EN", $city->getType()->getByLanguage(LanguagesEnum::EN));
+        $this->assertEquals("City {$cityId} short type UA", $city->getShortType()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals("City {$cityId} short type EN", $city->getShortType()->getByLanguage(LanguagesEnum::EN));
+        $this->assertEquals($cityId + 1, $city->getKatottg());
+        $this->assertEquals($cityId + 2, $city->getKoatuu());
+        $this->assertEquals((float) "$cityId.123", $city->getLongitude());
+        $this->assertEquals((float) (($cityId + 1) . '.123'), $city->getLatitude());
+        $this->assertEquals((int) "{$cityId}12345", $city->getPopulation());
+    }
+
+    public function testRequestCityByRegionIdAndDistrictId(): void
+    {
+        $responseData = $this->getRequestCityResponseData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $regionId = 1;
+        $districtId = 2;
+        $nameUa = 'Name UA';
+        $cityCollection = $this->addressClassifier->requestCityByRegionIdAndDistrictId($regionId, $districtId, $nameUa);
+
+        // Base assertions.
+        $this->assertInstanceOf(CityCollectionInterface::class, $cityCollection);
+        $cities = $cityCollection->all();
+        $this->assertCount(2, $cities);
+
+        // Check response data.
+        foreach ($cities as $key => $city) {
+            $cityId = $key + 1;
+            $this->assertInstanceOf(CityInterface::class, $city);
+            $this->assertCityResponseData($city, $cityId);
+        }
+    }
+
+    public function testRequestCityByDistrictId(): void
+    {
+        $responseData = $this->getRequestCityResponseData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $districtId = 1;
+        $nameUa = 'Name UA';
+        $cityCollection = $this->addressClassifier->requestCityByDistrictId($districtId, $nameUa);
+
+        // Base assertions.
+        $this->assertInstanceOf(CityCollectionInterface::class, $cityCollection);
+        $cities = $cityCollection->all();
+        $this->assertCount(2, $cities);
+
+        // Check response data.
+        foreach ($cities as $key => $city) {
+            $cityId = $key + 1;
+            $this->assertInstanceOf(CityInterface::class, $city);
+            $this->assertCityResponseData($city, $cityId);
+        }
+    }
+
+    public function testRequestCityByRegionId(): void
+    {
+        $responseData = $this->getRequestCityResponseData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $regionId = 1;
+        $nameUa = 'Name UA';
+        $cityCollection = $this->addressClassifier->requestCityByRegionId($regionId, $nameUa);
+
+        // Base assertions.
+        $this->assertInstanceOf(CityCollectionInterface::class, $cityCollection);
+        $cities = $cityCollection->all();
+        $this->assertCount(2, $cities);
+
+        // Check response data.
+        foreach ($cities as $key => $city) {
+            $cityId = $key + 1;
+            $this->assertInstanceOf(CityInterface::class, $city);
+            $this->assertCityResponseData($city, $cityId);
+        }
+    }
+
+    public function testRequestStreetByRegionIdAndDistrictIdAndCityId(): void
+    {
+        $responseData = [
+            'Entries' => [
+                'Entry' => [
+                    [
+                        'STREET_ID' => '1',
+                        'STREET_UA' => 'Main Street UA',
+                        'STREET_EN' => 'Main Street EN',
+                        'STREETTYPE_UA' => 'Street UA',
+                        'STREETTYPE_EN' => 'Street EN',
+                        'SHORTSTREETTYPE_UA' => 'St UA',
+                        'SHORTSTREETTYPE_EN' => 'St EN'
+                    ],
+                    [
+                        'STREET_ID' => '2',
+                        'STREET_UA' => 'Second Avenue UA',
+                        'STREET_EN' => 'Second Avenue EN',
+                        'STREETTYPE_UA' => 'Avenue UA',
+                        'STREETTYPE_EN' => 'Avenue EN',
+                        'SHORTSTREETTYPE_UA' => 'Ave UA',
+                        'SHORTSTREETTYPE_EN' => 'Ave EN'
+                    ],
+                ]
+            ]
+        ];
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $regionId = 1;
+        $districtId = 2;
+        $cityId = 3;
+        $nameUa = 'name ua';
+        $streetCollection = $this->addressClassifier->requestStreetByRegionIdAndDistrictIdAndCityId($regionId, $districtId, $cityId, $nameUa);
+
+        $this->assertInstanceOf(StreetCollectionInterface::class, $streetCollection);
+        /** @var StreetInterface[] $streets */
+        $streets = $streetCollection->all();
+        $this->assertCount(2, $streets);
+
+        $this->assertInstanceOf(StreetInterface::class, $streets[0]);
+        $this->assertEquals('1', $streets[0]->getId());
+        $this->assertEquals('Main Street UA', $streets[0]->getName()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals('Main Street EN', $streets[0]->getName()->getByLanguage(LanguagesEnum::EN));
+        $this->assertEquals('Street UA', $streets[0]->getType()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals('Street EN', $streets[0]->getType()->getByLanguage(LanguagesEnum::EN));
+        $this->assertEquals('St UA', $streets[0]->getShortType()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals('St EN', $streets[0]->getShortType()->getByLanguage(LanguagesEnum::EN));
+
+        $this->assertInstanceOf(StreetInterface::class, $streets[1]);
+        $this->assertEquals('2', $streets[1]->getId());
+        $this->assertEquals('Second Avenue UA', $streets[1]->getName()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals('Second Avenue EN', $streets[1]->getName()->getByLanguage(LanguagesEnum::EN));
+        $this->assertEquals('Avenue UA', $streets[1]->getType()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals('Avenue EN', $streets[1]->getType()->getByLanguage(LanguagesEnum::EN));
+        $this->assertEquals('Ave UA', $streets[1]->getShortType()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals('Ave EN', $streets[1]->getShortType()->getByLanguage(LanguagesEnum::EN));
+    }
+
+    public function testRequestAddressHouseByStreetId(): void
+    {
+        $responseData = [
+            'Entries' => [
+                'Entry' => [
+                    ['HOUSENUMBER_UA' => '10A', 'POSTCODE' => '12345'],
+                    ['HOUSENUMBER_UA' => '10B', 'POSTCODE' => '67890']
+                ]
+            ]
+        ];
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $streetId = 100;
+        $houseNumber = '10';
+        $houseCollection = $this->addressClassifier->requestAddressHouseByStreetId($streetId, $houseNumber);
+
+        // Verify the response is correctly processed into a HouseCollectionInterface
+        $this->assertInstanceOf(HouseCollectionInterface::class, $houseCollection);
+        /** @var HouseInterface[] $houses */
+        $houses = $houseCollection->all();
+        $this->assertCount(2, $houses);
+
+        // Further assertions to verify the details of the houses
+        $this->assertInstanceOf(HouseInterface::class, $houses[0]);
+        $this->assertEquals('10A', $houses[0]->getHouseNumber());
+        $this->assertEquals(12345, $houses[0]->getPostCode());
+
+        $this->assertInstanceOf(HouseInterface::class, $houses[1]);
+        $this->assertEquals('10B', $houses[1]->getHouseNumber());
+        $this->assertEquals(67890, $houses[1]->getPostCode());
+    }
+
+    public function testRequestCourierAreaByPostCode1(): void
+    {
+        $responseData = ['Entries' => ['Entry' => [['IS_COURIERAREA' => '1']]]];
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+        $postCode = 12345;
+        $courierArea = $this->addressClassifier->requestCourierAreaByPostCode($postCode);
+        $this->assertInstanceOf(CourierAreaInterface::class, $courierArea);
+        $this->assertTrue($courierArea->isCourierArea());
+    }
+
+    public function testRequestCourierAreaByPostCode2(): void
+    {
+        $responseData = ['Entries' => ['Entry' => [['IS_COURIERAREA' => '0']]]];
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+        $postCode = 67890;
+        $courierArea = $this->addressClassifier->requestCourierAreaByPostCode($postCode);
+        $this->assertInstanceOf(CourierAreaInterface::class, $courierArea);
+        $this->assertFalse($courierArea->isCourierArea());
+    }
+
+    public function testRequestCourierAreaByPostCode3(): void
+    {
+        $responseData = [];
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+        $postCode = 0;
+        $courierArea = $this->addressClassifier->requestCourierAreaByPostCode($postCode);
+        $this->assertInstanceOf(CourierAreaInterface::class, $courierArea);
+        $this->assertFalse($courierArea->isCourierArea());
+    }
+
+    /** @phpstan-ignore-next-line */
+    private function getRequestPostOfficesData(): array
+    {
+        return [
+            'Entries' => [
+                'Entry' => [
+                    [
+                        'ID' => '1',
+                        'PO_CODE' => '1',
+                        'PO_LONG' => 'Name long 1',
+                        'PO_SHORT' => 'Name short 1',
+                        'TYPE_LONG' => 'Type long 1',
+                        'TYPE_SHORT' => 'Type short 1',
+                        'TYPE_ACRONYM' => 'Type acronym 1',
+                        'POSTINDEX' => '1',
+                        'POSTCODE' => '1',
+                        'MEREZA_NUMBER' => '1',
+                        'POLOCK_UA' => 'Lock UA 1',
+                        'POLOCK_EN' => 'Lock EN 1',
+                        'LOCK_CODE' => '1',
+                        'POREGION_ID' => '1',
+                        'PDREGION_ID' => '1',
+                        'PODISTRICT_ID' => '1',
+                        'PDDISTRICT_ID' => '1',
+                        'POCITY_ID' => '1',
+                        'CITYTYPE_UA' => 'City type 1',
+                        'PDCITY_ID' => '1',
+                        'PDCITY_UA' => 'Service area city UA 1',
+                        'PDCITY_EN' => 'Service area city EN 1',
+                        'PDCITYTYPE_UA' => 'Service area city type UA 1',
+                        'PDCITYTYPE_EN' => 'Service area city type EN 1',
+                        'SHORTPDCITYTYPE_UA' => 'Service area short city type UA 1',
+                        'SHORTPDCITYTYPE_EN' => 'Service area short city type EN 1',
+                        'POSTREET_ID' => '1',
+                        'PARENT_ID' => '1',
+                        'ADDRESS' => 'Address 1',
+                        'PHONE' => '1-123',
+                        'LONGITUDE' => '1.123',
+                        'LATTITUDE' => '2.123',
+                        'ISVPZ' => '1',
+                        'AVALIBLE' => '1',
+                        'MRTPS' => '1',
+                        'TECHINDEX' => '1',
+                        'IS_NODISTRICT' => '0',
+                    ],
+                    [
+                        'ID' => '2',
+                        'PO_CODE' => '2',
+                        'PO_LONG' => 'Name long 2',
+                        'PO_SHORT' => 'Name short 2',
+                        'TYPE_LONG' => 'Type long 2',
+                        'TYPE_SHORT' => 'Type short 2',
+                        'TYPE_ACRONYM' => 'Type acronym 2',
+                        'POSTINDEX' => '2',
+                        'POSTCODE' => '2',
+                        'MEREZA_NUMBER' => '2',
+                        'POLOCK_UA' => 'Lock UA 2',
+                        'POLOCK_EN' => 'Lock EN 2',
+                        'LOCK_CODE' => '2',
+                        'POREGION_ID' => '2',
+                        'PDREGION_ID' => '2',
+                        'PODISTRICT_ID' => '2',
+                        'PDDISTRICT_ID' => '2',
+                        'POCITY_ID' => '2',
+                        'CITYTYPE_UA' => 'City type 2',
+                        'PDCITY_ID' => '2',
+                        'PDCITY_UA' => 'Service area city UA 2',
+                        'PDCITY_EN' => 'Service area city EN 2',
+                        'PDCITYTYPE_UA' => 'Service area city type UA 2',
+                        'PDCITYTYPE_EN' => 'Service area city type EN 2',
+                        'SHORTPDCITYTYPE_UA' => 'Service area short city type UA 2',
+                        'SHORTPDCITYTYPE_EN' => 'Service area short city type EN 2',
+                        'POSTREET_ID' => '2',
+                        'PARENT_ID' => '2',
+                        'ADDRESS' => 'Address 2',
+                        'PHONE' => '2-123',
+                        'LONGITUDE' => '2.123',
+                        'LATTITUDE' => '3.123',
+                        'ISVPZ' => '0',
+                        'AVALIBLE' => '0',
+                        'TECHINDEX' => '2',
+                        'IS_NODISTRICT' => '1',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    private function assertPostOfficeResponseData(PostOfficeInterface $postOffice, int $postOfficeId): void
+    {
+        $this->assertEquals($postOfficeId, $postOffice->getId());
+        $this->assertEquals($postOfficeId, $postOffice->getCode());
+        $this->assertEquals("Name long $postOfficeId", $postOffice->getName());
+        $this->assertEquals("Name short $postOfficeId", $postOffice->getShortName());
+        $this->assertEquals("Type long $postOfficeId", $postOffice->getType());
+        $this->assertEquals("Type short $postOfficeId", $postOffice->getShortType());
+        $this->assertEquals("Type acronym $postOfficeId", $postOffice->getTypeAcronymName());
+        $this->assertEquals($postOfficeId, $postOffice->getPostIndex());
+        $this->assertEquals($postOfficeId, $postOffice->getPostCode());
+        $this->assertEquals($postOfficeId, $postOffice->getMerezaNumber());
+        $this->assertEquals("Lock UA $postOfficeId", $postOffice->getLock()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals("Lock EN $postOfficeId", $postOffice->getLock()->getByLanguage(LanguagesEnum::EN));
+        $this->assertEquals($postOfficeId, $postOffice->getLockCode());
+        $this->assertEquals($postOfficeId, $postOffice->getRegionId());
+        $this->assertEquals($postOfficeId, $postOffice->getServiceAreaRegionId());
+        $this->assertEquals($postOfficeId, $postOffice->getDistrictId());
+        $this->assertEquals($postOfficeId, $postOffice->getServiceAreaDistrictId());
+        $this->assertEquals($postOfficeId, $postOffice->getCityId());
+        $this->assertEquals("City type $postOfficeId", $postOffice->getCityType());
+        $this->assertEquals($postOfficeId, $postOffice->getServiceAreaCityId());
+        $this->assertEquals("Service area city UA $postOfficeId", $postOffice->getServiceAreaCity()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals("Service area city EN $postOfficeId", $postOffice->getServiceAreaCity()->getByLanguage(LanguagesEnum::EN));
+        $this->assertEquals("Service area city type UA $postOfficeId", $postOffice->getServiceAreaCityType()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals("Service area city type EN $postOfficeId", $postOffice->getServiceAreaCityType()->getByLanguage(LanguagesEnum::EN));
+        $this->assertEquals("Service area short city type UA $postOfficeId", $postOffice->getServiceAreaShortCityType()->getByLanguage(LanguagesEnum::UA));
+        $this->assertEquals("Service area short city type EN $postOfficeId", $postOffice->getServiceAreaShortCityType()->getByLanguage(LanguagesEnum::EN));
+        $this->assertEquals($postOfficeId, $postOffice->getStreetId());
+        $this->assertEquals($postOfficeId, $postOffice->getParentId());
+        $this->assertEquals("Address $postOfficeId", $postOffice->getAddress());
+        $this->assertEquals("$postOfficeId-123", $postOffice->getPhoneNumber());
+        $this->assertEquals((float) ("$postOfficeId.123"), $postOffice->getLongitude());
+        $this->assertEquals((float) (($postOfficeId + 1) . '.123'), $postOffice->getLatitude());
+        $this->assertEquals($postOfficeId === 1, $postOffice->isVpz());
+        $this->assertEquals($postOfficeId === 1, $postOffice->isAvailable());
+        $this->assertEquals($postOfficeId === 1 ? 1 : null, $postOffice->getMrtps());
+        $this->assertEquals($postOfficeId, $postOffice->getTechIndex());
+        $this->assertEquals($postOfficeId === 1, $postOffice->isDeliveryPossible());
+    }
+
+    public function testRequestPostOfficeByPostCode(): void
+    {
+        $responseData = $this->getRequestPostOfficesData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $postCode = 123;
+        $postOfficeCollection = $this->addressClassifier->requestPostOfficeByPostCode($postCode);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeCollectionInterface::class, $postOfficeCollection);
+        $postOffices = $postOfficeCollection->all();
+        $this->assertCount(2, $postOffices);
+
+        // Check response data.
+        foreach ($postOffices as $key => $postOffice) {
+            $postOfficeId = $key + 1;
+            $this->assertInstanceOf(PostOfficeInterface::class, $postOffice);
+            $this->assertPostOfficeResponseData($postOffice, $postOfficeId);
+        }
+    }
+
+    public function testRequestPostOfficeByPostIndex(): void
+    {
+        $responseData = $this->getRequestPostOfficesData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $postIndex = 321;
+        $postOfficeCollection = $this->addressClassifier->requestPostOfficeByPostIndex($postIndex);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeCollectionInterface::class, $postOfficeCollection);
+        $postOffices = $postOfficeCollection->all();
+        $this->assertCount(2, $postOffices);
+
+        // Check response data.
+        foreach ($postOffices as $key => $postOffice) {
+            $postOfficeId = $key + 1;
+            $this->assertInstanceOf(PostOfficeInterface::class, $postOffice);
+            $this->assertPostOfficeResponseData($postOffice, $postOfficeId);
+        }
+    }
+
+    public function testRequestPostOfficeByCityId(): void
+    {
+        $responseData = $this->getRequestPostOfficesData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $cityId = 123;
+        $postOfficeCollection = $this->addressClassifier->requestPostOfficeByCityId($cityId);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeCollectionInterface::class, $postOfficeCollection);
+        $postOffices = $postOfficeCollection->all();
+        $this->assertCount(2, $postOffices);
+
+        // Check response data.
+        foreach ($postOffices as $key => $postOffice) {
+            $postOfficeId = $key + 1;
+            $this->assertInstanceOf(PostOfficeInterface::class, $postOffice);
+            $this->assertPostOfficeResponseData($postOffice, $postOfficeId);
+        }
+    }
+
+    public function testRequestPostOfficeByDistrictId(): void
+    {
+        $responseData = $this->getRequestPostOfficesData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $districtId = 321;
+        $postOfficeCollection = $this->addressClassifier->requestPostOfficeByDistrictId($districtId);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeCollectionInterface::class, $postOfficeCollection);
+        $postOffices = $postOfficeCollection->all();
+        $this->assertCount(2, $postOffices);
+
+        // Check response data.
+        foreach ($postOffices as $key => $postOffice) {
+            $postOfficeId = $key + 1;
+            $this->assertInstanceOf(PostOfficeInterface::class, $postOffice);
+            $this->assertPostOfficeResponseData($postOffice, $postOfficeId);
+        }
+    }
+
+    public function testRequestPostOfficeByStreetId(): void
+    {
+        $responseData = $this->getRequestPostOfficesData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $streetId = 123;
+        $postOfficeCollection = $this->addressClassifier->requestPostOfficeByStreetId($streetId);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeCollectionInterface::class, $postOfficeCollection);
+        $postOffices = $postOfficeCollection->all();
+        $this->assertCount(2, $postOffices);
+
+        // Check response data.
+        foreach ($postOffices as $key => $postOffice) {
+            $postOfficeId = $key + 1;
+            $this->assertInstanceOf(PostOfficeInterface::class, $postOffice);
+            $this->assertPostOfficeResponseData($postOffice, $postOfficeId);
+        }
+    }
+
+    public function testRequestPostOfficeByRegionId(): void
+    {
+        $responseData = $this->getRequestPostOfficesData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $regionId = 321;
+        $postOfficeCollection = $this->addressClassifier->requestPostOfficeByRegionId($regionId);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeCollectionInterface::class, $postOfficeCollection);
+        $postOffices = $postOfficeCollection->all();
+        $this->assertCount(2, $postOffices);
+
+        // Check response data.
+        foreach ($postOffices as $key => $postOffice) {
+            $postOfficeId = $key + 1;
+            $this->assertInstanceOf(PostOfficeInterface::class, $postOffice);
+            $this->assertPostOfficeResponseData($postOffice, $postOfficeId);
+        }
+    }
+
+    public function testRequestPostOfficeByServiceAreaCityId(): void
+    {
+        $responseData = $this->getRequestPostOfficesData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $serviceAreaCityId = 123;
+        $postOfficeCollection = $this->addressClassifier->requestPostOfficeByServiceAreaCityId($serviceAreaCityId);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeCollectionInterface::class, $postOfficeCollection);
+        $postOffices = $postOfficeCollection->all();
+        $this->assertCount(2, $postOffices);
+
+        // Check response data.
+        foreach ($postOffices as $key => $postOffice) {
+            $postOfficeId = $key + 1;
+            $this->assertInstanceOf(PostOfficeInterface::class, $postOffice);
+            $this->assertPostOfficeResponseData($postOffice, $postOfficeId);
+        }
+    }
+
+    public function testRequestPostOfficeByServiceAreaDistrictId(): void
+    {
+        $responseData = $this->getRequestPostOfficesData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $serviceAreaDistrictId = 321;
+        $postOfficeCollection = $this->addressClassifier->requestPostOfficeByServiceAreaDistrictId($serviceAreaDistrictId);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeCollectionInterface::class, $postOfficeCollection);
+        $postOffices = $postOfficeCollection->all();
+        $this->assertCount(2, $postOffices);
+
+        // Check response data.
+        foreach ($postOffices as $key => $postOffice) {
+            $postOfficeId = $key + 1;
+            $this->assertInstanceOf(PostOfficeInterface::class, $postOffice);
+            $this->assertPostOfficeResponseData($postOffice, $postOfficeId);
+        }
+    }
+
+    public function testRequestPostOfficeByServiceAreaRegionId(): void
+    {
+        $responseData = $this->getRequestPostOfficesData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $serviceAreRegionId = 123;
+        $postOfficeCollection = $this->addressClassifier->requestPostOfficeByServiceAreaRegionId($serviceAreRegionId);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeCollectionInterface::class, $postOfficeCollection);
+        $postOffices = $postOfficeCollection->all();
+        $this->assertCount(2, $postOffices);
+
+        // Check response data.
+        foreach ($postOffices as $key => $postOffice) {
+            $postOfficeId = $key + 1;
+            $this->assertInstanceOf(PostOfficeInterface::class, $postOffice);
+            $this->assertPostOfficeResponseData($postOffice, $postOfficeId);
         }
     }
 

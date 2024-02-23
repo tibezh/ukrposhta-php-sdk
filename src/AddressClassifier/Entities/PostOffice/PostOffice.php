@@ -461,7 +461,7 @@ class PostOffice implements PostOfficeInterface
             latitude: (float) $entry['LATTITUDE'],
             isVpz: (bool) $entry['ISVPZ'],
             isAvailable: (bool) $entry['AVALIBLE'],
-            mrtps: $entry['MRTPS'] ? (int) $entry['MRTPS'] : null,
+            mrtps: isset($entry['MRTPS']) ? (int) $entry['MRTPS'] : null,
             techIndex: (int) $entry['TECHINDEX'],
             isDeliveryPossible: $entry['IS_NODISTRICT'] == 0,
         );
