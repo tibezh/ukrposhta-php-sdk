@@ -18,6 +18,8 @@ use Ukrposhta\AddressClassifier\Entities\House\HouseCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\House\HouseInterface;
 use Ukrposhta\AddressClassifier\Entities\PostOffice\PostOfficeCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\PostOffice\PostOfficeInterface;
+use Ukrposhta\AddressClassifier\Entities\PostOfficeSettlement\PostOfficeSettlementCollection;
+use Ukrposhta\AddressClassifier\Entities\PostOfficeSettlement\PostOfficeSettlementInterface;
 use Ukrposhta\AddressClassifier\Entities\Region\RegionInterface;
 use Ukrposhta\AddressClassifier\Entities\Street\StreetCollectionInterface;
 use Ukrposhta\AddressClassifier\Entities\Street\StreetInterface;
@@ -815,6 +817,282 @@ class AddressClassifierTest extends TestCase
             $postOfficeId = $key + 1;
             $this->assertInstanceOf(PostOfficeInterface::class, $postOffice);
             $this->assertPostOfficeResponseData($postOffice, $postOfficeId);
+        }
+    }
+
+    /** @phpstan-ignore-next-line */
+    private function getRequestPostOfficeSettlementData(): array
+    {
+        return [
+          'Entries' => [
+              'Entry' => [
+                  [
+                      'ID' => '1',
+                      'PO_LONG' => 'Main Office 1',
+                      'PO_SHORT' => 'MO 1',
+                      'TYPE_LONG' => 'Office Type 1',
+                      'TYPE_SHORT' => 'OT 1',
+                      'TYPE_ACRONYM' => 'OTA 1',
+                      'PARENT_ID' => '2',
+                      'CITY_ID' => '3',
+                      'CITY_UA' => 'CityName 1 UA',
+                      'CITY_EN' => 'CityName 1 EN',
+                      'CITYTYPE_UA' => 'CityType 1 UA',
+                      'CITYTYPE_EN' => 'CityType 1 EN',
+                      'SHORTCITYTYPE_UA' => 'ShortCityType 1 UA',
+                      'SHORTCITYTYPE_EN' => 'ShortCityType 1 EN',
+                      'POSTINDEX' => '111',
+                      'REGION_ID' => '4',
+                      'REGION_UA' => 'RegionName 1 UA',
+                      'REGION_EN' => 'RegionName 1 EN',
+                      'DISTRICT_ID' => '5',
+                      'DISTRICT_UA' => 'DistrictName 1 UA',
+                      'DISTRICT_EN' => 'DistrictName 1 EN',
+                      'STREET_UA' => 'StreetName 1 UA',
+                      'STREET_EN' => 'StreetName 1 EN',
+                      'STREETTYPE_UA' => 'StreetType 1 UA',
+                      'STREETTYPE_EN' => 'StreetType 1 EN',
+                      'HOUSENUMBER' => '1A',
+                      'ADDRESS' => '1 Main Street',
+                      'LONGITUDE' => '10.1111',
+                      'LATTITUDE' => '20.2222',
+                      'IS_CASH' => '1',
+                      'IS_DHL' => '0',
+                      'IS_SMARTBOX' => '1',
+                      'PELPEREKAZY' => '0',
+                      'IS_FLAGMAN' => '1',
+                      'POSTTERMINAL' => '0',
+                      'IS_AUTOMATED' => '1',
+                      'IS_SECURITY' => '0',
+                      'LOCK_CODE' => '111',
+                      'LOCK_UA' => 'LockReason 1 UA',
+                      'LOCK_EN' => 'LockReason 1 EN',
+                      'PHONE' => '111-111',
+                      'ISVPZ' => '1',
+                      'MEREZA_NUMBER' => '1222',
+                      'TECHINDEX' => '222',
+                  ],
+                  [
+                      'ID' => '2',
+                      'PO_LONG' => 'Main Office 2',
+                      'PO_SHORT' => 'MO 2',
+                      'TYPE_LONG' => 'Office Type 2',
+                      'TYPE_SHORT' => 'OT 2',
+                      'TYPE_ACRONYM' => 'OTA 2',
+                      'PARENT_ID' => '3',
+                      'CITY_ID' => '4',
+                      'CITY_UA' => 'CityName 2 UA',
+                      'CITY_EN' => 'CityName 2 EN',
+                      'CITYTYPE_UA' => 'CityType 2 UA',
+                      'CITYTYPE_EN' => 'CityType 2 EN',
+                      'SHORTCITYTYPE_UA' => 'ShortCityType 2 UA',
+                      'SHORTCITYTYPE_EN' => 'ShortCityType 2 EN',
+                      'POSTINDEX' => '222',
+                      'REGION_ID' => '5',
+                      'REGION_UA' => 'RegionName 2 UA',
+                      'REGION_EN' => 'RegionName 2 EN',
+                      'DISTRICT_ID' => '6',
+                      'DISTRICT_UA' => 'DistrictName 2 UA',
+                      'DISTRICT_EN' => 'DistrictName 2 EN',
+                      'STREET_UA' => 'StreetName 2 UA',
+                      'STREET_EN' => 'StreetName 2 EN',
+                      'STREETTYPE_UA' => 'StreetType 2 UA',
+                      'STREETTYPE_EN' => 'StreetType 2 EN',
+                      'HOUSENUMBER' => '2A',
+                      'ADDRESS' => '2 Main Street',
+                      'LONGITUDE' => '20.2222',
+                      'LATTITUDE' => '30.3333',
+                      'IS_CASH' => '0',
+                      'IS_DHL' => '1',
+                      'IS_SMARTBOX' => '0',
+                      'PELPEREKAZY' => '1',
+                      'IS_FLAGMAN' => '0',
+                      'POSTTERMINAL' => '1',
+                      'IS_AUTOMATED' => '0',
+                      'IS_SECURITY' => '1',
+                      'LOCK_CODE' => '222',
+                      'LOCK_UA' => 'LockReason 2 UA',
+                      'LOCK_EN' => 'LockReason 2 EN',
+                      'PHONE' => '222-222',
+                      'ISVPZ' => '0',
+                      'MEREZA_NUMBER' => '2333',
+                      'TECHINDEX' => '333',
+                  ],
+              ],
+          ],
+        ];
+    }
+
+    private function assertPostOfficeSettlementsResponseData(PostOfficeSettlementInterface $postOfficeSettlement, int $postOfficeSettlementId): void
+    {
+        $this->assertEquals($postOfficeSettlementId, $postOfficeSettlement->getId());
+        $this->assertEquals("Main Office $postOfficeSettlementId", $postOfficeSettlement->getName());
+        $this->assertEquals("MO $postOfficeSettlementId", $postOfficeSettlement->getShortName());
+        $this->assertEquals("Office Type $postOfficeSettlementId", $postOfficeSettlement->getType());
+        $this->assertEquals("OT $postOfficeSettlementId", $postOfficeSettlement->getShortType());
+        $this->assertEquals("OTA $postOfficeSettlementId", $postOfficeSettlement->getTypeAcronym());
+        $this->assertEquals($postOfficeSettlementId + 1, $postOfficeSettlement->getParentId());
+        $this->assertEquals($postOfficeSettlementId + 2, $postOfficeSettlement->getCityId());
+        $this->assertEquals(
+            ['ua' => "CityName $postOfficeSettlementId UA", 'en' => "CityName $postOfficeSettlementId EN"],
+            $postOfficeSettlement->getCity()->getByLangOrArray()
+        );
+        $this->assertEquals(
+            ['ua' => "CityType $postOfficeSettlementId UA", 'en' => "CityType $postOfficeSettlementId EN"],
+            $postOfficeSettlement->getCityType()->getByLangOrArray()
+        );
+        $this->assertEquals(
+            ['ua' => "ShortCityType $postOfficeSettlementId UA", 'en' => "ShortCityType $postOfficeSettlementId EN"],
+            $postOfficeSettlement->getShortCityType()->getByLangOrArray()
+        );
+        $this->assertEquals((int) str_repeat((string) $postOfficeSettlementId, 3), $postOfficeSettlement->getPostIndex());
+        $this->assertEquals($postOfficeSettlementId + 3, $postOfficeSettlement->getRegionId());
+        $this->assertEquals(
+            ['ua' => "RegionName {$postOfficeSettlementId} UA", 'en' => "RegionName {$postOfficeSettlementId} EN"],
+            $postOfficeSettlement->getRegion()->getByLangOrArray()
+        );
+        $this->assertEquals($postOfficeSettlementId + 4, $postOfficeSettlement->getDistrictId());
+        $this->assertEquals(
+            ['ua' => "DistrictName {$postOfficeSettlementId} UA", 'en' => "DistrictName {$postOfficeSettlementId} EN"],
+            $postOfficeSettlement->getDistrict()->getByLangOrArray()
+        );
+        $this->assertEquals(
+            ['ua' => "StreetName {$postOfficeSettlementId} UA", 'en' => "StreetName {$postOfficeSettlementId} EN"],
+            $postOfficeSettlement->getStreet()->getByLangOrArray()
+        );
+        $this->assertEquals(
+            ['ua' => "StreetType {$postOfficeSettlementId} UA", 'en' => "StreetType {$postOfficeSettlementId} EN"],
+            $postOfficeSettlement->getStreetType()->getByLangOrArray()
+        );
+        $this->assertEquals("{$postOfficeSettlementId}A", $postOfficeSettlement->getHouseNumber());
+        $this->assertEquals("$postOfficeSettlementId Main Street", $postOfficeSettlement->getAddress());
+        $this->assertEquals(
+            (float) ("{$postOfficeSettlementId}0." . str_repeat((string) $postOfficeSettlementId, 4)),
+            $postOfficeSettlement->getLongitude()
+        );
+        $this->assertEquals(
+            (float) (($postOfficeSettlementId + 1) . '0.' . str_repeat((string) ($postOfficeSettlementId + 1), 4)),
+            $postOfficeSettlement->getLatitude()
+        );
+        $this->assertEquals($postOfficeSettlementId === 1, $postOfficeSettlement->isCash());
+        $this->assertEquals($postOfficeSettlementId !== 1, $postOfficeSettlement->isDhl());
+        $this->assertEquals($postOfficeSettlementId === 1, $postOfficeSettlement->isSmartbox());
+        $this->assertEquals($postOfficeSettlementId !== 1, $postOfficeSettlement->isUrgentPostalTransfers());
+        $this->assertEquals($postOfficeSettlementId === 1, $postOfficeSettlement->isFlagman());
+        $this->assertEquals($postOfficeSettlementId !== 1, $postOfficeSettlement->hasPostTerminal());
+        $this->assertEquals($postOfficeSettlementId === 1, $postOfficeSettlement->isAutomated());
+        $this->assertEquals($postOfficeSettlementId !== 1, $postOfficeSettlement->isSecurity());
+        $this->assertEquals((int) str_repeat((string) $postOfficeSettlementId, 3), $postOfficeSettlement->getLockCode());
+        $this->assertEquals(
+            ['ua' => "LockReason $postOfficeSettlementId UA", 'en' => "LockReason {$postOfficeSettlementId} EN"],
+            $postOfficeSettlement->getLock()->getByLangOrArray()
+        );
+        $phone_part = str_repeat((string) $postOfficeSettlementId, 3);
+        $this->assertEquals("$phone_part-$phone_part", $postOfficeSettlement->getPhone());
+        $this->assertEquals($postOfficeSettlementId === 1, $postOfficeSettlement->isVpz());
+        $this->assertEquals(
+            $postOfficeSettlementId . str_repeat((string) ($postOfficeSettlementId + 1), 3),
+            $postOfficeSettlement->getMerezaNumber()
+        );
+        $this->assertEquals(
+            str_repeat((string) ($postOfficeSettlementId + 1), 3),
+            $postOfficeSettlement->getTechIndex()
+        );
+    }
+
+    public function testRequestPostOfficeSettlementsByCityId(): void
+    {
+        $responseData = $this->getRequestPostOfficeSettlementData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $cityId = 123;
+        $postOfficeSettlementCollection = $this->addressClassifier->requestPostOfficeSettlementsByCityId($cityId);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeSettlementCollection::class, $postOfficeSettlementCollection);
+        $postOfficeSettlements = $postOfficeSettlementCollection->all();
+        $this->assertCount(2, $postOfficeSettlements);
+
+        // Check response data.
+        foreach ($postOfficeSettlements as $key => $postOfficeSettlement) {
+            $postOfficeSettlementId = $key + 1;
+            $this->assertInstanceOf(PostOfficeSettlementInterface::class, $postOfficeSettlement);
+            $this->assertPostOfficeSettlementsResponseData($postOfficeSettlement, $postOfficeSettlementId);
+        }
+    }
+
+    public function testRequestPostOfficeSettlementsByDistrictId(): void
+    {
+        $responseData = $this->getRequestPostOfficeSettlementData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $districtId = 321;
+        $postOfficeSettlementCollection = $this->addressClassifier->requestPostOfficeSettlementsByDistrictId($districtId);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeSettlementCollection::class, $postOfficeSettlementCollection);
+        $postOfficeSettlements = $postOfficeSettlementCollection->all();
+        $this->assertCount(2, $postOfficeSettlements);
+
+        // Check response data.
+        foreach ($postOfficeSettlements as $key => $postOfficeSettlement) {
+            $postOfficeSettlementId = $key + 1;
+            $this->assertInstanceOf(PostOfficeSettlementInterface::class, $postOfficeSettlement);
+            $this->assertPostOfficeSettlementsResponseData($postOfficeSettlement, $postOfficeSettlementId);
+        }
+    }
+
+    public function testRequestPostOfficeSettlementsByRegionId(): void
+    {
+        $responseData = $this->getRequestPostOfficeSettlementData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $regionId = 111;
+        $postOfficeSettlementCollection = $this->addressClassifier->requestPostOfficeSettlementsByRegionId($regionId);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeSettlementCollection::class, $postOfficeSettlementCollection);
+        $postOfficeSettlements = $postOfficeSettlementCollection->all();
+        $this->assertCount(2, $postOfficeSettlements);
+
+        // Check response data.
+        foreach ($postOfficeSettlements as $key => $postOfficeSettlement) {
+            $postOfficeSettlementId = $key + 1;
+            $this->assertInstanceOf(PostOfficeSettlementInterface::class, $postOfficeSettlement);
+            $this->assertPostOfficeSettlementsResponseData($postOfficeSettlement, $postOfficeSettlementId);
+        }
+    }
+
+    public function testRequestPostOfficeSettlementsByPostIndex(): void
+    {
+        $responseData = $this->getRequestPostOfficeSettlementData();
+        $this->requestMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($this->getMockResponse($responseData));
+
+        $postIndex = 222;
+        $postOfficeSettlementCollection = $this->addressClassifier->requestPostOfficeSettlementsByPostIndex($postIndex);
+
+        // Base assertions.
+        $this->assertInstanceOf(PostOfficeSettlementCollection::class, $postOfficeSettlementCollection);
+        $postOfficeSettlements = $postOfficeSettlementCollection->all();
+        $this->assertCount(2, $postOfficeSettlements);
+
+        // Check response data.
+        foreach ($postOfficeSettlements as $key => $postOfficeSettlement) {
+            $postOfficeSettlementId = $key + 1;
+            $this->assertInstanceOf(PostOfficeSettlementInterface::class, $postOfficeSettlement);
+            $this->assertPostOfficeSettlementsResponseData($postOfficeSettlement, $postOfficeSettlementId);
         }
     }
 
