@@ -29,6 +29,8 @@ abstract class Ukrposhta implements LoggerAwareInterface
      *   Counterparty token, uses for address classifier.
      * @param bool $sandbox
      *   Flag to use sandbox, false by default.
+     * @param array<string, mixed> $options
+     *   Associative array with additional options to the library.
      * @param LoggerInterface|null $logger
      *   Logger for the requests.
      */
@@ -36,7 +38,8 @@ abstract class Ukrposhta implements LoggerAwareInterface
         protected readonly ?string $bearerEcom = null,
         protected readonly ?string $bearerStatusTracking = null,
         protected readonly ?string $bearerCounterparty = null,
-        protected bool $sandbox = false,
+        protected readonly bool $sandbox = false,
+        protected readonly array $options = [],
         protected ?LoggerInterface $logger = null,
     ) {
     }
@@ -93,6 +96,17 @@ abstract class Ukrposhta implements LoggerAwareInterface
     public function isSandbox(): bool
     {
         return $this->sandbox;
+    }
+
+    /**
+     * Gets additional options.
+     *
+     * @return array<string, mixed>
+     *    Assoc array with the additional options of the library.
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 
 }
