@@ -13,10 +13,10 @@ use Psr\Log\LoggerInterface;
 abstract class Ukrposhta implements LoggerAwareInterface
 {
 
-    /** @var string Supported version. */
-    public const VERSION = '0.0.1';
-    /** @var string Base URL for requests. */
-    public const BASE_URL = 'https://www.ukrposhta.ua/';
+    /** Supported version. */
+    public const string VERSION = '0.0.1';
+    /** Base URL for requests. */
+    public const string BASE_URL = 'https://www.ukrposhta.ua/';
 
     /**
      * Ukrposhta abstract class constructor.

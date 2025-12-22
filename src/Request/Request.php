@@ -23,11 +23,11 @@ use Ukrposhta\Response\ResponseInterface;
 class Request implements RequestInterface, LoggerAwareInterface
 {
 
-    /** @var int Default maximum number of retry attempts. */
-    public const DEFAULT_MAX_RETRIES = 3;
+    /** Default maximum number of retry attempts. */
+    public const int DEFAULT_MAX_RETRIES = 3;
 
-    /** @var int Default base delay between retries in milliseconds. */
-    public const DEFAULT_RETRY_DELAY_MS = 100;
+    /** Default base delay between retries in milliseconds. */
+    public const int DEFAULT_RETRY_DELAY_MS = 100;
 
     /**
      * Related client object for requests.
@@ -174,14 +174,12 @@ class Request implements RequestInterface, LoggerAwareInterface
                 $this->logger->debug("Response: {$body}", $loggerContext);
 
                 // Guzzle with http_errors => true handles 4xx/5xx responses.
-                $decoded = json_decode($body, true);
-                if (json_last_error() !== JSON_ERROR_NONE) {
-                    throw new InvalidResponseException(
-                        sprintf('Invalid JSON response: %s', json_last_error_msg())
-                    );
+                // PHP 8.3: Use json_validate() for faster validation.
+                if (!json_validate($body)) {
+                    throw new InvalidResponseException('Invalid JSON response');
                 }
 
-                return new Response(response: (array) $decoded);
+                return new Response(response: (array) json_decode($body, true));
             } catch (ConnectException $e) {
                 // Connection errors are retryable.
                 $lastException = $e;

@@ -7,7 +7,7 @@ An Ukrposhta PHP SDK based on the official [Ukrposhta API].
 
 <p align="center">
 
-[![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D8.1-8892BF.svg)](https://php.net/)
+[![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D8.3-8892BF.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/tibezh/ukrposhta-php-sdk/blob/master/LICENSE)
 [![CI](https://github.com/tibezh/ukrposhta-php-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/tibezh/ukrposhta-php-sdk/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/tibezh/ukrposhta-php-sdk/graph/badge.svg?token=PPRCRB96LZ)](https://codecov.io/gh/tibezh/ukrposhta-php-sdk)
@@ -30,7 +30,7 @@ An Ukrposhta PHP SDK based on the official [Ukrposhta API].
 
 <a name="requirements"></a>
 ### Requirements
-This library uses PHP 8.1+.
+This library uses PHP 8.3+.
 
 To use the Ukrposhta API, you need to have Bearer and Token for each API sub-portal (eCom, StatusTracking and AddressClassifier).
 After signing the contract, the bearer and token are issued by your manager.
@@ -123,8 +123,8 @@ Request last status by barcode:
 /** @var \Ukrposhta\Tracking\Entities\TrackingStatusInterface $barcodeLastStatus */
 $barcodeLastStatus = (new \Ukrposhta\Tracking\Tracking())
   ->setAccessToken('[BEARER-STATUS-TRACKING-ACCESS-TOKEN]')
-  // To get results in English.
-  // ->$this->setRequestLang('EN')
+  // To get results in English:
+  // ->setRequestLang('EN')
   ->requestBarcodeLastStatus('[BARCODE]');
 
 // Prints event name value of the last status for the given barcode.
@@ -134,16 +134,16 @@ print $barcodeLastStatus->getEventName();
 Request all statuses by barcode:
 
 ```php
-/** @var \Ukrposhta\Tracking\Entities\TrackingStatusCollectionInterface $barcodeLastStatuses */
-$barcodeLastStatuses = (new \Ukrposhta\Tracking\Tracking())
+/** @var \Ukrposhta\Tracking\Entities\TrackingStatusCollectionInterface $barcodeStatuses */
+$barcodeStatuses = (new \Ukrposhta\Tracking\Tracking())
   ->setAccessToken('[BEARER-STATUS-TRACKING-ACCESS-TOKEN]')
-  // To get results in English.
-  // ->$this->setRequestLang('EN')
+  // To get results in English:
+  // ->setRequestLang('EN')
   ->requestBarcodeStatuses('[BARCODE]');
 
 // Prints "[date]: [eventName]" of each status for the given barcode.
-foreach ($data->all() as $item) {
-  print $item->getDate()->format('c') . ': ' . $item->getEventName();
+foreach ($barcodeStatuses as $status) {
+  print $status->getDate()->format('c') . ': ' . $status->getEventName();
   print '<br>';
 }
 ```
@@ -154,9 +154,10 @@ Request route by barcode:
 /** @var \Ukrposhta\Tracking\Entities\TrackingRouteInterface $barcodeRoute */
 $barcodeRoute = (new \Ukrposhta\Tracking\Tracking())
   ->setAccessToken('[BEARER-STATUS-TRACKING-ACCESS-TOKEN]')
-  // To get results in English.
-  // ->$this->setRequestLang('EN')
+  // To get results in English:
+  // ->setRequestLang('EN')
   ->requestBarcodeRoute('[BARCODE]');
+
 // Prints "[from] -> [to]" information for the given barcode.
 print $barcodeRoute->getFrom() . ' -> ' . $barcodeRoute->getTo();
 ```
@@ -204,7 +205,7 @@ Request cities by region ID and district ID:
 $cities = $classifier->requestCityByRegionIdAndDistrictId(
     regionId: 1,
     districtId: 5,
-    cityName: 'Бориспіль'
+    nameUa: 'Бориспіль'
 );
 
 foreach ($cities->all() as $city) {
@@ -221,7 +222,7 @@ $streets = $classifier->requestStreetByRegionIdAndDistrictIdAndCityId(
     regionId: 1,
     districtId: 5,
     cityId: 100,
-    streetName: 'Головна'
+    nameUa: 'Головна'
 );
 
 foreach ($streets->all() as $street) {

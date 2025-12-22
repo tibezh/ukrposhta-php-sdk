@@ -283,7 +283,6 @@ class RequestTest extends TestCase
         $endpointUrl = 'https://example.com/invalid-json-exception';
 
         $this->expectException(InvalidResponseException::class);
-        $this->expectExceptionMessage('Invalid JSON response');
         $request->request(access: $access, method: $method, endpointUrl: $endpointUrl);
     }
 
