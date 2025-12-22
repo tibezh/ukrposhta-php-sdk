@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Ukrposhta\Tracking\Entities;
 
+use Countable;
+use Iterator;
+
 /**
  * Tracking status collection interface.
+ *
+ * @extends Iterator<int, TrackingStatusInterface>
  */
-interface TrackingStatusCollectionInterface
+interface TrackingStatusCollectionInterface extends Countable, Iterator
 {
 
     /**
@@ -29,45 +34,11 @@ interface TrackingStatusCollectionInterface
     public function all(): array;
 
     /**
-     * Gets the iterator position.
-     *
-     * @return int
-     */
-    public function key(): int;
-
-    /**
-     * Resets iterator position.
-     *
-     * @return void
-     */
-    public function rewind(): void;
-
-    /**
-     * Gets current Tracking Status object according to iterator position.
-     *
-     * @return TrackingStatusInterface
-     */
-    public function current(): TrackingStatusInterface;
-
-    /**
-     * Increase the internal iterator for 1.
-     *
-     * @return void
-     */
-    public function next(): void;
-
-    /**
-     * Checks if the current position of iterator is valid.
+     * Checks if the collection is empty.
      *
      * @return bool
+     *   True if the collection has no items, false otherwise.
      */
-    public function valid(): bool;
-
-    /**
-     * Gets count of Tracking Status items in the collection.
-     *
-     * @return int
-     */
-    public function count(): int;
+    public function isEmpty(): bool;
 
 }

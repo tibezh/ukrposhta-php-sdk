@@ -101,4 +101,12 @@ class TrackingStatusCollection implements TrackingStatusCollectionInterface
         return count($this->items);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->items);
+    }
+
 }

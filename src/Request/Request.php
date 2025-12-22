@@ -7,6 +7,7 @@ namespace Ukrposhta\Request;
 use DateTime;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\TransferException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -21,6 +22,12 @@ use Ukrposhta\Response\ResponseInterface;
  */
 class Request implements RequestInterface, LoggerAwareInterface
 {
+
+    /** @var int Default maximum number of retry attempts. */
+    public const DEFAULT_MAX_RETRIES = 3;
+
+    /** @var int Default base delay between retries in milliseconds. */
+    public const DEFAULT_RETRY_DELAY_MS = 100;
 
     /**
      * Related client object for requests.
@@ -73,15 +80,39 @@ class Request implements RequestInterface, LoggerAwareInterface
     protected LoggerInterface $logger;
 
     /**
-     * {@inheritDoc}
+     * Maximum number of retry attempts.
+     *
+     * @var int
      */
-    public function __construct(LoggerInterface $logger = null)
-    {
+    protected int $maxRetries;
+
+    /**
+     * Base delay between retries in milliseconds.
+     *
+     * @var int
+     */
+    protected int $retryDelayMs;
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param int $maxRetries
+     *   Maximum number of retry attempts for transient errors.
+     * @param int $retryDelayMs
+     *   Base delay between retries in milliseconds (uses exponential backoff).
+     */
+    public function __construct(
+        LoggerInterface $logger = null,
+        int $maxRetries = self::DEFAULT_MAX_RETRIES,
+        int $retryDelayMs = self::DEFAULT_RETRY_DELAY_MS
+    ) {
         if ($logger !== null) {
             $this->setLogger($logger);
         } else {
             $this->setLogger(new NullLogger());
         }
+        $this->maxRetries = $maxRetries;
+        $this->retryDelayMs = $retryDelayMs;
         $this->setClient();
     }
 
@@ -105,43 +136,92 @@ class Request implements RequestInterface, LoggerAwareInterface
         // Log request.
         $date = new DateTime();
         $id = $date->format('YmdHisu');
-        $logger_context = [
+        $loggerContext = [
           'id' => $id,
           'endpointurl' => $this->getEndpointUrl(),
         ];
-        $this->logger->info('Request to Ukrposhta API', $logger_context);
+        $this->logger->info('Request to Ukrposhta API', $loggerContext);
 
-        $request_json = json_encode($this->getRequest());
-        $this->logger->debug("Request: {$request_json}", $logger_context);
+        $requestJson = json_encode($this->getRequest());
+        $this->logger->debug("Request: {$requestJson}", $loggerContext);
 
-        try {
-            $options = $this->getRequestOptions();
-
-            if ('GET' === $method) {
-                $options = array_merge($options, ['query' => $request]);
-            }
-
-            $response = $this->client->request(
-                $method,
-                $this->getEndpointUrl(),
-                $options,
-            );
-
-            $body = (string) $response->getBody();
-
-            $this->logger->info('Response from Ukrposhta API', $logger_context);
-
-            $this->logger->debug("Response: {$body}", $logger_context);
-
-            if (200 === $response->getStatusCode()) {
-                return new Response(response: (array) json_decode($body, true));
-            } else {
-                throw new InvalidResponseException(sprintf('Failure: %s response code.', $response->getStatusCode()));
-            }
-        } catch (TransferException $e) {
-            $this->logger->alert($e->getMessage(), $logger_context);
-            throw new RequestException($e->getMessage());
+        $options = $this->getRequestOptions();
+        if ('GET' === $method) {
+            $options = array_merge($options, ['query' => $request]);
         }
+
+        $lastException = null;
+        for ($attempt = 0; $attempt <= $this->maxRetries; $attempt++) {
+            try {
+                if ($attempt > 0) {
+                    $delayMs = $this->calculateRetryDelay($attempt);
+                    $this->logger->info(
+                        sprintf('Retry attempt %d/%d after %dms delay', $attempt, $this->maxRetries, $delayMs),
+                        $loggerContext
+                    );
+                    usleep($delayMs * 1000);
+                }
+
+                $response = $this->client->request(
+                    $method,
+                    $this->getEndpointUrl(),
+                    $options,
+                );
+
+                $body = (string) $response->getBody();
+
+                $this->logger->info('Response from Ukrposhta API', $loggerContext);
+                $this->logger->debug("Response: {$body}", $loggerContext);
+
+                // Guzzle with http_errors => true handles 4xx/5xx responses.
+                $decoded = json_decode($body, true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    throw new InvalidResponseException(
+                        sprintf('Invalid JSON response: %s', json_last_error_msg())
+                    );
+                }
+
+                return new Response(response: (array) $decoded);
+            } catch (ConnectException $e) {
+                // Connection errors are retryable.
+                $lastException = $e;
+                $this->logger->warning(
+                    sprintf('Connection error (attempt %d/%d): %s', $attempt + 1, $this->maxRetries + 1, $e->getMessage()),
+                    $loggerContext
+                );
+            } catch (TransferException $e) {
+                // Other transfer exceptions are not retryable.
+                $this->logger->alert($e->getMessage(), $loggerContext);
+                throw new RequestException($e->getMessage());
+            }
+        }
+
+        // All retries exhausted.
+        $this->logger->alert(
+            sprintf('All %d retry attempts exhausted', $this->maxRetries + 1),
+            $loggerContext
+        );
+        throw new RequestException(
+            $lastException?->getMessage() ?? 'Request failed after all retry attempts'
+        );
+    }
+
+    /**
+     * Calculates retry delay using exponential backoff.
+     *
+     * @param int $attempt
+     *   Current retry attempt number (1-based).
+     *
+     * @return int
+     *   Delay in milliseconds.
+     */
+    protected function calculateRetryDelay(int $attempt): int
+    {
+        // Exponential backoff: delay * 2^(attempt-1)
+        // With jitter: add random 0-50% to avoid thundering herd.
+        $baseDelay = $this->retryDelayMs * (2 ** ($attempt - 1));
+        $jitter = (int) ($baseDelay * (mt_rand(0, 50) / 100));
+        return $baseDelay + $jitter;
     }
 
     /**
