@@ -11,7 +11,6 @@ use Ukrposhta\Tracking\Entities\TrackingRoute;
 use Ukrposhta\Tracking\Entities\TrackingRouteInterface;
 
 #[CoversClass(TrackingRoute::class)]
-#[CoversClass(TrackingRouteInterface::class)]
 #[Small]
 final class TrackingRouteTest extends TestCase
 {

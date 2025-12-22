@@ -64,11 +64,11 @@ class Tracking extends Ukrposhta implements TrackingInterface
      * {@inheritDoc}
      */
     public function __construct(
-        string $bearerEcom = null,
-        string $bearerStatusTracking = null,
-        string $bearerCounterparty = null,
-        LoggerInterface $logger = null,
-        RequestInterface $request = null,
+        ?string $bearerEcom = null,
+        ?string $bearerStatusTracking = null,
+        ?string $bearerCounterparty = null,
+        ?LoggerInterface $logger = null,
+        ?RequestInterface $request = null,
     ) {
         parent::__construct(
             $bearerEcom,

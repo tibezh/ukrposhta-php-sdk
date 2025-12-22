@@ -11,7 +11,6 @@ use Ukrposhta\Response\Response;
 use Ukrposhta\Response\ResponseInterface;
 
 #[CoversClass(Response::class)]
-#[CoversClass(ResponseInterface::class)]
 #[Small]
 class ResponseTest extends TestCase
 {

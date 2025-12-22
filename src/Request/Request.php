@@ -102,7 +102,7 @@ class Request implements RequestInterface, LoggerAwareInterface
      *   Base delay between retries in milliseconds (uses exponential backoff).
      */
     public function __construct(
-        LoggerInterface $logger = null,
+        ?LoggerInterface $logger = null,
         int $maxRetries = self::DEFAULT_MAX_RETRIES,
         int $retryDelayMs = self::DEFAULT_RETRY_DELAY_MS
     ) {
@@ -247,7 +247,7 @@ class Request implements RequestInterface, LoggerAwareInterface
      *
      * @return void
      */
-    public function setClient(ClientInterface $client = null): void
+    public function setClient(?ClientInterface $client = null): void
     {
         $this->client = $client ?? new Guzzle();
     }

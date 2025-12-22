@@ -22,7 +22,7 @@ interface RequestInterface
      * @param ?LoggerInterface $logger
      *   The logger for the Request object, leave null to use NullLogger.
      */
-    public function __construct(LoggerInterface $logger = null);
+    public function __construct(?LoggerInterface $logger = null);
 
     /**
      * Main method to send requests.

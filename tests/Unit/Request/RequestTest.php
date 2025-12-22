@@ -23,7 +23,6 @@ use Ukrposhta\Request\Request;
 use Ukrposhta\Request\RequestInterface;
 
 #[CoversClass(Request::class)]
-#[CoversClass(RequestInterface::class)]
 #[Medium]
 class RequestTest extends TestCase
 {
