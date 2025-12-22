@@ -47,4 +47,49 @@ class EntityCollectionBaseTest extends TestCase
         $this->assertSame($entityMock2, $entities[1]);
     }
 
+    public function testCount(): void
+    {
+        $this->assertSame(0, $this->collection->count());
+        $this->assertCount(0, $this->collection);
+
+        $entityMock1 = $this->createMock(EntityInterface::class);
+        $entityMock2 = $this->createMock(EntityInterface::class);
+
+        $this->collection->add($entityMock1);
+        $this->assertSame(1, $this->collection->count());
+        $this->assertCount(1, $this->collection);
+
+        $this->collection->add($entityMock2);
+        $this->assertSame(2, $this->collection->count());
+        $this->assertCount(2, $this->collection);
+    }
+
+    public function testGetIterator(): void
+    {
+        $entityMock1 = $this->createMock(EntityInterface::class);
+        $entityMock2 = $this->createMock(EntityInterface::class);
+
+        $this->collection->add($entityMock1);
+        $this->collection->add($entityMock2);
+
+        $items = [];
+        foreach ($this->collection as $key => $item) {
+            $items[$key] = $item;
+        }
+
+        $this->assertCount(2, $items);
+        $this->assertSame($entityMock1, $items[0]);
+        $this->assertSame($entityMock2, $items[1]);
+    }
+
+    public function testIsEmpty(): void
+    {
+        $this->assertTrue($this->collection->isEmpty());
+
+        $entityMock = $this->createMock(EntityInterface::class);
+        $this->collection->add($entityMock);
+
+        $this->assertFalse($this->collection->isEmpty());
+    }
+
 }

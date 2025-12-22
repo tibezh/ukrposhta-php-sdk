@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Ukrposhta\Tests\Unit\Request;
 
 use GuzzleHttp\Client as Guzzle;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Medium;
@@ -266,9 +268,9 @@ class RequestTest extends TestCase
         $this->assertSame($fakeResponseData, $response->getResponseData());
     }
 
-    public function testRequestInvalidResponseException(): void
+    public function testRequestInvalidJsonResponseException(): void
     {
-        $mock = new MockHandler([new GuzzleResponse(201, [], '{}')]);
+        $mock = new MockHandler([new GuzzleResponse(200, [], 'invalid json {')]);
 
         $handler = HandlerStack::create($mock);
         $guzzleClient = new Guzzle(['handler' => $handler]);
@@ -278,9 +280,10 @@ class RequestTest extends TestCase
 
         $access = '6d3a3f89-b094-4c9a-bd64-9185016afe85';
         $method = 'GET';
-        $endpointUrl = 'https://example.com/invalid-response-exception';
+        $endpointUrl = 'https://example.com/invalid-json-exception';
 
         $this->expectException(InvalidResponseException::class);
+        $this->expectExceptionMessage('Invalid JSON response');
         $request->request(access: $access, method: $method, endpointUrl: $endpointUrl);
     }
 
@@ -300,5 +303,108 @@ class RequestTest extends TestCase
 
         $this->expectException(RequestException::class);
         $request->request(access: $access, method: $method, endpointUrl: $endpointUrl);
+    }
+
+    public function testConstructorWithCustomRetrySettings(): void
+    {
+        $request = new Request(
+            logger: null,
+            maxRetries: 5,
+            retryDelayMs: 200
+        );
+
+        $reflection = new \ReflectionClass($request);
+
+        $maxRetriesProperty = $reflection->getProperty('maxRetries');
+        $this->assertSame(5, $maxRetriesProperty->getValue($request));
+
+        $retryDelayProperty = $reflection->getProperty('retryDelayMs');
+        $this->assertSame(200, $retryDelayProperty->getValue($request));
+    }
+
+    public function testRetryOnConnectException(): void
+    {
+        $fakeResponseData = ['success' => true];
+        $guzzleRequest = new GuzzleRequest('GET', 'https://example.com/retry-test');
+
+        // First two attempts fail with ConnectException, third succeeds.
+        $mock = new MockHandler([
+            new ConnectException('Connection failed', $guzzleRequest),
+            new ConnectException('Connection failed again', $guzzleRequest),
+            new GuzzleResponse(200, [], (string) json_encode($fakeResponseData)),
+        ]);
+
+        $handler = HandlerStack::create($mock);
+        $guzzleClient = new Guzzle(['handler' => $handler]);
+
+        // Use minimal retry delay for faster tests.
+        $request = new Request(null, 3, 1);
+        $request->setClient($guzzleClient);
+
+        $response = $request->request(
+            access: 'test-token',
+            method: 'GET',
+            endpointUrl: 'https://example.com/retry-test'
+        );
+
+        $this->assertSame($fakeResponseData, $response->getResponseData());
+    }
+
+    public function testAllRetriesExhausted(): void
+    {
+        $guzzleRequest = new GuzzleRequest('GET', 'https://example.com/retry-exhausted');
+
+        // All attempts fail with ConnectException.
+        $mock = new MockHandler([
+            new ConnectException('Connection failed 1', $guzzleRequest),
+            new ConnectException('Connection failed 2', $guzzleRequest),
+            new ConnectException('Connection failed 3', $guzzleRequest),
+            new ConnectException('Connection failed 4', $guzzleRequest),
+        ]);
+
+        $handler = HandlerStack::create($mock);
+        $guzzleClient = new Guzzle(['handler' => $handler]);
+
+        // 3 retries = 4 total attempts (initial + 3 retries).
+        $request = new Request(null, 3, 1);
+        $request->setClient($guzzleClient);
+
+        $this->expectException(RequestException::class);
+        $this->expectExceptionMessage('Connection failed 4');
+        $request->request(
+            access: 'test-token',
+            method: 'GET',
+            endpointUrl: 'https://example.com/retry-exhausted'
+        );
+    }
+
+    public function testCalculateRetryDelay(): void
+    {
+        $request = new Request(null, 3, 100);
+
+        $reflection = new \ReflectionClass($request);
+        $method = $reflection->getMethod('calculateRetryDelay');
+
+        // Test exponential backoff pattern.
+        // Attempt 1: base delay = 100 * 2^0 = 100, with jitter 0-50%.
+        $delay1 = $method->invoke($request, 1);
+        $this->assertGreaterThanOrEqual(100, $delay1);
+        $this->assertLessThanOrEqual(150, $delay1);
+
+        // Attempt 2: base delay = 100 * 2^1 = 200, with jitter 0-50%.
+        $delay2 = $method->invoke($request, 2);
+        $this->assertGreaterThanOrEqual(200, $delay2);
+        $this->assertLessThanOrEqual(300, $delay2);
+
+        // Attempt 3: base delay = 100 * 2^2 = 400, with jitter 0-50%.
+        $delay3 = $method->invoke($request, 3);
+        $this->assertGreaterThanOrEqual(400, $delay3);
+        $this->assertLessThanOrEqual(600, $delay3);
+    }
+
+    public function testDefaultRetryConstants(): void
+    {
+        $this->assertSame(3, Request::DEFAULT_MAX_RETRIES);
+        $this->assertSame(100, Request::DEFAULT_RETRY_DELAY_MS);
     }
 }

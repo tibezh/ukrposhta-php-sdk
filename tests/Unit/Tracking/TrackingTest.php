@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Ukrposhta\Exceptions\InvalidResponseException;
 use Ukrposhta\Exceptions\NoCredentialException;
 use Ukrposhta\Request\Request;
 use Ukrposhta\Request\RequestInterface;
@@ -95,18 +96,12 @@ class TrackingTest extends TestCase
 
     public function testCanBeCreatedWithValidData5(): void
     {
-        new Tracking(sandbox: true);
-        $this->expectNotToPerformAssertions();
-    }
-
-    public function testCanBeCreatedWithValidData6(): void
-    {
         new Tracking(logger: new NullLogger());
         new Tracking(logger: null);
         $this->expectNotToPerformAssertions();
     }
 
-    public function testCanBeCreatedWithValidData7(): void
+    public function testCanBeCreatedWithValidData6(): void
     {
         new Tracking(request: new Request());
         new Tracking(request: null);
@@ -138,17 +133,10 @@ class TrackingTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        new Tracking(sandbox: 'sandbox 4 sandbox');
-    }
-
-    public function testCanBeCreatedWithNotValidData5(): void
-    {
-        $this->expectException(\TypeError::class);
-        /** @phpstan-ignore-next-line */
         new Tracking(logger: 'Ukraine logger');
     }
 
-    public function testCanBeCreatedWithNotValidData6(): void
+    public function testCanBeCreatedWithNotValidData5(): void
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
@@ -438,5 +426,63 @@ class TrackingTest extends TestCase
         $this->assertSame($fakeTrackingStatus['index'], $trackingStatus->getIndex());
         $this->assertSame($fakeTrackingStatus['eventReason'], $trackingStatus->getEventReason());
         $this->assertSame($fakeTrackingStatus['eventReason_id'], $trackingStatus->getEventReasonId());
+    }
+
+    public function testValidateRequiredKeysThrowsOnMissingKeys(): void
+    {
+        $tracking = new Tracking();
+
+        $reflection = new \ReflectionClass($tracking);
+        $method = $reflection->getMethod('validateRequiredKeys');
+
+        $this->expectException(InvalidResponseException::class);
+        $this->expectExceptionMessage('Missing required keys in response: foo, bar');
+        $method->invokeArgs($tracking, [['baz' => 'value'], ['foo', 'bar', 'baz']]);
+    }
+
+    public function testValidateRequiredKeysPassesWithAllKeys(): void
+    {
+        $tracking = new Tracking();
+
+        $reflection = new \ReflectionClass($tracking);
+        $method = $reflection->getMethod('validateRequiredKeys');
+
+        // Should not throw.
+        $method->invokeArgs($tracking, [['foo' => 1, 'bar' => 2], ['foo', 'bar']]);
+        $this->assertTrue(true);
+    }
+
+    public function testConvertTrackingStatusResponseMissingKeys(): void
+    {
+        $tracking = new Tracking();
+
+        $reflection = new \ReflectionClass($tracking);
+        $method = $reflection->getMethod('convertTrackingStatusResponse');
+
+        // Missing required keys.
+        $incompleteData = ['barcode' => '123', 'step' => 1];
+
+        $this->expectException(InvalidResponseException::class);
+        $this->expectExceptionMessage('Missing required keys in response');
+        $method->invokeArgs($tracking, [$incompleteData]);
+    }
+
+    public function testRequestBarcodeRouteMissingKeys(): void
+    {
+        $bearerToken = 'test-token';
+        // Response missing 'to' key.
+        $fakeResponse = new Response(['from' => 'Kyiv']);
+
+        $requestMock = $this->createMock(RequestInterface::class);
+        $requestMock->method('request')->willReturn($fakeResponse);
+
+        $tracking = new Tracking(
+            bearerStatusTracking: $bearerToken,
+            request: $requestMock
+        );
+
+        $this->expectException(InvalidResponseException::class);
+        $this->expectExceptionMessage('Missing required keys in response: to');
+        $tracking->requestBarcodeRoute(barcode: '123456');
     }
 }

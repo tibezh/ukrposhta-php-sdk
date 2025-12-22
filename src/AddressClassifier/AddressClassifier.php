@@ -132,7 +132,6 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
         string $bearerEcom = null,
         string $bearerStatusTracking = null,
         string $bearerCounterparty = null,
-        bool $sandbox = false,
         LoggerInterface $logger = null,
         RequestInterface $request = null,
     ) {
@@ -140,7 +139,6 @@ class AddressClassifier extends Ukrposhta implements AddressClassifierInterface
             $bearerEcom,
             $bearerStatusTracking,
             $bearerCounterparty,
-            $sandbox,
             $logger
         );
 

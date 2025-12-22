@@ -6,6 +6,7 @@ namespace Ukrposhta\Tracking;
 
 use Exception;
 use Psr\Log\LoggerInterface;
+use Ukrposhta\Exceptions\InvalidResponseException;
 use Ukrposhta\Exceptions\NoCredentialException;
 use Ukrposhta\Request\Request;
 use Ukrposhta\Request\RequestInterface;
@@ -66,7 +67,6 @@ class Tracking extends Ukrposhta implements TrackingInterface
         string $bearerEcom = null,
         string $bearerStatusTracking = null,
         string $bearerCounterparty = null,
-        bool $sandbox = false,
         LoggerInterface $logger = null,
         RequestInterface $request = null,
     ) {
@@ -74,7 +74,6 @@ class Tracking extends Ukrposhta implements TrackingInterface
             $bearerEcom,
             $bearerStatusTracking,
             $bearerCounterparty,
-            $sandbox,
             $logger
         );
 
@@ -122,6 +121,9 @@ class Tracking extends Ukrposhta implements TrackingInterface
         return $collection;
     }
 
+    /** @var string[] Required keys for tracking route response. */
+    private const TRACKING_ROUTE_REQUIRED_KEYS = ['from', 'to'];
+
     /**
      * {@inheritDoc}
      */
@@ -140,8 +142,24 @@ class Tracking extends Ukrposhta implements TrackingInterface
         /** @var array<string, string> $response */
         $response = $response->getResponseData();
 
+        $this->validateRequiredKeys($response, self::TRACKING_ROUTE_REQUIRED_KEYS);
+
         return new TrackingRoute($response['from'], $response['to']);
     }
+
+    /** @var string[] Required keys for tracking status response. */
+    private const TRACKING_STATUS_REQUIRED_KEYS = [
+        'barcode',
+        'step',
+        'date',
+        'name',
+        'event',
+        'eventName',
+        'country',
+        'mailType',
+        'indexOrder',
+        'index',
+    ];
 
     /**
      * Helper function to converts Tracking Status response to the Tracking Status object.
@@ -153,9 +171,12 @@ class Tracking extends Ukrposhta implements TrackingInterface
      *   Tracking Status object from the response data.
      *
      * @throws Exception
+     * @throws InvalidResponseException
      */
     protected function convertTrackingStatusResponse(array $trackingStatusResponseData): TrackingStatusInterface
     {
+        $this->validateRequiredKeys($trackingStatusResponseData, self::TRACKING_STATUS_REQUIRED_KEYS);
+
         return new TrackingStatus(
             barcode: $trackingStatusResponseData['barcode'],
             step: (int) $trackingStatusResponseData['step'],
@@ -170,7 +191,27 @@ class Tracking extends Ukrposhta implements TrackingInterface
             eventReason: $trackingStatusResponseData['eventReason'] ?? null,
             eventReasonId: $trackingStatusResponseData['eventReason_id'] ?? null
         );
+    }
 
+    /**
+     * Validates that all required keys exist in the response data.
+     *
+     * @param array<string|int, mixed> $data
+     *   The response data to validate.
+     * @param string[] $requiredKeys
+     *   List of required keys.
+     *
+     * @throws InvalidResponseException
+     *   When required keys are missing.
+     */
+    private function validateRequiredKeys(array $data, array $requiredKeys): void
+    {
+        $missingKeys = array_diff($requiredKeys, array_keys($data));
+        if (!empty($missingKeys)) {
+            throw new InvalidResponseException(
+                sprintf('Missing required keys in response: %s', implode(', ', $missingKeys))
+            );
+        }
     }
 
     /**

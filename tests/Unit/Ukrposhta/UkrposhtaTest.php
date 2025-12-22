@@ -46,13 +46,6 @@ final class UkrposhtaTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
-        new UkrposhtaClass(sandbox: 78964365484);
-    }
-
-    public function testCannotBeCreatedWithNotValidTypeData5(): void
-    {
-        $this->expectException(\TypeError::class);
-        /** @phpstan-ignore-next-line */
         new UkrposhtaClass(logger: 3541668);
     }
 
@@ -75,13 +68,5 @@ final class UkrposhtaTest extends TestCase
     {
         $ukrposhta = new UkrposhtaClass();
         $this->assertSame(Ukrposhta::BASE_URL, $ukrposhta->getEndpointUrl());
-    }
-
-    public function testIsSandboxMethod(): void
-    {
-        $ukrposhta = new UkrposhtaClass();
-        $this->assertFalse($ukrposhta->isSandbox());
-        $ukrposhta = new UkrposhtaClass(sandbox: true);
-        $this->assertTrue($ukrposhta->isSandbox());
     }
 }

@@ -121,4 +121,14 @@ final class TrackingStatusCollectionTest extends TestCase
         $collection = new TrackingStatusCollection($trackingStatuses);
         $this->assertSame($count, $collection->count());
     }
+
+    public function testIsEmpty(): void
+    {
+        $collection = new TrackingStatusCollection();
+        $this->assertTrue($collection->isEmpty());
+
+        $trackingStatus = new TrackingStatus(...TrackingStatusHelper::getRandomTrackingStatusFixture());
+        $collection->add($trackingStatus);
+        $this->assertFalse($collection->isEmpty());
+    }
 }

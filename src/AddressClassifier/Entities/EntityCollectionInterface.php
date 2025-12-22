@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Ukrposhta\AddressClassifier\Entities;
 
+use Countable;
+use IteratorAggregate;
+
 /**
  * The base address classifier entity collection interface.
+ *
+ * @extends IteratorAggregate<int, EntityInterface>
  */
-interface EntityCollectionInterface
+interface EntityCollectionInterface extends Countable, IteratorAggregate
 {
 
     /**
@@ -27,5 +32,13 @@ interface EntityCollectionInterface
      *   Simple array with Entity objects.
      */
     public function all(): array;
+
+    /**
+     * Checks if the collection is empty.
+     *
+     * @return bool
+     *   True if the collection has no items, false otherwise.
+     */
+    public function isEmpty(): bool;
 
 }

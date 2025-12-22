@@ -27,8 +27,6 @@ abstract class Ukrposhta implements LoggerAwareInterface
      *   Status Tracking access token, uses to check status tracking by barcode.
      * @param string|null $bearerCounterparty
      *   Counterparty token, uses for address classifier.
-     * @param bool $sandbox
-     *   Flag to use sandbox, false by default.
      * @param LoggerInterface|null $logger
      *   Logger for the requests.
      */
@@ -36,7 +34,6 @@ abstract class Ukrposhta implements LoggerAwareInterface
         protected readonly ?string $bearerEcom = null,
         protected readonly ?string $bearerStatusTracking = null,
         protected readonly ?string $bearerCounterparty = null,
-        protected readonly bool $sandbox = false,
         protected ?LoggerInterface $logger = null,
     ) {
     }
@@ -82,17 +79,6 @@ abstract class Ukrposhta implements LoggerAwareInterface
     public function getEndpointUrl(): string
     {
         return self::BASE_URL;
-    }
-
-    /**
-     * Flag which indicates sandbox uses.
-     *
-     * @return bool
-     *   The true if sandbox uses, otherwise false.
-     */
-    public function isSandbox(): bool
-    {
-        return $this->sandbox;
     }
 
 }
