@@ -24,20 +24,20 @@ use Ukrposhta\Ukrposhta;
 class Tracking extends Ukrposhta implements TrackingInterface
 {
 
-    /** @var string Base endpoint to get status tracking information. */
-    public const BASE_ENDPOINT = 'status-tracking';
+    /** Base endpoint to get status tracking information. */
+    public const string BASE_ENDPOINT = 'status-tracking';
 
-    /** @var string Access type that needs to get status tracking information. */
-    public const CREDENTIALS_TYPE = 'bearerStatusTracking';
+    /** Access type that needs to get status tracking information. */
+    public const string CREDENTIALS_TYPE = 'bearerStatusTracking';
 
-    /** @var string Endpoint to get last tracking status information. */
-    public const BARCODE_LAST_STATUS_ENDPOINT = '/statuses/last';
-    /** @var string Endpoint to get all tracking statuses. */
-    public const BARCODE_STATUSES_ENDPOINT = '/statuses';
-    /** @var string Endpoint to get route information. */
-    public const BARCODE_ROUTE_ENDPOINT = '/barcodes/%s/route';
-    /** @var string Endpoint to get route information for specific language. */
-    public const BARCODE_ROUTE_WITH_LANG_ENDPOINT = '/barcodes/%s/route/in-lang/%s';
+    /** Endpoint to get last tracking status information. */
+    public const string BARCODE_LAST_STATUS_ENDPOINT = '/statuses/last';
+    /** Endpoint to get all tracking statuses. */
+    public const string BARCODE_STATUSES_ENDPOINT = '/statuses';
+    /** Endpoint to get route information. */
+    public const string BARCODE_ROUTE_ENDPOINT = '/barcodes/%s/route';
+    /** Endpoint to get route information for specific language. */
+    public const string BARCODE_ROUTE_WITH_LANG_ENDPOINT = '/barcodes/%s/route/in-lang/%s';
 
     /**
      * Default language for requests.

@@ -17,6 +17,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
@@ -39,6 +44,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
@@ -52,6 +62,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
@@ -63,7 +78,7 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ["8.1", "8.2", "8.3", "8.4"]
+        php-versions: ["8.3", "8.4", "8.5"]
 
     name: Tests PHP with ${{ matrix.php-versions }}
 
