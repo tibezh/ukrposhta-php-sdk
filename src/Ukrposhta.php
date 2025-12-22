@@ -14,7 +14,7 @@ abstract class Ukrposhta implements LoggerAwareInterface
 {
 
     /** Supported version. */
-    public const string VERSION = '0.0.1';
+    public const string VERSION = '0.1.0';
     /** Base URL for requests. */
     public const string BASE_URL = 'https://www.ukrposhta.ua/';
 
