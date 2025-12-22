@@ -447,9 +447,9 @@ class TrackingTest extends TestCase
         $reflection = new \ReflectionClass($tracking);
         $method = $reflection->getMethod('validateRequiredKeys');
 
-        // Should not throw.
-        $method->invokeArgs($tracking, [['foo' => 1, 'bar' => 2], ['foo', 'bar']]);
-        $this->assertTrue(true);
+        // Should not throw - if we reach here, the validation passed.
+        $result = $method->invokeArgs($tracking, [['foo' => 1, 'bar' => 2], ['foo', 'bar']]);
+        $this->assertNull($result);
     }
 
     public function testConvertTrackingStatusResponseMissingKeys(): void

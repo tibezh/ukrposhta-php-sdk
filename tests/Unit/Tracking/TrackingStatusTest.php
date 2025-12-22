@@ -149,8 +149,7 @@ final class TrackingStatusTest extends TestCase
     public function testCanBeCreatedWithRequiredArguments(): void
     {
         $this->updateFixturesData();
-        $this->expectNotToPerformAssertions();
-        new TrackingStatus(
+        $status = new TrackingStatus(
             barcode: $this->fixturesData['barcode'],
             step: $this->fixturesData['step'],
             date: $this->fixturesData['date'],
@@ -161,6 +160,7 @@ final class TrackingStatusTest extends TestCase
             mailType: $this->fixturesData['mailType'],
             indexOrder: $this->fixturesData['indexOrder']
         );
+        $this->assertInstanceOf(TrackingStatus::class, $status);
     }
 
     public function testCannotBeCreatedWithNotValidTypeData1(): void
@@ -168,7 +168,7 @@ final class TrackingStatusTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
         $this->fixturesData['barcode'] = 123;
-        new TrackingStatus(...$this->fixturesData);
+        $_ = new TrackingStatus(...$this->fixturesData);
     }
 
     public function testCannotBeCreatedWithNotValidTypeData2(): void
@@ -176,7 +176,7 @@ final class TrackingStatusTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
         $this->fixturesData['step'] = 'step2';
-        new TrackingStatus(...$this->fixturesData);
+        $_ = new TrackingStatus(...$this->fixturesData);
     }
 
     public function testCannotBeCreatedWithNotValidTypeData3(): void
@@ -184,7 +184,7 @@ final class TrackingStatusTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
         $this->fixturesData['date'] = 'date3';
-        new TrackingStatus(...$this->fixturesData);
+        $_ = new TrackingStatus(...$this->fixturesData);
     }
 
     public function testCannotBeCreatedWithNotValidTypeData4(): void
@@ -192,7 +192,7 @@ final class TrackingStatusTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
         $this->fixturesData['eventId'] = 'eventId4';
-        new TrackingStatus(...$this->fixturesData);
+        $_ = new TrackingStatus(...$this->fixturesData);
     }
 
     public function testCannotBeCreatedWithNotValidTypeData5(): void
@@ -200,7 +200,7 @@ final class TrackingStatusTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
         $this->fixturesData['eventName'] = 123450;
-        new TrackingStatus(...$this->fixturesData);
+        $_ = new TrackingStatus(...$this->fixturesData);
     }
 
     public function testCannotBeCreatedWithNotValidTypeData6(): void
@@ -208,7 +208,7 @@ final class TrackingStatusTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
         $this->fixturesData['country'] = 0123456;
-        new TrackingStatus(...$this->fixturesData);
+        $_ = new TrackingStatus(...$this->fixturesData);
     }
 
     public function testCannotBeCreatedWithNotValidTypeData7(): void
@@ -216,7 +216,7 @@ final class TrackingStatusTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
         $this->fixturesData['mailType'] = 'mailType7';
-        new TrackingStatus(...$this->fixturesData);
+        $_ = new TrackingStatus(...$this->fixturesData);
     }
 
     public function testCannotBeCreatedWithNotValidTypeData8(): void
@@ -224,7 +224,7 @@ final class TrackingStatusTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
         $this->fixturesData['indexOrder'] = 'indexOrder8';
-        new TrackingStatus(...$this->fixturesData);
+        $_ = new TrackingStatus(...$this->fixturesData);
     }
 
     public function testCannotBeCreatedWithNotValidTypeData9(): void
@@ -232,7 +232,7 @@ final class TrackingStatusTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
         $this->fixturesData['index'] = 123456789999;
-        new TrackingStatus(...$this->fixturesData);
+        $_ = new TrackingStatus(...$this->fixturesData);
     }
 
     public function testCannotBeCreatedWithNotValidTypeData10(): void
@@ -240,7 +240,7 @@ final class TrackingStatusTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
         $this->fixturesData['eventReason'] = 101011123;
-        new TrackingStatus(...$this->fixturesData);
+        $_ = new TrackingStatus(...$this->fixturesData);
     }
 
     public function testCannotBeCreatedWithNotValidTypeData11(): void
@@ -248,7 +248,7 @@ final class TrackingStatusTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->updateFixturesData();
         $this->fixturesData['eventReasonId'] = 'eventReasonId11';
-        new TrackingStatus(...$this->fixturesData);
+        $_ = new TrackingStatus(...$this->fixturesData);
     }
 
     public function testToArray(): void
